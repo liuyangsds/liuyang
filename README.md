@@ -3,7 +3,8 @@
 
 下载：
 go get -u github.com/liuyangsds/liuyang
-或指定版本
+
+或指定版本：
 go get -u github.com/liuyangsds/liuyang@v1.0.2
 
 使用：
