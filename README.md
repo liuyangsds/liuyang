@@ -5,9 +5,9 @@
 go get -u github.com/liuyangsds/liuyang
 
 或指定版本：
-go get -u github.com/liuyangsds/liuyang@v1.0.2
+go get -u github.com/liuyangsds/liuyang@v1.0.3
 
 使用：
 require (
-    github.com/liuyangsds/liuyang v1.0.2
+    github.com/liuyangsds/liuyang v1.0.3
 )
