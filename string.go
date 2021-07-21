@@ -1,6 +1,7 @@
 package liuyang
 
 import (
+	"strconv"
 	"strings"
 )
 
@@ -71,4 +72,33 @@ func StringWordSum(str string) int {
 	//fmt.Println(sum)//793
 
 	return sum
+}
+
+//string类型转int64
+func StringToInt64(s string) (int64, error) {
+	return strconv.ParseInt(s, 10, 64)
+}
+
+//string类型转uint64
+func StringToUInt64(s string) (uint64, error) {
+	return strconv.ParseUint(s, 10, 64)
+}
+
+//string类型转float32，虽然返回的是float64类型，但是以float32为精度截取的
+func StringToFloat32(s string) (float64, error) {
+	//str := "123456.0123456789653"
+	//fmt.Println(a1)//123456.015625
+	return strconv.ParseFloat(s, 32)
+}
+
+//string转float64
+func StringToFloat64(s string) (float64, error) {
+	//str := "123456.0123456789653"
+	//fmt.Println(a2)//123456.01234567896
+	//值的注意：string转float时，只能转6位数以下的值，超过6位就会变成科学计数法，如下：
+	//str := "123456"
+	//fmt.Println(a2)//123456
+	//str := "1234567"
+	//fmt.Println(a2)//1.234567e+06
+	return strconv.ParseFloat(s, 64)
 }

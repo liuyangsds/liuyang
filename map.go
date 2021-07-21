@@ -25,6 +25,7 @@ func MapToString(mm map[string]interface{}) string {
 	//return result
 
 
+
 	//方式2：
 	str := ""//总接收变量
 	temp := ""//临时接收拼接的变量

@@ -1,11 +1,12 @@
 package liuyang
 
 import (
+	"fmt"
 	"math"
 	"strconv"
 )
 
-//将float64类型的小数四舍六入五成双后，得到一个字符串
+//方式1，将float64类型的小数四舍六入五成双后，得到一个字符串，且保留指定位数的小数
 func Float64ToString(f float64,n int) string  {
 	//参数n表示：
 	//0，取整数，不要后面的小数点部分，但是四舍五入后2.50变成了3，1.50变成了2,这是不理想的，所以0时要单独判断
@@ -29,5 +30,11 @@ func Float64ToString(f float64,n int) string  {
 	//fmt表示格式：'f'（-ddd.dddd）、'b'（-ddddp±ddd，指数为二进制）、'e'（-d.dddde±dd，十进制指数）、'E'（-d.ddddE±dd，十进制指数）、'g'（指数很大时用'e'格式，否则'f'格式）、'G'（指数很大时用'E'格式，否则'f'格式）。
 	//prec控制精度（排除指数部分）：对'f'、'e'、'E'，它表示小数点后的数字个数；对'g'、'G'，它控制总的数字个数。如果prec 为-1，则代表使用最少数量的、但又必需的数字来表示f。
 	str := strconv.FormatFloat(f,'f',n,64)
+	return str
+}
+
+//方式2，将float64类型的小数四舍六入五成双后，得到一个字符串，且保留2位小数
+func Float64ToString2(ff float64) string {
+	str := fmt.Sprintf("%.2f",ff)
 	return str
 }
