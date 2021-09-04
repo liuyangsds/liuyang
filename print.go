@@ -5,7 +5,7 @@ import (
 	"reflect"
 )
 
-//可打印map或struct类型的数据，并打印其键和值
+//打印map或struct类型的数据的键和值
 func Print_i(i interface{}) {
 
 	obj := reflect.TypeOf(i)//Type类型
@@ -42,8 +42,74 @@ func Print_i(i interface{}) {
 
 	fmt.Println("其他类型：",i)
 }
-//打印参数的类型
-func Print_type(i interface{}) {
+
+//获取变量类型，返回系统类型的名称
+func Get_T(i interface{}) string {//struct
 	obj := reflect.TypeOf(i)
-	fmt.Println("当前变量的类型为：",obj.Kind())
+	return obj.Kind().String()
 }
+//获取变量类型，返回实际类型的名称(具体的实际类型，更细节)
+func Get_TT(i interface{}) string {//main.Fangchong
+	return fmt.Sprintf("%T", i)
+}
+
+//打印参数的类型，得出变量的系统类型
+func Print_T(i interface{}) {//struct
+	obj := reflect.TypeOf(i)
+	fmt.Println("当前值的类型为：",obj.Kind().String())
+}
+
+//打印参数的类型，得出变量的实际类型(具体的实际类型，更细节)，如下打印类型的对比
+func Print_TT(i interface{})  {//main.Fangchong
+	fmt.Printf("当前值的类型为：%T\n", i)
+}
+
+/*
+打印类型：
+
+	//chan时
+	var cc chan int
+	fmt.Println(cc)//nil
+	test.Print_T(cc)//chan
+	fmt.Printf("%T", cc)//chan int
+
+	ff := make(chan int)
+	test.Print_T(ff)//chan
+	fmt.Printf("%T", ff, ff)//chan int
+	fmt.Printf("%v", ff, ff)//0xc0003981e0
+
+	//结构体时
+	ff := Fangchong{}
+	test.Print_T(ff)//struct
+	fmt.Printf("%T", ff)//main.Fangchong
+
+	//map时
+	ff := make(map[string]interface{})
+	test.Print_T(ff)//map
+	fmt.Printf("%T", ff)//map[string]interface {}
+
+	//数组时
+	ff := []byte{0,2}
+	test.Print_T(ff)//slice
+	fmt.Printf("%T", ff)//[]uint8
+
+	//数组时，不指定元素个数被视为切片
+	ff := []int{0,2}
+	test.Print_T(ff)//slice
+	fmt.Printf("%T", ff)//[]int
+
+	//数组时
+	ff := [5]int{2,1,4,2,1}
+	test.Print_T(ff)//array
+	fmt.Printf("%T", ff)//[5]int
+
+	//int
+	ff := 24
+	test.Print_T(ff)//int
+	fmt.Printf("%T", ff)//int
+
+	//string
+	ff := "haha"
+	test.Print_T(ff)//string
+	fmt.Printf("%T", ff)//string
+*/

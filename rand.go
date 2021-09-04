@@ -53,7 +53,7 @@ func RandomArrayInt(arr []int) []int {
 		//fmt.Print(randX,"\t")//4	8	2	2	1	2	0	1	1	0
 		tempArr = append(tempArr,arr[randX])
 		//删除生成的随机数所对应的值
-		arr = SliceDeleteKeyInt(arr,randX)
+		arr = ArrayDeleteKeyInt(arr,randX)
 		//fmt.Println(len(copyArr),"===>",randX)
 	}
 	//fmt.Println(tempArr)//[104 109 102 103 101 106 100 107 108 105]
@@ -75,7 +75,7 @@ func RandomArrayString(arr []string) []string {
 		//fmt.Print(randX,"\t")//4	8	2	2	1	2	0	1	1	0
 		tempArr = append(tempArr,arr[randX])
 		//删除生成的随机数所对应的值
-		arr = SliceDeleteKeyString(arr,randX)
+		arr = ArrayDeleteKeyString(arr,randX)
 		//fmt.Println(len(copyArr),"===>",randX)
 	}
 	//fmt.Println(tempArr)//[104 109 102 103 101 106 100 107 108 105]

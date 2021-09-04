@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-//获得文件大小，如：KB、MB、GB、TB、HB为单位的数值字符串。
+//将数值转为文件类型数值，如：KB、MB、GB、TB、HB为单位的数值字符串。
 func File_size(filesize int64) string {
 	var KB int64 = 1024		//1KB
 	MB := KB * 1024			//1MB
@@ -117,12 +117,23 @@ func File_put_contents_rewrite(filename string,data string) (int, error) {
 }
 
 
-//读取文件内容，将读取到的内容写入一个字符串中，返回读取到的内容和bool值
+//二次封装，读取文件内容，将读到的[]byte数据用高级写法转成string，并和bool值一起返回
 func File_get_contents(filename string) (string, bool) {
+	
+	bb,istrue := File_get_data(filename)
+	if istrue == false {
+		return "", false
+	}
+	//将[]byte高级转法为string
+	return BytesToString(bb), true
+}
+
+//读取文件内容，返回[]byte数据和bool值。
+func File_get_data(filename string) ([]byte, bool) {
 	//判断文件是否不存在
 	if File_exits(filename) == false {//文件不存在
 		//文件不存在
-		return "", false
+		return nil, false
 	}
 	//存在时
 	fopen,ferr := os.Open(filename)//打开文件
@@ -131,11 +142,11 @@ func File_get_contents(filename string) (string, bool) {
 	//获取文件信息
 	Sinfo,_ := fopen.Stat()//这里可以直接使用open的句柄调用Stat方法。而不用os.Stat方法。
 	//调用文件读操作方法，传参文件句柄和文件字节大小。
-	return fread(fopen,Sinfo.Size()), true
+	return fread(fopen, Sinfo.Size()), true
 }
 
-//读取文件操作
-func fread(fopen *os.File, length int64) string {
+//读取文件操作，返回[]byte
+func fread(fopen *os.File, length int64) []byte {
 
 	//创建byte类型的数组
 	byteArr := make([]byte,length)
@@ -146,14 +157,28 @@ func fread(fopen *os.File, length int64) string {
 	// Read方法可忽略，只有ReadAt方法在读取文件时，如果设置要读取的长度byte大于文件内容的长度时，读完后会出现EOF，所以当EOF的时候不做处理。
 	CheckErrEOF(rerr)//当读取文件出错时
 	//将读取到的内容长度用byte数组进行读取并转成字符串
-	return string(byteArr[0:rbyte])
+	return byteArr[0:rbyte]//普通转法
+	//return string(byteArr[0:rbyte])//普通转法
+	//return BytesToString(byteArr[0:rbyte])//高级转法
 }
-//读取文件内容，参数1，要读取的文件名称，参数2，要读取的开始位置，参数3，要读取的长度，返回读取到的内容和bool值
+//二次封装，读取文件内容，参数1，要读取的文件名称及路径，参数2，要读取的开始位置，参数3，要读取的长度，将读取的[]byte用高级写法转成string后和bool一起返回
 func File_get_contents_index(filename string, index int64, length int64) (string, bool) {
+
+	bb,istrue := File_get_data_index(filename, index, length)
+	if istrue == false {
+		return "", false
+	}
+
+	//将[]byte高级转法为string
+	return BytesToString(bb), true
+}
+
+//读取文件内容，参数1，要读取的文件名称，参数2，要读取的开始位置，参数3，要读取的长度，返回读取到的[]byte数据和bool值
+func File_get_data_index(filename string, index int64, length int64) ([]byte, bool) {
 	//判断文件是否不存在
 	if File_exits(filename) == false {//文件不存在
 		//文件不存在
-		return "", false
+		return nil, false
 	}
 	//存在
 	fopen,ferr := os.Open(filename)//打开文件
@@ -170,8 +195,8 @@ func File_get_contents_index(filename string, index int64, length int64) (string
 	return fread_index(fopen,index,length), true
 }
 
-//读取文件内容操作，参数1，文件名柄指针，参数2，要读取的开始位置，参数3，要读取的长度
-func fread_index(fopen *os.File,index int64, length int64) string {
+//读取文件内容操作，参数1，文件名柄指针，参数2，要读取的开始位置，参数3，要读取的长度，返回[]byte数据
+func fread_index(fopen *os.File,index int64, length int64) []byte {
 
 	//创建byte类型的数组
 	byteArr := make([]byte,length)
@@ -182,7 +207,8 @@ func fread_index(fopen *os.File,index int64, length int64) string {
 	//ReadAt方法在读取文件时，如果设置要读取的长度byte大于文件内容的长度时，读完后会出现EOF，所以当EOF的时候不做处理。
 	CheckErrEOF(rerr)//当读取文件出错时
 	//将读取到的内容长度用byte数组进行读取并转成字符串
-	return string(byteArr[0:rbyte])
+	//return string(byteArr[0:rbyte])//为了将byte转string更高效的使用，所以这里返回[]byte而不返回string
+	return byteArr[0:rbyte]
 }
 
 //检查文件或目录是否存在，如果存在返回true，否存返回false
@@ -199,6 +225,10 @@ func File_exits(path string) bool {
 	return false//不存在
 }
 
+//得到文件信息
+func File_info(filename string) (os.FileInfo, error) {
+	return os.Stat(filename)
+}
 
 //获取路径中的目录并创建
 func File_mkdir(filename string) error {
@@ -214,7 +244,7 @@ func File_mkdir(filename string) error {
 
 //文件操作===========================================
 
-//断点续传
+//断点续传，参数1：源文件、参数2：目标文件
 func File_xu_chuan(src_file string, desc_file string) error {
 
 	//测试复制断点续传
@@ -257,7 +287,7 @@ func File_xu_chuan(src_file string, desc_file string) error {
 	//开始循环复制文件
 	for {
 		//第1步，设置临时文件句柄的偏移量（0，文件开头）。
-		tempFile.Seek(0,io.SeekStart)
+		tempFile.Seek(0, io.SeekStart)
 
 		//第2步，读取临时文件中的数据。
 		temp_int,temp_err := tempFile.Read(read_tempData)

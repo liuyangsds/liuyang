@@ -3,6 +3,7 @@ package liuyang
 import (
 	"strconv"
 	"strings"
+	"unsafe"
 )
 
 //比较两个英文字符串的大小
@@ -62,7 +63,7 @@ func StringTrim(str string) string {
 }
 
 //得到一个英文字符串的ASCII码值的总和
-func StringWordSum(str string) int {
+func StringAscllSum(str string) int {
 	var sum int = 0
 	//fmt.Println(str)//liu yang
 	for i := 0; i < len(str); i++ {
@@ -101,4 +102,23 @@ func StringToFloat64(s string) (float64, error) {
 	//str := "1234567"
 	//fmt.Println(a2)//1.234567e+06
 	return strconv.ParseFloat(s, 64)
+}
+
+//新增
+//string转byte的高级写法
+func StringToBytes(s string) []byte {
+	//return *(*[]byte)(unsafe.Pointer(&s))
+	//上面的方式虽然正确，但是cap()却得不到正确的值，所以改用下面的方式
+	return *(*[]byte)(unsafe.Pointer(
+		&struct {
+			string
+			Cap int
+		}{s, len(s)},
+	))
+}
+
+//新增
+//byte转string的高级写法，bytes2string将字节片转换为字符串，无需内存分配
+func BytesToString(b []byte) string {
+	return *(*string)(unsafe.Pointer(&b))
 }
