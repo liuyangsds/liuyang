@@ -44,6 +44,7 @@ func MD5_test()  {
 func MD5(str string) string {
 	data := []byte(str)
 	md5x := md5.Sum(data)
+	//md5x是[16]byte数组，不是切片，不能用ByteToString转，只能用Sprintf转
 	md5str := fmt.Sprintf("%x",md5x)
 
 	return md5str

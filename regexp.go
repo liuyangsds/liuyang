@@ -18,7 +18,7 @@ func Check_test()  {
 		3，将返回结果byte类型转换成string类型。
 
 		如果使用string，其步骤为：
-		1，获取返回结果即果。
+		1，获取返回结果即可。
 
 		所以，为了省事，还是使用string类型比较好。
 	*/
@@ -466,9 +466,51 @@ func Check_Uid(str string) bool {
 	return istrue
 }
 
-//正则检测token格式是否合法，判定为50至300之间的任意字符
+//正则检测token格式是否合法，判定长度为固定32位的数字和字母
+func Check_md5(str string) bool {
+	expreg := "^[0-9a-zA-Z]{32}$"
+	reg, regErr := regexp.Compile(expreg)
+	if regErr != nil {
+		return false
+	}
+	//str := "123fa2fs314569_87as3"
+	istrue := reg.MatchString(str)
+	//istrue := reg.Match([]byte("123刘阳"))
+	//fmt.Println("字符串长度为：",len(str),"匹配结果：",istrue)
+	return istrue
+}
+
+//正则检测token格式是否合法，判定为30至100之间的数字和字母
 func Check_Token(str string) bool {
+	expreg := "^[0-9a-zA-Z]{30,100}$"
+	reg, regErr := regexp.Compile(expreg)
+	if regErr != nil {
+		return false
+	}
+	//str := "123fa2fs314569_87as3"
+	istrue := reg.MatchString(str)
+	//istrue := reg.Match([]byte("123刘阳"))
+	//fmt.Println("字符串长度为：",len(str),"匹配结果：",istrue)
+	return istrue
+}
+
+//正则检测token格式是否合法，判定为50至300之间的任意字符(不包括',")
+func Check_JWT(str string) bool {
 	expreg := "^[^'\"]{50,300}$"
+	reg, regErr := regexp.Compile(expreg)
+	if regErr != nil {
+		return false
+	}
+	//str := "123fa2fs314569_87as3"
+	istrue := reg.MatchString(str)
+	//istrue := reg.Match([]byte("123刘阳"))
+	//fmt.Println("字符串长度为：",len(str),"匹配结果：",istrue)
+	return istrue
+}
+
+//正则检测设备id格式是否合法，判定为6至200之间的任意字符(不包括',")
+func Check_devid(str string) bool {
+	expreg := "^[^'\"]{6,200}$"
 	reg, regErr := regexp.Compile(expreg)
 	if regErr != nil {
 		return false
