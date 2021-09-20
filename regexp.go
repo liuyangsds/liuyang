@@ -184,7 +184,7 @@ func Check_test()  {
 	fmt.Println("是否是网址：",istrue)
 
 	uid := "12322"
-	isuid := Check_Uid(uid)
+	isuid := Check_uid(uid)
 	fmt.Println("是否是合法的uid：",isuid)
 
 	//检测字符串中是否有数字
@@ -276,7 +276,7 @@ func Check_email(str string) bool {
 	return istrue
 }
 
-//只能输入汉字或字母或数字(1至16个)
+//只能输入汉字、字母、数字、下划线(1至16个)
 func Check_title(str string) bool {
 	expreg := "^[\u4e00-\u9fa5\\w]{1,16}$"
 	reg, regErr := regexp.Compile(expreg)
@@ -380,7 +380,7 @@ func Check_decimal_6(str string) bool {
 	return istrue
 }
 
-//检查积分，可输入0或小于10000000000000000(16个0)的正整数
+//检查积分，可输入0，或小于10000000000000000(16个0)的正整数
 func Check_0_score(str string) bool {
 	expreg := "^(0|[1-9]\\d{0,15})$";
 	reg, regErr := regexp.Compile(expreg)
@@ -404,7 +404,7 @@ func Check_1_score(str string) bool {
 	return istrue
 }
 
-//检查数字，可输入0或小于100000(5个0)的正整数
+//检查数字，可输入0，或小于100000(5个0)的正整数
 func Check_0_100000(str string) bool {
 	expreg := "^(0|[1-9]\\d{0,4})$";
 	reg, regErr := regexp.Compile(expreg)
@@ -428,7 +428,7 @@ func Check_1_100000(str string) bool {
 	return istrue
 }
 
-//只能输入大于或等于0并且小于1000000000(9个0)的正整数
+//检查数字，可输入0，或小于1000000000(9个0)的正整数
 func Check_0_1000000000(str string) bool {
 	expreg := "^(0|[1-9]\\d{0,8})$";
 	reg, regErr := regexp.Compile(expreg)
@@ -440,7 +440,7 @@ func Check_0_1000000000(str string) bool {
 	return istrue
 }
 
-//只能输入大于或等于1并且小于1000000000(9个0)的正整数
+//检查数字，只能输入大于或等于1并且小于1000000000(9个0)的正整数
 func Check_1_1000000000(str string) bool {
 	expreg := "^([1-9]\\d{0,8})$";
 	reg, regErr := regexp.Compile(expreg)
@@ -452,11 +452,9 @@ func Check_1_1000000000(str string) bool {
 	return istrue
 }
 
-
-
-//正则检测用户uid格式是否合法，以大于0值开头的数字且5到18位为合法。
-func Check_Uid(str string) bool {
-	expreg := "^[1-9]\\d{4,17}$"
+//检查数字，可输入0，或小于uint64最大值的正整数
+func Check_0_20(str string) bool {
+	expreg := "^(0|[1-9]\\d{0,19})$";
 	reg, regErr := regexp.Compile(expreg)
 	if regErr != nil {
 		return false
@@ -466,7 +464,45 @@ func Check_Uid(str string) bool {
 	return istrue
 }
 
-//正则检测token格式是否合法，判定长度为固定32位的数字和字母
+//只能输入大于或等于1并且小于uint64最大值的正整数
+func Check_1_20(str string) bool {
+	expreg := "^([1-9]\\d{0,19})$";
+	reg, regErr := regexp.Compile(expreg)
+	if regErr != nil {
+		return false
+	}
+	istrue := reg.MatchString(str)
+
+	return istrue
+}
+
+//正则检测字符串中的内容是否为纯数字
+func Check_number(str string) bool {
+	expreg := "^(\\d+)$";
+	reg, regErr := regexp.Compile(expreg)
+	if regErr != nil {
+		return false
+	}
+	istrue := reg.MatchString(str)
+
+	return istrue
+}
+
+
+
+//正则检测用户uid格式是否合法，以大于0值开头的数字且5到19位为合法。
+func Check_uid(str string) bool {
+	expreg := "^[1-9]\\d{4,18}$"
+	reg, regErr := regexp.Compile(expreg)
+	if regErr != nil {
+		return false
+	}
+	istrue := reg.MatchString(str)
+
+	return istrue
+}
+
+//正则检测md5格式是否合法，判定长度为固定32位的数字和字母
 func Check_md5(str string) bool {
 	expreg := "^[0-9a-zA-Z]{32}$"
 	reg, regErr := regexp.Compile(expreg)
@@ -481,7 +517,7 @@ func Check_md5(str string) bool {
 }
 
 //正则检测token格式是否合法，判定为30至100之间的数字和字母
-func Check_Token(str string) bool {
+func Check_token(str string) bool {
 	expreg := "^[0-9a-zA-Z]{30,100}$"
 	reg, regErr := regexp.Compile(expreg)
 	if regErr != nil {
@@ -494,8 +530,8 @@ func Check_Token(str string) bool {
 	return istrue
 }
 
-//正则检测token格式是否合法，判定为50至300之间的任意字符(不包括',")
-func Check_JWT(str string) bool {
+//正则检测jwt格式是否合法，判定为50至300之间的任意字符(不包括',")
+func Check_jwt(str string) bool {
 	expreg := "^[^'\"]{50,300}$"
 	reg, regErr := regexp.Compile(expreg)
 	if regErr != nil {
