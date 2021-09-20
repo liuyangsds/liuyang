@@ -2,17 +2,16 @@ package liuyang
 
 import (
 	"math/rand"
-	"time"
 )
 
 //生成随机数======================================
-
 //生成一个随机数，得到大于等于0并且小于参数值max的随机数
 func RandomNumber(max int) int {
 	if max <= 0 {
 		return max
 	}
-	rand.Seed(time.Now().UnixNano())
+	//随机种子必须要有，并且要用公用的，不能写在方法里，不然不利于循环
+	//rand.Seed(time.Now().UnixNano())
 	randX := rand.Intn(max)
 
 	//另一种写法：
@@ -22,15 +21,16 @@ func RandomNumber(max int) int {
 	//sliceSource := rand.NewSource(nanoTime)
 	//以随机种子重新创建了rand函数，此时返回了一个新的rand的指针
 	//r := rand.New(sliceSource)
-
 	return randX
 }
+
 //生成一个随机数，得到大于等于参数值min并且小于参数值max的随机数
 func RandomNumberRange(min int, max int) int {
 	if max <= 0 {
 		return 0
 	}
-	rand.Seed(time.Now().UnixNano())
+	//随机种子必须要有，并且要用公用的，不能写在方法里，不然不利于循环
+	//rand.Seed(time.Now().UnixNano())
 	//差值 = 最大数 - 最小数
 	offset := max - min
 	randX := rand.Intn(offset)
@@ -41,9 +41,8 @@ func RandomNumberRange(min int, max int) int {
 
 //int类型数组元素顺序打乱，以向临时数组添加新元素再删除原数组元素，反复操作，一般
 func RandomArrayInt(arr []int) []int {
-	//将传递过来的指针数组拷贝一个新数组，此时不应该在这里拷贝，而应该把是否要复制一份新数组的权力给调用者
-	//copyArr := copyArrayInt(arr)
-	rand.Seed(time.Now().UnixNano())
+	//随机种子必须要有，只能用公用的，不能写在方法里，不然不利于循环
+	//rand.Seed(time.Now().UnixNano())
 	var tempArr []int
 	//注意，下面的10代表原数组中固定的元素值，也就是有多少个元素，就要循环多少次，一定要记住。
 	num := len(arr)
@@ -63,9 +62,8 @@ func RandomArrayInt(arr []int) []int {
 
 //string类型数组元素顺序打乱，以向临时数组添加新元素再删除原数组元素，反复操作，效率一般
 func RandomArrayString(arr []string) []string {
-	//将传递过来的指针数组拷贝一个新数组，此时不应该在这里拷贝，而应该把是否要复制一份新数组的权力给调用者
-	//copyArr := copyArrayString(arr)
-	rand.Seed(time.Now().UnixNano())
+	//随机种子必须要有，只能用公用的，不能写在方法里，不然不利于循环
+	//rand.Seed(time.Now().UnixNano())
 	var tempArr []string
 	//注意，下面的10代表原数组中固定的元素值，也就是有多少个元素，就要循环多少次，一定要记住。
 	num := len(arr)
@@ -85,8 +83,8 @@ func RandomArrayString(arr []string) []string {
 
 //int类型数组元素打乱之最高境界，效率高，推荐
 func RandomArrayIntSuper(arr []int) []int {
-	//生成时间种子
-	rand.Seed(time.Now().UnixNano())
+	//随机种子必须要有，只能用公用的，不能写在方法里，不然不利于循环
+	//rand.Seed(time.Now().UnixNano())
 	var temp int
 	for i := 0; i < len(arr); i++ {
 		//第1步，得到随机数，范围值一定要大于0
@@ -105,8 +103,8 @@ func RandomArrayIntSuper(arr []int) []int {
 }
 //string类型数组元素打乱之最高境界，效率高，推荐
 func RandomArrayStringSuper(arr []string) []string {
-	//生成时间种子
-	rand.Seed(time.Now().UnixNano())
+	//随机种子必须要有，只能用公用的，不能写在方法里，不然不利于循环
+	//rand.Seed(time.Now().UnixNano())
 	var temp string
 	for i := 0; i < len(arr); i++ {
 		randX := rand.Intn(i+1)
@@ -122,8 +120,8 @@ func RandomArrayStringSuper(arr []string) []string {
 //生成int类型数组，其元素为大于等于0并且小于参数值的随机数的数组
 //如参数为5，则会得到[2 4 0 1 3]这样的数组
 func RandomNumberArrayInt(max int) []int {
-	//设置随机种子
-	rand.Seed(time.Now().UnixNano())
+	//随机种子必须要有，只能用公用的，不能写在方法里，不然不利于循环
+	//rand.Seed(time.Now().UnixNano())
 	//声明临时切片数组
 	arr := make([]int,max)
 
@@ -146,8 +144,8 @@ func RandomNumberArrayIntRange(min int, max int) []int {
 	offset := max - min
 	//创建数组切片，元素个数为差值数量
 	arr := make([]int,offset)
-	//生成时间种子
-	rand.Seed(time.Now().UnixNano())
+	//随机种子必须要有，只能用公用的，不能写在方法里，不然不利于循环
+	//rand.Seed(time.Now().UnixNano())
 	for i := 0; i < offset; i++ {
 		randX := rand.Intn(i+1)//i+1很重要，因为每次要获取小于这个数的值，i初始为0，总不能获取小于0的数。
 		arr[i] = arr[randX]
@@ -175,8 +173,8 @@ func RandomNumberArrayIntRangeNum(min int, max int,num int) []int {
 func RandomString(n int) string {
 	arr := []byte("0123456789abcdefghijklmnopqrstuvwxyz")
 	temp := make([]byte,n)
-
-	rand.Seed(time.Now().UnixNano())//设置随机种子
+	//随机种子必须要有，只能用公用的，不能写在方法里，不然不利于循环
+	//rand.Seed(time.Now().UnixNano())
 	for key := range temp {
 		//fmt.Println(key,"=====",value)
 		temp[key] = arr[rand.Intn(len(arr))]
