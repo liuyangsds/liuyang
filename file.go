@@ -116,11 +116,43 @@ func File_put_contents_rewrite(filename string,data string) (int, error) {
 	return fwrite(fopen, data)
 }
 
-
-//二次封装，读取文件内容，将读到的[]byte数据用高级写法转成string，并和bool值一起返回
+//读取文件内容，该函数名模仿php中的读文件函数File_get_contents。
+//之所以这样定义，是因为刘阳的初始技能为php。
+//新写法，封装标准库，读取文件内容，并将读到的byte转string后返回，推荐使用
 func File_get_contents(filename string) (string, bool) {
+	//判断读文件是否已读到[]byte数据
+	byteArr,ok := File_get_data(filename)
+	//只有ok为true时，才返回类型转换后的数据，否则以默认的初始值兜底返回
+	if ok == true {
+		return BytesToString(byteArr), true
+	}
+
+	//只以默认的初始值兜底返回
+	return "", false
+}
+
+//新写法，封装标准库，读取文件内容，推荐使用
+func File_get_data(filename string) ([]byte, bool) {
+	//判断文件是否不存在
+	if File_exits(filename) == false {//文件不存在
+		//文件不存在
+		return nil, false
+	}
+	//如果存在时，则读取文件
+	byteArr,err := ioutil.ReadFile(filename)
+	//只有读文件一切顺利的情况下才将byte转string后返回
+	if err == nil {
+		return byteArr, true
+	}
+
+	return nil, false
+}
+
+//原File_get_contents，现更名，将原名让给标准库中的写法。
+//二次封装，读取文件内容，将读到的[]byte数据用高级写法转成string，并和bool值一起返回
+func File_get_string(filename string) (string, bool) {
 	
-	bb,istrue := File_get_data(filename)
+	bb,istrue := File_get_byte(filename)
 	if istrue == false {
 		return "", false
 	}
@@ -128,8 +160,9 @@ func File_get_contents(filename string) (string, bool) {
 	return BytesToString(bb), true
 }
 
+//原File_get_data，现更名，将原名让给标准库中的写法。
 //读取文件内容，返回[]byte数据和bool值。
-func File_get_data(filename string) ([]byte, bool) {
+func File_get_byte(filename string) ([]byte, bool) {
 	//判断文件是否不存在
 	if File_exits(filename) == false {//文件不存在
 		//文件不存在
