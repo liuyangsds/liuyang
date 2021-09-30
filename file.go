@@ -244,14 +244,14 @@ func fread_index(fopen *os.File,index int64, length int64) []byte {
 	return byteArr[0:rbyte]
 }
 
-//检查文件或目录是否存在，如果存在返回true，否存返回false
+//检查文件或目录是否存在，如果存在返回true，不存在返回false
 func File_exits(path string) bool {
 	_,ferr := os.Stat(path)//只有不存在时，ferr才有内容，否则是nil
 	//这里的ferr在不等于nil时，也有可能是"aa/bb"这样的字符串，而没有实际目录文件。所以不能以是否为nil作为判断依据。
 	//if ferr != nil {
 	//	return true,nil
 	//}
-	//IsNotExist函数判断的是文件不存在。存在返回的是false，不存才返回true。
+	//IsNotExist函数判断的是文件不存在。存在返回的是false，不存在返回的是true。
 	if os.IsNotExist(ferr) == false {
 		return true//存在
 	}
