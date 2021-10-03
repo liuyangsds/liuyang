@@ -46,7 +46,7 @@ func Binary_test()  {
 //将10进制转2进制后得到字符串，刘阳推荐
 func DecToBin(n int64) string {
 	if n < 0 {
-		log.Println("十进制到二进制错误：参数必须大于零")
+		//log.Println("十进制到二进制错误：参数必须大于零")
 		return ""
 	}
 	if n == 0 {

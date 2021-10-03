@@ -1,6 +1,7 @@
 package liuyang
 
 import (
+	"math"
 	"strconv"
 	"strings"
 	"unsafe"
@@ -75,25 +76,142 @@ func StringAscllSum(str string) int {
 	return sum
 }
 
+//string类型转int8
+func StringToInt8(s string) int8 {
+	n,err := strconv.ParseInt(s, 10, 64)
+	if err != nil {
+		//字符串中的数字大于64位最大值19位时的报错
+		return 0//这里不用返回该类型的最大值，返回0就代表转换失败
+	}
+	//如果转后后的数值大于当前类型的最大值时，返回0
+	if n > math.MaxInt8 {
+		return 0
+	}
+
+	return int8(n)
+}
+
+//string类型转uint8
+func StringToUInt8(s string) uint8 {
+	n,err := strconv.ParseUint(s, 10, 64)
+	if err != nil {
+		//字符串中的数字大于64位最大值19位时的报错
+		return 0//这里不用返回该类型的最大值，返回0就代表转换失败
+	}
+	//如果转后后的数值大于当前类型的最大值时，返回0
+	if n > math.MaxUint8 {
+		return 0
+	}
+
+	return uint8(n)
+}
+
+//string类型转int16
+func StringToInt16(s string) int16 {
+	n,err := strconv.ParseInt(s, 10, 64)
+	if err != nil {
+		//字符串中的数字大于64位最大值19位时的报错
+		return 0//这里不用返回该类型的最大值，返回0就代表转换失败
+	}
+	//如果转后后的数值大于当前类型的最大值时，返回0
+	if n > math.MaxInt16 {
+		return 0
+	}
+
+	return int16(n)
+}
+
+//string类型转uint16
+func StringToUInt16(s string) uint16 {
+	n,err := strconv.ParseUint(s, 10, 64)
+	if err != nil {
+		//字符串中的数字大于64位最大值19位时的报错
+		return 0//这里不用返回该类型的最大值，返回0就代表转换失败
+	}
+	//如果转后后的数值大于当前类型的最大值时，返回0
+	if n > math.MaxUint16 {
+		return 0
+	}
+
+	return uint16(n)
+}
+
+
+//string类型转int32
+func StringToInt32(s string) int32{
+	n,err := strconv.ParseInt(s, 10, 64)
+	if err != nil {
+		//字符串中的数字大于64位最大值19位时的报错
+		return 0//这里不用返回该类型的最大值，返回0就代表转换失败
+	}
+	//如果转后后的数值大于当前类型的最大值时，返回0
+	if n > math.MaxInt32 {
+		return 0
+	}
+
+	return int32(n)
+}
+
+//string类型转uint32
+func StringToUInt32(s string) uint32 {
+	n,err := strconv.ParseUint(s, 10, 64)
+	if err != nil {
+		//字符串中的数字大于64位最大值19位时的报错
+		return 0//这里不用返回该类型的最大值，返回0就代表转换失败
+	}
+	//如果转后后的数值大于当前类型的最大值时，返回0
+	if n > math.MaxUint32 {
+		return 0
+	}
+
+	return uint32(n)
+}
+
 //string类型转int64
-func StringToInt64(s string) (int64, error) {
-	return strconv.ParseInt(s, 10, 64)
+func StringToInt64(s string) int64 {
+	n,err := strconv.ParseInt(s, 10, 64)
+	if err != nil {
+		//字符串中的数字大于64位最大值19位时的报错
+		return 0//这里不用返回该类型的最大值，返回0就代表转换失败
+	}
+	//如果转后后的数值大于当前类型的最大值时，返回0
+	if n > math.MaxInt64 {
+		return 0
+	}
+
+	return n
 }
 
 //string类型转uint64
-func StringToUInt64(s string) (uint64, error) {
-	return strconv.ParseUint(s, 10, 64)
+func StringToUInt64(s string) uint64 {
+	n,err := strconv.ParseUint(s, 10, 64)
+	if err != nil {
+		//字符串中的数字大于64位最大值19位时的报错
+		return 0//这里不用返回该类型的最大值，返回0就代表转换失败
+	}
+
+	return n
 }
 
 //string类型转float32，虽然返回的是float64类型，但是以float32为精度截取的
-func StringToFloat32(s string) (float64, error) {
+func StringToFloat32(s string) float32 {
 	//str := "123456.0123456789653"
 	//fmt.Println(a1)//123456.015625
-	return strconv.ParseFloat(s, 32)
+	ff,err := strconv.ParseFloat(s, 64)
+	if err != nil {
+		//字符串中的数字大于64位最大值19位时的报错
+		return 0//这里不用返回该类型的最大值，返回0就代表转换失败
+	}
+	//如果转后后的数值大于当前类型的最大值时，返回0
+	if ff > math.MaxFloat32 {
+		return 0
+	}
+
+	return float32(ff)
 }
 
 //string转float64
-func StringToFloat64(s string) (float64, error) {
+func StringToFloat64(s string) float64 {
 	//str := "123456.0123456789653"
 	//fmt.Println(a2)//123456.01234567896
 	//值的注意：string转float时，只能转6位数以下的值，超过6位就会变成科学计数法，如下：
@@ -101,7 +219,13 @@ func StringToFloat64(s string) (float64, error) {
 	//fmt.Println(a2)//123456
 	//str := "1234567"
 	//fmt.Println(a2)//1.234567e+06
-	return strconv.ParseFloat(s, 64)
+	ff,err := strconv.ParseFloat(s, 64)
+	if err != nil {
+		//字符串中的数字大于64位最大值19位时的报错
+		return 0//这里不用返回该类型的最大值，返回0就代表转换失败
+	}
+
+	return ff
 }
 
 //新增
