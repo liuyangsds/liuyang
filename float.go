@@ -33,10 +33,20 @@ func Float64ToString(ff float64,n int) string  {
 	return str
 }
 
-//方式2，将float64类型的小数四舍六入五成双后，得到一个字符串，且保留2位小数
+//方式2，将float64类型的小数四舍六入五成双后，得到一个固定保留2位小数的字符串
 func Float64ToString2(ff float64) string {
 	str := fmt.Sprintf("%.2f",ff)
 	return str
+}
+
+//将float64转成指定小数位的float64
+func Float64ToFloat64(ff float64, n int) float64 {
+	//1，先将float类型转成string类型，并指定保留的小数个数
+	str := Float64ToString(ff, n)
+	//2，再将string类型转成float64
+	ss := StringToFloat64(str)
+
+	return ss
 }
 
 //float64转int64
