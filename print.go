@@ -43,16 +43,6 @@ func Print_i(i interface{}) {
 	fmt.Println("其他类型：",i)
 }
 
-//获取变量类型，返回系统类型的名称
-func Get_T(i interface{}) string {//struct
-	obj := reflect.TypeOf(i)
-	return obj.Kind().String()
-}
-//获取变量类型，返回实际类型的名称(具体的实际类型，更细节)
-func Get_TT(i interface{}) string {//main.Fangchong
-	return fmt.Sprintf("%T", i)
-}
-
 //打印参数的类型，得出变量的系统类型
 func Print_T(i interface{}) {//struct
 	obj := reflect.TypeOf(i)
