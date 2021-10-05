@@ -341,6 +341,19 @@ func Check_money(str string) bool {
 	return istrue
 }
 
+//有符号(正负)检查金额，只能输入大于0并且小于1000000000(9个0)的正整数或小数(精确0至2位)，刘阳推荐
+//注意数据库存储时的精度，也不能用10位，不然会与时间戳相混
+func Check_s_money(str string) bool {
+	expreg := "^(\\+|\\-)?((0\\.(0[1-9]|[1-9]\\d?))|([1-9]\\d{0,8}(\\.\\d{1,2})?))$";
+	reg, regErr := regexp.Compile(expreg)
+	if regErr != nil {
+		return false
+	}
+	istrue := reg.MatchString(str)
+
+	return istrue
+}
+
 //检查小数，可输入0.00，或输入小于1000000000(9个0)的正整数或小数(精确0至2位)，刘阳推荐
 //注意数据库存储时的精度，也不能用10位，不然会与时间戳相混
 func Check_decimal(str string) bool {
@@ -353,6 +366,22 @@ func Check_decimal(str string) bool {
 
 	return istrue
 }
+
+
+//有符号(正负)检查小数，可输入0.00，或输入小于1000000000(9个0)的正整数或小数(精确0至2位)，刘阳推荐
+//注意数据库存储时的精度，也不能用10位，不然会与时间戳相混
+func Check_s_decimal(str string) bool {
+	expreg := "^((\\+|\\-)?(0|[1-9]\\d{0,8})(\\.\\d{1,2})?)$";
+	reg, regErr := regexp.Compile(expreg)
+	if regErr != nil {
+		return false
+	}
+	istrue := reg.MatchString(str)
+
+	return istrue
+}
+
+
 
 //检查金额，只能输入大于0并且小于1000000000(9个0)的正整数或小数(精确0至6位)，刘阳推荐
 //注意数据库存储时的精度，也不能用10位，不然会与时间戳相混
@@ -367,10 +396,48 @@ func Check_money_6(str string) bool {
 	return istrue
 }
 
+//有符号(正负)检查金额，只能输入大于0并且小于1000000000(9个0)的正整数或小数(精确0至6位)，刘阳推荐
+//注意数据库存储时的精度，也不能用10位，不然会与时间戳相混
+func Check_s_money_6(str string) bool {
+	expreg := "^(\\+|\\-)?((0\\.(\\d{0,1}[1-9]\\d{0,4}|\\d{0,2}[1-9]\\d{0,3}|\\d{0,3}[1-9]\\d{0,2}|\\d{0,4}[1-9]\\d{0,1}|\\d{0,5}[1-9]|[1-9]\\d{0,5}))|([1-9]\\d{0,8}(\\.\\d{1,6})?))$";
+	reg, regErr := regexp.Compile(expreg)
+	if regErr != nil {
+		return false
+	}
+	istrue := reg.MatchString(str)
+
+	return istrue
+}
+
 //检查小数，可输入0.000000，或输入小于1000000000(9个0)的正整数或小数(精确0至6位)，刘阳推荐
 //注意数据库存储时的精度，也不能用10位，不然会与时间戳相混
 func Check_decimal_6(str string) bool {
 	expreg := "^((0|[1-9]\\d{0,8})(\\.\\d{1,6})?)$";
+	reg, regErr := regexp.Compile(expreg)
+	if regErr != nil {
+		return false
+	}
+	istrue := reg.MatchString(str)
+
+	return istrue
+}
+
+//有符号(正负)检查小数，可输入0.000000，或输入小于1000000000(9个0)的正整数或小数(精确0至6位)，刘阳推荐
+//注意数据库存储时的精度，也不能用10位，不然会与时间戳相混
+func Check_s_decimal_6(str string) bool {
+	expreg := "^((\\+|\\-)?(0|[1-9]\\d{0,8})(\\.\\d{1,6})?)$";
+	reg, regErr := regexp.Compile(expreg)
+	if regErr != nil {
+		return false
+	}
+	istrue := reg.MatchString(str)
+
+	return istrue
+}
+
+//有符号(正负)检查积分，可输入0，或小于10000000000000000(16个0)的正整数
+func Check_s_0_score(str string) bool {
+	expreg := "^(\\+|\\-)?(0|[1-9]\\d{0,15})$";
 	reg, regErr := regexp.Compile(expreg)
 	if regErr != nil {
 		return false
@@ -404,6 +471,19 @@ func Check_1_score(str string) bool {
 	return istrue
 }
 
+//有符号(正负)检查数字，可输入0，或小于100000(5个0)的正整数
+func Check_s_0_100000(str string) bool {
+	expreg := "^(\\+|\\-)?(0|[1-9]\\d{0,4})$";
+	reg, regErr := regexp.Compile(expreg)
+	if regErr != nil {
+		return false
+	}
+	istrue := reg.MatchString(str)
+
+	return istrue
+}
+
+
 //检查数字，可输入0，或小于100000(5个0)的正整数
 func Check_0_100000(str string) bool {
 	expreg := "^(0|[1-9]\\d{0,4})$";
@@ -419,6 +499,18 @@ func Check_0_100000(str string) bool {
 //检查数字，只能输入大于或等于1并且小于100000(5个0)的正整数
 func Check_1_100000(str string) bool {
 	expreg := "^([1-9]\\d{0,4})$";
+	reg, regErr := regexp.Compile(expreg)
+	if regErr != nil {
+		return false
+	}
+	istrue := reg.MatchString(str)
+
+	return istrue
+}
+
+//有符号(正负)检查数字，可输入0，或小于1000000000(9个0)的正整数
+func Check_s_0_1000000000(str string) bool {
+	expreg := "^(\\+|\\-)?(0|[1-9]\\d{0,8})$";
 	reg, regErr := regexp.Compile(expreg)
 	if regErr != nil {
 		return false
@@ -476,7 +568,7 @@ func Check_1_20(str string) bool {
 	return istrue
 }
 
-//正则检测字符串中的内容是否为纯数字
+//正则检测字符串中的内容是否为纯数字，不限制个数
 func Check_number(str string) bool {
 	expreg := "^(\\d+)$";
 	reg, regErr := regexp.Compile(expreg)
@@ -488,6 +580,17 @@ func Check_number(str string) bool {
 	return istrue
 }
 
+//有符号(正负)检测字符串中的内容是否为正数或负数
+func Check_s_number(str string) bool {
+	expreg := "^((\\+|\\-)?\\d+)$";
+	reg, regErr := regexp.Compile(expreg)
+	if regErr != nil {
+		return false
+	}
+	istrue := reg.MatchString(str)
+
+	return istrue
+}
 
 
 //正则检测用户uid格式是否合法，以大于0值开头的数字且5到19位为合法。
