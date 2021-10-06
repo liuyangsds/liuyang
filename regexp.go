@@ -225,7 +225,21 @@ func Check_test()  {
 
 }
 
-//必须以字母开头(参考：微信号和陌陌个性帐号)，可以使用5-20位数字、字母、下划线、减号或它们的组合。
+//正则个性化检查，可以是数字开头，可以使用3-20位数字、字母、下划线。
+func Check_custom(str string) bool {
+	expreg := "^(\\w{3,20})$"
+	reg, regErr := regexp.Compile(expreg)
+	if regErr != nil {
+		return false
+	}
+	//str := "123fa2fs314569_87as3"
+	istrue := reg.MatchString(str)
+	//istrue := reg.Match([]byte("123刘阳"))
+	//fmt.Println("字符串长度为：",len(str),"匹配结果：",istrue)
+	return istrue
+}
+
+//必须以字母开头(参考：微信号和陌陌个性帐号)，可以使用5-20位数字、字母、下划线。
 //正则检查用户名只能输入字母或数字或下划线(5至20位)，以字母开头。
 func Check_username(str string) bool {
 	expreg := "^[a-zA-Z]\\w{4,19}$"
