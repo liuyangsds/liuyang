@@ -76,6 +76,23 @@ func ArrayDeleteKeyInt(s []int, index int) []int {
 	return s
 }
 
+//删除一个切片元素，返回uint32类型切片
+func ArrayDeleteKeyUInt32(s []uint32, index uint32) []uint32 {
+
+	s = append(s[:index], s[index + 1:]...)
+
+	return s
+}
+
+//删除一个切片元素，返回uint64类型切片
+func ArrayDeleteKeyUInt64(s []uint64, index uint32) []uint64 {
+
+	s = append(s[:index], s[index + 1:]...)
+
+	return s
+}
+
+
 //删除一个切片元素，返回string类型切片
 func ArrayDeleteKeyString(s []string, index int) []string {
 
