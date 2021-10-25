@@ -92,7 +92,6 @@ func ArrayDeleteKeyUInt64(s []uint64, index int) []uint64 {
 	return s
 }
 
-
 //删除一个切片元素，返回string类型切片
 func ArrayDeleteKeyString(s []string, index int) []string {
 
