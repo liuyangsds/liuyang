@@ -619,6 +619,19 @@ func Check_uid(str string) bool {
 	return istrue
 }
 
+//检查6位数字
+func Check_6(str string) bool {
+	expreg := "^[0-9]{6}$";
+	reg, regErr := regexp.Compile(expreg)
+	if regErr != nil {
+		return false
+	}
+	istrue := reg.MatchString(str)
+
+	return istrue
+}
+
+
 //正则检测md5格式是否合法，判定长度为固定32位的数字和字母
 func Check_md5(str string) bool {
 	expreg := "^[0-9a-zA-Z]{32}$"
