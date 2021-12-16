@@ -143,6 +143,13 @@ func VersionCompare(verS1, verS2 string) int {
 	return 0
 }
 
+//截取字符串，可以是所有字符，也包括汉字。
+func StringSubstr(str string, startIndex int, endIndex int) string {
+	rune_arr := []rune(str)
+
+	return string(rune_arr[startIndex:endIndex])
+}
+
 //判断字符串是否为空，如果有空格的话，也视为空
 func StringIsEmpty(str string) bool {
 

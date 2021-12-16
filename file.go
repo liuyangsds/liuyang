@@ -407,7 +407,7 @@ func File_folder_total(dir string, level int) (int, int) {
 	//此处如果不用的话，那么递规调用方法时就要传参level + 1这种形式，其实和level++功能一样。
 	//level++ //层次变量自增，想要打印有层次感的文件名地址，就必须要有该变量的记录。
 
-	child_dir := "" //子文件夹变量
+	child_dir := "" //子文件夹名称
 
 	var folder_num int = 0 //文件夹数量
 	var file_num int = 0   //文件数量
@@ -422,7 +422,7 @@ func File_folder_total(dir string, level int) (int, int) {
 			child_dir = dir + "/" + fileInfo_arr[i].Name()
 			folder_num++ //文件夹数量累加
 			//递规调用，参数为目录地址和层次，层次如果不加1的话，那上面就需要level++了。
-			n_folder, n_file = File_folder_total(child_dir, level+1) //返回文件夹数量和文件数量
+			n_folder, n_file = File_folder_total(child_dir, level+1) //返回文件夹数量和文件数量，这里必须得加1才行
 			folder_num += n_folder                                   //文件夹数量累加递规返回的文件夹数量
 			file_num += n_file                                       //文件数量累加递规返回的文件数量
 			//fmt.Println("文件夹数量为：",folder_num,",第2值：",n_folder,"，文件数量",n_file,"，文件夹名称为：",child_dir)
@@ -433,10 +433,14 @@ func File_folder_total(dir string, level int) (int, int) {
 
 		//tempdir := dir + "/" + fileInfo_arr[i].Name()
 		//fmt.Println("当前级别：",level,"，文件为：",level_str,tempdir)
-
+		//当前级别： 5 ，文件为： |   |   |   |   |   |-- -------> temp_test/android/res/atlases/base/moyangguan/task
+		//当前级别： 4 ，文件为： |   |   |   |   |-- -------> temp_test/android/res/atlases/base/moyangguan
+		//当前级别： 4 ，文件为： |   |   |   |   |-- -------> temp_test/android/res/atlases/base/settingbox
+		//当前级别： 4 ，文件为： |   |   |   |   |-- -------> temp_test/android/res/atlases/base/settingbox.manifest
+		//当前级别： 3 ，文件为： |   |   |   |-- -------> temp_test/android/res/atlases/base
+		//当前级别： 2 ，文件为： |   |   |-- -------> temp_test/android/res/atlases
+		//当前级别： 1 ，文件为： |   |-- -------> temp_test/android/res
 	}
 
 	return folder_num, file_num
 }
-
-//统计目录中的文件夹数量与文件数量
