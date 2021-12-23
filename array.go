@@ -146,9 +146,108 @@ func ArrayDeleteKeyStringLength(s []string, index int, length int) []string {
 
 //复制数组切片======================================
 
+//复制一个byte数组切片
+func ArrayCopyByte(arr []byte) []byte {
+	var temp = make([]byte, len(arr))
+	//将原数据数组拷贝给临时数组。拷贝后，返回元素数量
+	copy(temp, arr)
+
+	return temp
+}
+
+//复制一个bool数组切片
+func ArrayCopyBool(arr []bool) []bool {
+	var temp = make([]bool, len(arr))
+	//将原数据数组拷贝给临时数组。拷贝后，返回元素数量
+	copy(temp, arr)
+
+	return temp
+}
+
+//复制一个uint数组切片
+func ArrayCopyUint(arr []uint) []uint {
+	var temp = make([]uint, len(arr))
+	//将原数据数组拷贝给临时数组。拷贝后，返回元素数量
+	copy(temp, arr)
+
+	return temp
+}
+
+//复制一个uint8数组切片
+func ArrayCopyUint8(arr []uint8) []uint8 {
+	var temp = make([]uint8, len(arr))
+	//将原数据数组拷贝给临时数组。拷贝后，返回元素数量
+	copy(temp, arr)
+
+	return temp
+}
+
+//复制一个uint16数组切片
+func ArrayCopyUint16(arr []uint16) []uint16 {
+	var temp = make([]uint16, len(arr))
+	//将原数据数组拷贝给临时数组。拷贝后，返回元素数量
+	copy(temp, arr)
+
+	return temp
+}
+
+//复制一个uint32数组切片
+func ArrayCopyUint32(arr []uint32) []uint32 {
+	var temp = make([]uint32, len(arr))
+	//将原数据数组拷贝给临时数组。拷贝后，返回元素数量
+	copy(temp, arr)
+
+	return temp
+}
+
+//复制一个uint64数组切片
+func ArrayCopyUint64(arr []uint64) []uint64 {
+	var temp = make([]uint64, len(arr))
+	//将原数据数组拷贝给临时数组。拷贝后，返回元素数量
+	copy(temp, arr)
+
+	return temp
+}
+
 //复制一个int数组切片
 func ArrayCopyInt(arr []int) []int {
 	var temp = make([]int, len(arr))
+	//将原数据数组拷贝给临时数组。拷贝后，返回元素数量
+	copy(temp, arr)
+
+	return temp
+}
+
+//复制一个int8数组切片
+func ArrayCopyInt8(arr []int8) []int8 {
+	var temp = make([]int8, len(arr))
+	//将原数据数组拷贝给临时数组。拷贝后，返回元素数量
+	copy(temp, arr)
+
+	return temp
+}
+
+//复制一个int16数组切片
+func ArrayCopyInt16(arr []int16) []int16 {
+	var temp = make([]int16, len(arr))
+	//将原数据数组拷贝给临时数组。拷贝后，返回元素数量
+	copy(temp, arr)
+
+	return temp
+}
+
+//复制一个int32数组切片
+func ArrayCopyInt32(arr []int32) []int32 {
+	var temp = make([]int32, len(arr))
+	//将原数据数组拷贝给临时数组。拷贝后，返回元素数量
+	copy(temp, arr)
+
+	return temp
+}
+
+//复制一个int64数组切片
+func ArrayCopyInt64(arr []int64) []int64 {
+	var temp = make([]int64, len(arr))
 	//将原数据数组拷贝给临时数组。拷贝后，返回元素数量
 	copy(temp, arr)
 
