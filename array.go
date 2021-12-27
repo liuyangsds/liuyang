@@ -1,5 +1,10 @@
 package liuyang
 
+import (
+	"fmt"
+	"strings"
+)
+
 //数组元素排序======================================
 
 //标准冒泡排序，参数1为原数组，参数2如果为0则正序，为1则倒序。
@@ -346,3 +351,21 @@ func ArrayCopyRangeString(arr []string, start int, length int) []string {
 }
 
 //复制数组切片======================================
+//将所有int类型的数组分割成以逗号连接的字符串
+func ArrayToString(arr interface{}, sep string) string {
+	temp_str := fmt.Sprint(arr)
+	//fmt.Println(str) //[1 2 3 4 5 6 7 8 9]，字符串类型
+
+	tt := strings.Trim(temp_str, "[]")
+	//fmt.Println(tt) //1 2 3 4 5 6 7 8 9，去掉首尾字符：中括号
+
+	//str := strings.Replace(tt, " ", ",", 5)
+	//fmt.Println(str)//1,2,3,4,5,6 7 8 9
+
+	//str1 := strings.Replace(tt, " ", ",", -1)
+	//fmt.Println(str1) //1,2,3,4,5,6,7,8,9
+
+	str := strings.Replace(tt, " ", sep, -1)
+
+	return str
+}
