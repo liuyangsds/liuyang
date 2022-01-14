@@ -1,3 +1,3 @@
 package liuyang
 
-const Version = "1.2.7"
+const Version = "1.2.8"
