@@ -39,7 +39,7 @@ func RandomNumberRange(min int, max int) int {
 	return randX + min
 }
 
-//int类型数组元素顺序打乱，以向临时数组添加新元素再删除原数组元素，反复操作，效率一般
+//int类型数组元素顺序打乱，以向临时数组添加新元素再删除原数组元素，反复操作，效率一般，参考学习
 func RandomArrayIntNormal(arr []int) []int {
 	//随机种子必须要有，只能用公用的，不能写在方法里，不然不利于循环
 	//rand.Seed(time.Now().UnixNano())
@@ -60,7 +60,7 @@ func RandomArrayIntNormal(arr []int) []int {
 	return tempArr
 }
 
-//string类型数组元素顺序打乱，以向临时数组添加新元素再删除原数组元素，反复操作，效率一般
+//string类型数组元素顺序打乱，以向临时数组添加新元素再删除原数组元素，反复操作，效率一般，参考学习
 func RandomArrayStringNormal(arr []string) []string {
 	//随机种子必须要有，只能用公用的，不能写在方法里，不然不利于循环
 	//rand.Seed(time.Now().UnixNano())

@@ -41,7 +41,23 @@ func BaseUInt10To16(n uint64) string {
 //----------------10进制转成2、8、16进制----------------
 
 //----------------2、8、16进制转成10进制----------------
+//进制转换，2转10，int类型，base为0时，代表参数可以传以0b、0o、0x开头的字符串，如果base大于0就不允许传特殊字符。
+//	ab2 := test.Base0To10Int("0b10110") //22
+//	ab8 := test.Base0To10Int("0o26")    //22
+//	ab16 := test.Base0To10Int("0x16")   //22
+func Base0To10Int(s string) int64 {
+	n, err := strconv.ParseInt(s, 0, 64)
+	if err != nil {
+		return 0
+	}
+
+	return n
+}
+
 //进制转换，2转10，int类型
+//	aa2 := test.Base2To10UInt("10110") //22
+//	aa8 := test.Base8To10UInt("26")    //22
+//	aa16 := test.Base16To10UInt("16")  //22
 func Base2To10Int(s string) int64 {
 	n, err := strconv.ParseInt(s, 2, 64)
 	if err != nil {
@@ -102,6 +118,114 @@ func Base16To10UInt(s string) uint64 {
 }
 
 //----------------2、8、16进制转成10进制----------------
+
+//----------------打印[]byte数组，里面包含10进制数，得到2、8、16进制数，参数默认0包含0x和补0----------------
+//打印[]byte数组，里面包含的是10进制数，得到0b开头的2进制数并以分号连接的字符串
+func PrintBase10To2(byteArr []byte, flag uint8) string {
+	var str = ""       //总总符串，默认空
+	var prefix_0 = ""  //补字符0，默认空
+	var prefix_0b = "" //补字符0b,默认空
+	if flag == 0 {
+		prefix_0 = "0"
+		prefix_0b = "0b"
+	} else if flag == 1 {
+		prefix_0 = "0"
+		prefix_0b = ""
+	} else if flag == 2 {
+		prefix_0 = ""
+		prefix_0b = "0b"
+	} else if flag == 3 {
+		prefix_0 = ""
+		prefix_0b = ""
+	}
+	for key, value := range byteArr {
+		//将10进制数转成16进制字符串
+		cardData := BaseUInt10To2(uint64(value))
+		//如果长度为1，也就是0到9时，补0，这样方便看，不然会是0x1,0x2，远没有0x01,0x02好看。
+		if len(cardData) == 1 {
+			cardData = prefix_0 + cardData
+		}
+		if key < len(byteArr)-1 {
+			str += prefix_0b + cardData + ","
+		} else {
+			str += prefix_0b + cardData
+		}
+	}
+
+	return str
+}
+
+//打印[]byte数组，里面包含的是10进制数，得到0o开头的8进制数并以分号连接的字符串
+func PrintBase10To8(byteArr []byte, flag uint8) string {
+	var str = ""       //总总符串，默认空
+	var prefix_0 = ""  //补字符0，默认空
+	var prefix_0b = "" //补字符0b,默认空
+	if flag == 0 {
+		prefix_0 = "0"
+		prefix_0b = "0o"
+	} else if flag == 1 {
+		prefix_0 = "0"
+		prefix_0b = ""
+	} else if flag == 2 {
+		prefix_0 = ""
+		prefix_0b = "0o"
+	} else if flag == 3 {
+		prefix_0 = ""
+		prefix_0b = ""
+	}
+	for key, value := range byteArr {
+		//将10进制数转成16进制字符串
+		cardData := BaseUInt10To8(uint64(value))
+		//如果长度为1，也就是0到9时，补0，这样方便看，不然会是0x1,0x2，远没有0x01,0x02好看。
+		if len(cardData) == 1 {
+			cardData = prefix_0 + cardData
+		}
+		if key < len(byteArr)-1 {
+			str += prefix_0b + cardData + ","
+		} else {
+			str += prefix_0b + cardData
+		}
+	}
+
+	return str
+}
+
+//打印[]byte数组，里面包含的是10进制数，得到0x开头的16进制数并以分号连接的字符串
+func PrintBase10To16(byteArr []byte, flag uint8) string {
+	var str = ""       //总总符串，默认空
+	var prefix_0 = ""  //补字符0，默认空
+	var prefix_0b = "" //补字符0b,默认空
+	if flag == 0 {
+		prefix_0 = "0"
+		prefix_0b = "0x"
+	} else if flag == 1 {
+		prefix_0 = "0"
+		prefix_0b = ""
+	} else if flag == 2 {
+		prefix_0 = ""
+		prefix_0b = "0x"
+	} else if flag == 3 {
+		prefix_0 = ""
+		prefix_0b = ""
+	}
+	for key, value := range byteArr {
+		//将10进制数转成16进制字符串
+		cardData := BaseUInt10To16(uint64(value))
+		//如果长度为1，也就是0到9时，补0，这样方便看，不然会是0x1,0x2，远没有0x01,0x02好看。
+		if len(cardData) == 1 {
+			cardData = prefix_0 + cardData
+		}
+		if key < len(byteArr)-1 {
+			str += prefix_0b + cardData + ","
+		} else {
+			str += prefix_0b + cardData
+		}
+	}
+
+	return str
+}
+
+//----------------打印[]byte数组，里面包含10进制数，得到2、8、16进制数，参数默认0包含0x和补0----------------
 //====================================自定义封装进制函数========================================
 
 //====================================进制学习专用函数========================================
