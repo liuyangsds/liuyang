@@ -39,8 +39,8 @@ func RandomNumberRange(min int, max int) int {
 	return randX + min
 }
 
-//int类型数组元素顺序打乱，以向临时数组添加新元素再删除原数组元素，反复操作，一般
-func RandomArrayInt(arr []int) []int {
+//int类型数组元素顺序打乱，以向临时数组添加新元素再删除原数组元素，反复操作，效率一般
+func RandomArrayIntNormal(arr []int) []int {
 	//随机种子必须要有，只能用公用的，不能写在方法里，不然不利于循环
 	//rand.Seed(time.Now().UnixNano())
 	var tempArr []int
@@ -50,9 +50,9 @@ func RandomArrayInt(arr []int) []int {
 
 		randX := rand.Intn(len(arr))
 		//fmt.Print(randX,"\t")//4	8	2	2	1	2	0	1	1	0
-		tempArr = append(tempArr,arr[randX])
+		tempArr = append(tempArr, arr[randX])
 		//删除生成的随机数所对应的值
-		arr = ArrayDeleteKeyInt(arr,randX)
+		arr = ArrayDeleteKeyInt(arr, randX)
 		//fmt.Println(len(copyArr),"===>",randX)
 	}
 	//fmt.Println(tempArr)//[104 109 102 103 101 106 100 107 108 105]
@@ -61,7 +61,7 @@ func RandomArrayInt(arr []int) []int {
 }
 
 //string类型数组元素顺序打乱，以向临时数组添加新元素再删除原数组元素，反复操作，效率一般
-func RandomArrayString(arr []string) []string {
+func RandomArrayStringNormal(arr []string) []string {
 	//随机种子必须要有，只能用公用的，不能写在方法里，不然不利于循环
 	//rand.Seed(time.Now().UnixNano())
 	var tempArr []string
@@ -71,9 +71,9 @@ func RandomArrayString(arr []string) []string {
 
 		randX := rand.Intn(len(arr))
 		//fmt.Print(randX,"\t")//4	8	2	2	1	2	0	1	1	0
-		tempArr = append(tempArr,arr[randX])
+		tempArr = append(tempArr, arr[randX])
 		//删除生成的随机数所对应的值
-		arr = ArrayDeleteKeyString(arr,randX)
+		arr = ArrayDeleteKeyString(arr, randX)
 		//fmt.Println(len(copyArr),"===>",randX)
 	}
 	//fmt.Println(tempArr)//[104 109 102 103 101 106 100 107 108 105]
@@ -81,14 +81,14 @@ func RandomArrayString(arr []string) []string {
 	return tempArr
 }
 
-//int类型数组元素打乱之最高境界，效率高，推荐
-func RandomArrayIntSuper(arr []int) []int {
+//byte类型数组元素打乱之最高境界，效率高，推荐
+func RandomArrayByte(arr []byte) []byte {
 	//随机种子必须要有，只能用公用的，不能写在方法里，不然不利于循环
 	//rand.Seed(time.Now().UnixNano())
-	var temp int
+	var temp byte
 	for i := 0; i < len(arr); i++ {
 		//第1步，得到随机数，范围值一定要大于0
-		randX := rand.Intn(i+1)
+		randX := rand.Intn(i + 1)
 		//第2步，当前位置的值赋值临时变量，这样等于备份了一下，因为即将有随机位置的值赋过来并替换掉当前位置的值
 		//temp变量之所以需要，是因为要打乱一个数组中的元素。这个数组元素有可能是200、300、555、666这样的值。
 		//如果只是想要将0到10或0到100之内的数随机，那可以省略temp变量。
@@ -101,13 +101,140 @@ func RandomArrayIntSuper(arr []int) []int {
 
 	return arr
 }
+
+//uint8类型数组元素打乱之最高境界，效率高，推荐
+func RandomArrayUInt8(arr []uint8) []uint8 {
+	//随机种子必须要有，只能用公用的，不能写在方法里，不然不利于循环
+	//rand.Seed(time.Now().UnixNano())
+	var temp uint8
+	for i := 0; i < len(arr); i++ {
+		//第1步，得到随机数，范围值一定要大于0
+		randX := rand.Intn(i + 1)
+		//第2步，当前位置的值赋值临时变量，这样等于备份了一下，因为即将有随机位置的值赋过来并替换掉当前位置的值
+		//temp变量之所以需要，是因为要打乱一个数组中的元素。这个数组元素有可能是200、300、555、666这样的值。
+		//如果只是想要将0到10或0到100之内的数随机，那可以省略temp变量。
+		temp = arr[i]
+		//第3步，随机位置赋值给当前位置
+		arr[i] = arr[randX]
+		//第4步，将刚刚暂存的值赋给随机位置
+		arr[randX] = temp
+	}
+
+	return arr
+}
+
+//int类型数组元素打乱之最高境界，效率高，推荐
+func RandomArrayInt(arr []int) []int {
+	//随机种子必须要有，只能用公用的，不能写在方法里，不然不利于循环
+	//rand.Seed(time.Now().UnixNano())
+	var temp int
+	for i := 0; i < len(arr); i++ {
+		//第1步，得到随机数，范围值一定要大于0
+		randX := rand.Intn(i + 1)
+		//第2步，当前位置的值赋值临时变量，这样等于备份了一下，因为即将有随机位置的值赋过来并替换掉当前位置的值
+		//temp变量之所以需要，是因为要打乱一个数组中的元素。这个数组元素有可能是200、300、555、666这样的值。
+		//如果只是想要将0到10或0到100之内的数随机，那可以省略temp变量。
+		temp = arr[i]
+		//第3步，随机位置赋值给当前位置
+		arr[i] = arr[randX]
+		//第4步，将刚刚暂存的值赋给随机位置
+		arr[randX] = temp
+	}
+
+	return arr
+}
+
+//uint16类型数组元素打乱之最高境界，效率高，推荐
+func RandomArrayUInt16(arr []uint16) []uint16 {
+	//随机种子必须要有，只能用公用的，不能写在方法里，不然不利于循环
+	//rand.Seed(time.Now().UnixNano())
+	var temp uint16
+	for i := 0; i < len(arr); i++ {
+		//第1步，得到随机数，范围值一定要大于0
+		randX := rand.Intn(i + 1)
+		//第2步，当前位置的值赋值临时变量，这样等于备份了一下，因为即将有随机位置的值赋过来并替换掉当前位置的值
+		//temp变量之所以需要，是因为要打乱一个数组中的元素。这个数组元素有可能是200、300、555、666这样的值。
+		//如果只是想要将0到10或0到100之内的数随机，那可以省略temp变量。
+		temp = arr[i]
+		//第3步，随机位置赋值给当前位置
+		arr[i] = arr[randX]
+		//第4步，将刚刚暂存的值赋给随机位置
+		arr[randX] = temp
+	}
+
+	return arr
+}
+
+//uint32类型数组元素打乱之最高境界，效率高，推荐
+func RandomArrayUInt32(arr []uint32) []uint32 {
+	//随机种子必须要有，只能用公用的，不能写在方法里，不然不利于循环
+	//rand.Seed(time.Now().UnixNano())
+	var temp uint32
+	for i := 0; i < len(arr); i++ {
+		//第1步，得到随机数，范围值一定要大于0
+		randX := rand.Intn(i + 1)
+		//第2步，当前位置的值赋值临时变量，这样等于备份了一下，因为即将有随机位置的值赋过来并替换掉当前位置的值
+		//temp变量之所以需要，是因为要打乱一个数组中的元素。这个数组元素有可能是200、300、555、666这样的值。
+		//如果只是想要将0到10或0到100之内的数随机，那可以省略temp变量。
+		temp = arr[i]
+		//第3步，随机位置赋值给当前位置
+		arr[i] = arr[randX]
+		//第4步，将刚刚暂存的值赋给随机位置
+		arr[randX] = temp
+	}
+
+	return arr
+}
+
+//int64类型数组元素打乱之最高境界，效率高，推荐
+func RandomArrayInt64(arr []int64) []int64 {
+	//随机种子必须要有，只能用公用的，不能写在方法里，不然不利于循环
+	//rand.Seed(time.Now().UnixNano())
+	var temp int64
+	for i := 0; i < len(arr); i++ {
+		//第1步，得到随机数，范围值一定要大于0
+		randX := rand.Intn(i + 1)
+		//第2步，当前位置的值赋值临时变量，这样等于备份了一下，因为即将有随机位置的值赋过来并替换掉当前位置的值
+		//temp变量之所以需要，是因为要打乱一个数组中的元素。这个数组元素有可能是200、300、555、666这样的值。
+		//如果只是想要将0到10或0到100之内的数随机，那可以省略temp变量。
+		temp = arr[i]
+		//第3步，随机位置赋值给当前位置
+		arr[i] = arr[randX]
+		//第4步，将刚刚暂存的值赋给随机位置
+		arr[randX] = temp
+	}
+
+	return arr
+}
+
+//uint64类型数组元素打乱之最高境界，效率高，推荐
+func RandomArrayUInt64(arr []uint64) []uint64 {
+	//随机种子必须要有，只能用公用的，不能写在方法里，不然不利于循环
+	//rand.Seed(time.Now().UnixNano())
+	var temp uint64
+	for i := 0; i < len(arr); i++ {
+		//第1步，得到随机数，范围值一定要大于0
+		randX := rand.Intn(i + 1)
+		//第2步，当前位置的值赋值临时变量，这样等于备份了一下，因为即将有随机位置的值赋过来并替换掉当前位置的值
+		//temp变量之所以需要，是因为要打乱一个数组中的元素。这个数组元素有可能是200、300、555、666这样的值。
+		//如果只是想要将0到10或0到100之内的数随机，那可以省略temp变量。
+		temp = arr[i]
+		//第3步，随机位置赋值给当前位置
+		arr[i] = arr[randX]
+		//第4步，将刚刚暂存的值赋给随机位置
+		arr[randX] = temp
+	}
+
+	return arr
+}
+
 //string类型数组元素打乱之最高境界，效率高，推荐
-func RandomArrayStringSuper(arr []string) []string {
+func RandomArrayString(arr []string) []string {
 	//随机种子必须要有，只能用公用的，不能写在方法里，不然不利于循环
 	//rand.Seed(time.Now().UnixNano())
 	var temp string
 	for i := 0; i < len(arr); i++ {
-		randX := rand.Intn(i+1)
+		randX := rand.Intn(i + 1)
 		temp = arr[i]
 		arr[i] = arr[randX]
 		arr[randX] = temp
@@ -123,11 +250,11 @@ func RandomNumberArrayInt(max int) []int {
 	//随机种子必须要有，只能用公用的，不能写在方法里，不然不利于循环
 	//rand.Seed(time.Now().UnixNano())
 	//声明临时切片数组
-	arr := make([]int,max)
+	arr := make([]int, max)
 
 	for i := 0; i < max; i++ {
 		//第1步，得到随机数，范围值一定要大于0
-		randX := rand.Intn(i+1)
+		randX := rand.Intn(i + 1)
 		//第2步，随机位置赋值给当前位置
 		arr[i] = arr[randX]
 		//第3步，当前值赋值给随机位置
@@ -143,11 +270,11 @@ func RandomNumberArrayIntRange(min int, max int) []int {
 	//得到差值，计算数量
 	offset := max - min
 	//创建数组切片，元素个数为差值数量
-	arr := make([]int,offset)
+	arr := make([]int, offset)
 	//随机种子必须要有，只能用公用的，不能写在方法里，不然不利于循环
 	//rand.Seed(time.Now().UnixNano())
 	for i := 0; i < offset; i++ {
-		randX := rand.Intn(i+1)//i+1很重要，因为每次要获取小于这个数的值，i初始为0，总不能获取小于0的数。
+		randX := rand.Intn(i + 1) //i+1很重要，因为每次要获取小于这个数的值，i初始为0，总不能获取小于0的数。
 		arr[i] = arr[randX]
 		arr[randX] = i + min
 	}
@@ -157,7 +284,7 @@ func RandomNumberArrayIntRange(min int, max int) []int {
 
 //生成int类型数组，其元素值为大于等于参数1并且小于参数2、元素个数为参数3的随机数的数组
 //如参数为5，10，3，则会得到[9 8 5]这样的数组
-func RandomNumberArrayIntRangeNum(min int, max int,num int) []int {
+func RandomNumberArrayIntRangeNum(min int, max int, num int) []int {
 	//先调用：获取一个指定区间不重复的随机数数组
 	arr := RandomNumberArrayIntRange(min, max)
 	////再调用：拷贝一个区间元素的数组
@@ -167,12 +294,13 @@ func RandomNumberArrayIntRangeNum(min int, max int,num int) []int {
 	//在新生成的数组中取元素个数的切片即可，如：
 	return arr[0:num]
 }
+
 //生成随机数======================================
 
 //生成随机字符串，参数为要生成的字符串长度
 func RandomString(n int) string {
 	arr := []byte("0123456789abcdefghijklmnopqrstuvwxyz")
-	temp := make([]byte,n)
+	temp := make([]byte, n)
 	//随机种子必须要有，只能用公用的，不能写在方法里，不然不利于循环
 	//rand.Seed(time.Now().UnixNano())
 	for key := range temp {
