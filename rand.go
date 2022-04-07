@@ -282,8 +282,13 @@ func RandomNumberArrayIntRange(min int, max int) []int {
 	return arr
 }
 
-//生成int类型数组，其元素值为大于等于参数1并且小于参数2、元素个数为参数3的随机数的数组
-//如参数为5，10，3，则会得到[9 8 5]这样的数组
+//生成int类型数组，其元素值为大于等于参数1并且小于参数2、元素个数为参数3的随机数的数组，但此方式会生成指定区间值的长度数组，
+//如：1、100、5。会生成长度为99的数组，只是获取前5个而已。且生成的元素是不重复的，也就是真的有99个元素被随机打乱后，取前5个。
+//如：20、60、5。会生成：[57 39 56 45 23]
+//如：1、7、5。会生成：[3 2 6 1 5]
+//当前方法生随机数组： [1 6 5 3 4]，此方式是生成1次区间值，所以不重复。
+//调用专用生成色子数组： [2 2 5 4 5]，此方式是真的生成5次随机数，因为是独立各自生成的，所以区间值重复，所以生成色子就得用色子专用方法。
+//综上所述，如果是生成色子就不能用此方法，因为色子会出现多个一样的点数，所以不建议使用此方法。
 func RandomNumberArrayIntRangeNum(min int, max int, num int) []int {
 	//先调用：获取一个指定区间不重复的随机数数组
 	arr := RandomNumberArrayIntRange(min, max)
@@ -293,6 +298,24 @@ func RandomNumberArrayIntRangeNum(min int, max int, num int) []int {
 
 	//在新生成的数组中取元素个数的切片即可，如：
 	return arr[0:num]
+}
+
+//生成类似色子的专用函数。比如5个色子(1,7,5)。参数：最小值、最大值、生成个数。(1到6之间的随机数，不包括7)
+//和另一函数RandomNumberArrayIntRangeNum()比较如下：
+//生成随机数组： [1 6 5 3 4]，此方式是生成1次区间值，所以不重复。
+//生成色子数组： [2 2 5 4 5]，此方式是真的生成5次随机数，因为是独立各自生成的，所以区间值重复，所以生成色子就得用色子专用方法。
+func RandomDice(min int, max int, num uint32) ([]uint32, uint32) {
+	//声明色子数组
+	randArr := make([]uint32, num)
+	var i uint32 = 0
+	var sum uint32 = 0
+	for i = 0; i < num; i++ {
+		randX := RandomNumberRange(min, max) //生成1到6之间的随机数，不包括7。
+		urandX := uint32(randX)              //转换类型
+		sum += urandX                        //记录生成随机数的累加值，最后要返回生成指定个数随机数的总和
+		randArr[i] = urandX                  //将生成的随机数赋到对应索引上
+	}
+	return randArr, sum
 }
 
 //生成随机数======================================
