@@ -13,7 +13,7 @@ import (
 //字符串1小于字符串2时，返回：-1
 //字符串1和字符串2相等时，返回：0
 //虽然和系统方法功能一样，但还是建议使用系统方法：strings.Compare()
-func StringCompare(str1, str2 string) int {
+func CompareString(str1, str2 string) int {
 	lenS1 := len(str1)
 	lenS2 := len(str2)
 	for key, _ := range str1 {
@@ -50,7 +50,7 @@ func StringCompare(str1, str2 string) int {
 //字符串1小于字符串2时，返回：-1
 //字符串1和字符串2相等时，返回：0
 //需要先用正则函数Check_version()检测字符串是否为版本号，如：9.0、9.1、9.10、9.10.1、9.10.10.1、10.10.0.0.0.1
-func VersionCompare(verS1, verS2 string) int {
+func CompareVersion(verS1, verS2 string) int {
 	if len(verS1) > 0 && len(verS2) == 0 {
 		//fmt.Println("如果verS1 > 0，并且verS2 == 0")
 		return 1
