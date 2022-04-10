@@ -69,7 +69,7 @@ func ArraySortUInt32(arr []uint32, sort uint8) {
 	//return arr
 }
 
-//英文字符串排序，使用冒泡排序，在比较两个字符串的大小时，使用刘阳封装的方法StringCompareInt进行比较。
+//英文字符串排序，使用冒泡排序，在比较两个字符串的大小时，使用刘阳封装的方法CompareStringInt进行比较。
 func ArraySortString(arr []string, sort uint8) []string {
 	if len(arr) < 2 {
 		return arr //这里是直接返回数组
@@ -78,7 +78,7 @@ func ArraySortString(arr []string, sort uint8) []string {
 	if sort == 0 {
 		for i := 0; i < len(arr); i++ {
 			for j := 0; j < len(arr)-(1+i); j++ {
-				if StringCompare(arr[j], arr[j+1]) > 0 {
+				if CompareString(arr[j], arr[j+1]) > 0 {
 					arr[j], arr[j+1] = arr[j+1], arr[j]
 				}
 			}
@@ -86,7 +86,7 @@ func ArraySortString(arr []string, sort uint8) []string {
 	} else if sort == 1 {
 		for i := 0; i < len(arr); i++ {
 			for j := 0; j < len(arr)-(1+i); j++ {
-				if StringCompare(arr[j], arr[j+1]) < 0 {
+				if CompareString(arr[j], arr[j+1]) < 0 {
 					arr[j], arr[j+1] = arr[j+1], arr[j]
 				}
 			}
