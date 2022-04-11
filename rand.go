@@ -304,18 +304,39 @@ func RandomNumberArrayIntRangeNum(min int, max int, num int) []int {
 //和另一函数RandomNumberArrayIntRangeNum()比较如下：
 //生成随机数组： [1 6 5 3 4]，此方式是生成1次区间值，所以不重复。
 //生成色子数组： [2 2 5 4 5]，此方式是真的生成5次随机数，因为是独立各自生成的，所以区间值重复，所以生成色子就得用色子专用方法。
-func RandomDice(min int, max int, num uint32) ([]uint32, uint32) {
-	//声明色子数组
-	randArr := make([]uint32, num)
-	var i uint32 = 0
+func RandomDice(min int, max int, num int) ([]uint32, uint32) {
+	//声明色子数组，元素个数就是要生成的个数
+	diceArr := make([]uint32, num)
+	//临时变量，用于累加色子值
 	var sum uint32 = 0
-	for i = 0; i < num; i++ {
+	for i := 0; i < num; i++ {
 		randX := RandomNumberRange(min, max) //生成1到6之间的随机数，不包括7。
-		urandX := uint32(randX)              //转换类型
-		sum += urandX                        //记录生成随机数的累加值，最后要返回生成指定个数随机数的总和
-		randArr[i] = urandX                  //将生成的随机数赋到对应索引上
+		diceData := uint32(randX)            //将生成的点数转换类型
+		sum += diceData                      //记录生成随机数的累加值，最后要返回生成指定个数随机数的总和
+		diceArr[i] = diceData                //将生成的随机数赋到对应索引上
 	}
-	return randArr, sum
+
+	return diceArr, sum
+}
+
+//生成类似色子豹子的专用函数。比如5个色子(1,7,5)。参数：最小值、最大值、生成个数。(1到6之间的随机数且是豹子，不包括7)
+//生成色子豹子： [2 2 2 2 2]
+//生成色子豹子： [6 6 6 6 6]
+func RandomDiceBaoZi(min int, max int, num int) ([]uint32, uint32) {
+	//声明色子数组，元素个数就是要生成的个数
+	diceArr := make([]uint32, num)
+	//随机一个区间数
+	randX := RandomNumberRange(min, max)
+	//临时变量，用于累加色子值
+	var sum uint32 = 0
+	//转成uint32
+	diceData := uint32(randX)
+	for i := 0; i < num; i++ {
+		sum += diceData //记录生成随机数的累加值，最后要返回生成指定个数随机数的总和
+		diceArr[i] = diceData
+	}
+
+	return diceArr, sum
 }
 
 //生成随机数======================================
