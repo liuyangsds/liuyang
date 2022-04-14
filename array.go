@@ -178,6 +178,193 @@ func ArrayDeleteKeyStringLength(s []string, index int, length int) []string {
 	return s
 }
 
+//===========================================批量删除切片元素=========================================================
+
+//批量删除切片元素，以索引为条件，uint32类型
+func ArrayRemoveUint32(arr []uint32, delIndex []uint32) []uint32 {
+	//fmt.Println("原切片值：", arr)
+	//如果要删除的索引数量大于原数组中的元素数量时，直接返回原数组
+	if len(delIndex) > len(arr) {
+		return arr
+	}
+
+	//原数组元素数量总计
+	arrCount := uint32(len(arr))
+
+	//先遍历先删除的索引值，将原数组中对应索引赋值为0进行标记，也就是待删除
+	for _, value := range delIndex {
+		//如果要删除的某个索引值大于等于原数组总长度时，说明不合法，则跳过
+		if value >= arrCount {
+			continue
+		}
+		//将要删除的索引赋为0值
+		arr[value] = 0
+	}
+	//fmt.Println("赋0后，切片值：", arr)
+
+	//遍历删除值为0的元素
+	for i := 0; i < len(arr); { //切记，这里的数组长度必须实时获取，不能用变接收，不然会数组越界
+		if arr[i] == 0 {
+			//fmt.Println("判断等于0时------>当前索引：", i, "，当前值：", arr[i])
+			arr = append(arr[:i], arr[i+1:]...)
+			//fmt.Println("删除当前元素后的切片后，长度：", len(arr), "，值是：", arr)
+		} else {
+			//fmt.Println("否则大于0时------>当前索引：", i, "，当前值：", arr[i])
+			i++
+		}
+	}
+
+	return arr
+}
+
+//批量删除切片元素，以索引为条件，uint64类型
+func ArrayRemoveUint64(arr []uint64, delIndex []uint32) []uint64 {
+	//fmt.Println("原切片值：", arr)
+	//如果要删除的索引数量大于原数组中的元素数量时，直接返回原数组
+	if len(delIndex) > len(arr) {
+		return arr
+	}
+
+	//原数组元素数量总计
+	arrCount := uint32(len(arr))
+
+	//先遍历先删除的索引值，将原数组中对应索引赋值为0进行标记，也就是待删除
+	for _, value := range delIndex {
+		//如果要删除的某个索引值大于等于原数组总长度时，说明不合法，则跳过
+		if value >= arrCount {
+			continue
+		}
+		//将要删除的索引赋为0值
+		arr[value] = 0
+	}
+	//fmt.Println("赋0后，切片值：", arr)
+
+	//遍历删除值为0的元素
+	for i := 0; i < len(arr); { //切记，这里的数组长度必须实时获取，不能用变接收，不然会数组越界
+		if arr[i] == 0 {
+			//fmt.Println("判断等于0时------>当前索引：", i, "，当前值：", arr[i])
+			arr = append(arr[:i], arr[i+1:]...)
+			//fmt.Println("删除当前元素后的切片后，长度：", len(arr), "，值是：", arr)
+		} else {
+			//fmt.Println("否则大于0时------>当前索引：", i, "，当前值：", arr[i])
+			i++
+		}
+	}
+
+	return arr
+}
+
+//批量删除切片元素，以索引为条件，int类型
+func ArrayRemoveInt(arr []int, delIndex []uint32) []int {
+	//fmt.Println("原切片值：", arr)
+	//如果要删除的索引数量大于原数组中的元素数量时，直接返回原数组
+	if len(delIndex) > len(arr) {
+		return arr
+	}
+
+	//原数组元素数量总计
+	arrCount := uint32(len(arr))
+
+	//先遍历先删除的索引值，将原数组中对应索引赋值为0进行标记，也就是待删除
+	for _, value := range delIndex {
+		//如果要删除的某个索引值大于等于原数组总长度时，说明不合法，则跳过
+		if value >= arrCount {
+			continue
+		}
+		//将要删除的索引赋为0值
+		arr[value] = 0
+	}
+	//fmt.Println("赋0后，切片值：", arr)
+
+	//遍历删除值为0的元素
+	for i := 0; i < len(arr); { //切记，这里的数组长度必须实时获取，不能用变接收，不然会数组越界
+		if arr[i] == 0 {
+			//fmt.Println("判断等于0时------>当前索引：", i, "，当前值：", arr[i])
+			arr = append(arr[:i], arr[i+1:]...)
+			//fmt.Println("删除当前元素后的切片后，长度：", len(arr), "，值是：", arr)
+		} else {
+			//fmt.Println("否则大于0时------>当前索引：", i, "，当前值：", arr[i])
+			i++
+		}
+	}
+
+	return arr
+}
+
+//批量删除切片元素，以索引为条件，int32类型
+func ArrayRemoveInt32(arr []int32, delIndex []uint32) []int32 {
+	//fmt.Println("原切片值：", arr)
+	//如果要删除的索引数量大于原数组中的元素数量时，直接返回原数组
+	if len(delIndex) > len(arr) {
+		return arr
+	}
+
+	//原数组元素数量总计
+	arrCount := uint32(len(arr))
+
+	//先遍历先删除的索引值，将原数组中对应索引赋值为0进行标记，也就是待删除
+	for _, value := range delIndex {
+		//如果要删除的某个索引值大于等于原数组总长度时，说明不合法，则跳过
+		if value >= arrCount {
+			continue
+		}
+		//将要删除的索引赋为0值
+		arr[value] = 0
+	}
+	//fmt.Println("赋0后，切片值：", arr)
+
+	//遍历删除值为0的元素
+	for i := 0; i < len(arr); { //切记，这里的数组长度必须实时获取，不能用变接收，不然会数组越界
+		if arr[i] == 0 {
+			//fmt.Println("判断等于0时------>当前索引：", i, "，当前值：", arr[i])
+			arr = append(arr[:i], arr[i+1:]...)
+			//fmt.Println("删除当前元素后的切片后，长度：", len(arr), "，值是：", arr)
+		} else {
+			//fmt.Println("否则大于0时------>当前索引：", i, "，当前值：", arr[i])
+			i++
+		}
+	}
+
+	return arr
+}
+
+//批量删除切片元素，以索引为条件，string类型
+func ArrayRemoveString(arr []string, delIndex []uint32) []string {
+	//fmt.Println("原切片值：", arr)
+	//如果要删除的索引数量大于原数组中的元素数量时，直接返回原数组
+	if len(delIndex) > len(arr) {
+		return arr
+	}
+
+	//原数组元素数量总计
+	arrCount := uint32(len(arr))
+
+	//先遍历先删除的索引值，将原数组中对应索引赋值为0进行标记，也就是待删除
+	for _, value := range delIndex {
+		//如果要删除的某个索引值大于等于原数组总长度时，说明不合法，则跳过
+		if value >= arrCount {
+			continue
+		}
+		//将要删除的索引赋为0值
+		arr[value] = ""
+	}
+	//fmt.Println("赋0后，切片值：", arr)
+
+	//遍历删除值为0的元素
+	for i := 0; i < len(arr); { //切记，这里的数组长度必须实时获取，不能用变接收，不然会数组越界
+		if arr[i] == "" {
+			//fmt.Println("判断等于0时------>当前索引：", i, "，当前值：", arr[i])
+			arr = append(arr[:i], arr[i+1:]...)
+			//fmt.Println("删除当前元素后的切片后，长度：", len(arr), "，值是：", arr)
+		} else {
+			//fmt.Println("否则大于0时------>当前索引：", i, "，当前值：", arr[i])
+			i++
+		}
+	}
+
+	return arr
+}
+
 //删除数组切片======================================
 
 //复制数组切片======================================
