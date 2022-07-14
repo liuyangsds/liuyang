@@ -181,7 +181,23 @@ func ArrayDeleteKeyStringLength(s []string, index int, length int) []string {
 //===========================================以保留元索引为参数得到要删除的索引=========================================================
 
 //收集要删除的索引值。参数：1要操作的切片、2要保留的索引。返回值：要删除的索引切片。该返回值主要配合liuyang.ArrayRemoveUint32()函数使用。
+//前题条件：要操作的切片中元素值不能为0，因为要保留的索引值就是以0为标记的。
 func ArrayCollectDelIndexUint32(arr []uint32, saveIndex []uint32) []uint32 {
+	//过滤非法参数，但却漏掉了saveIndex参数值，因为它是[]uint32的空值。但却不为nil
+	//saveArr := []uint32{} //要保留的索引值在定义时设为某个类型的空值，但却不为nil。这就会让saveIndex == nil 的判断失效。
+	//if arr == nil || saveIndex == nil {
+	//	return nil
+	//}
+
+	//刘阳建议使用长度判断切片是否有值
+	if len(arr) == 0 || len(saveIndex) == 0 {
+		return nil
+	}
+
+	if len(saveIndex) > len(arr) {
+		return nil
+	}
+
 	//拷贝临时数组，用于标记要保留的索引
 	tempPotArr := make([]uint32, len(arr))
 	copy(tempPotArr, arr)
@@ -191,6 +207,10 @@ func ArrayCollectDelIndexUint32(arr []uint32, saveIndex []uint32) []uint32 {
 
 	//fmt.Println("拷贝的临时数组值：", tempPotArr)
 	for i := 0; i < len(saveIndex); i++ {
+		//如果要保留的索引值超出或等于要操作的切片总长度时，为非法
+		if int(saveIndex[i]) >= len(tempPotArr) {
+			return nil
+		}
 		//将要保留的索引(1、3)标记为0
 		tempPotArr[saveIndex[i]] = 0
 	}
@@ -210,7 +230,23 @@ func ArrayCollectDelIndexUint32(arr []uint32, saveIndex []uint32) []uint32 {
 }
 
 //收集要删除的索引值。参数：1要操作的切片、2要保留的索引。返回值：要删除的索引切片。该返回值主要配合liuyang.ArrayRemoveUint32()函数使用。
+//前题条件：要操作的切片中元素值不能为0，因为要保留的索引值就是以0为标记的。
 func ArrayCollectDelIndexUint64(arr []uint64, saveIndex []uint32) []uint32 {
+	//过滤非法参数，但却漏掉了saveIndex参数值，因为它是[]uint32的空值。但却不为nil
+	//saveArr := []uint32{} //要保留的索引值在定义时设为某个类型的空值，但却不为nil。这就会让saveIndex == nil 的判断失效。
+	//if arr == nil || saveIndex == nil {
+	//	return nil
+	//}
+
+	//刘阳建议使用长度判断切片是否有值
+	if len(arr) == 0 || len(saveIndex) == 0 {
+		return nil
+	}
+
+	if len(saveIndex) > len(arr) {
+		return nil
+	}
+
 	//拷贝临时数组，用于标记要保留的索引
 	tempPotArr := make([]uint64, len(arr))
 	copy(tempPotArr, arr)
@@ -220,6 +256,10 @@ func ArrayCollectDelIndexUint64(arr []uint64, saveIndex []uint32) []uint32 {
 
 	//fmt.Println("拷贝的临时数组值：", tempPotArr)
 	for i := 0; i < len(saveIndex); i++ {
+		//如果要保留的索引值超出或等于要操作的切片总长度时，为非法
+		if int(saveIndex[i]) >= len(tempPotArr) {
+			return nil
+		}
 		//将要保留的索引(1、3)标记为0
 		tempPotArr[saveIndex[i]] = 0
 	}
@@ -239,7 +279,23 @@ func ArrayCollectDelIndexUint64(arr []uint64, saveIndex []uint32) []uint32 {
 }
 
 //收集要删除的索引值。参数：1要操作的切片、2要保留的索引。返回值：要删除的索引切片。该返回值主要配合liuyang.ArrayRemoveUint32()函数使用。
+//前题条件：要操作的切片中元素值不能为0，因为要保留的索引值就是以0为标记的。
 func ArrayCollectDelIndexInt32(arr []int32, saveIndex []uint32) []uint32 {
+	//过滤非法参数，但却漏掉了saveIndex参数值，因为它是[]uint32的空值。但却不为nil
+	//saveArr := []uint32{} //要保留的索引值在定义时设为某个类型的空值，但却不为nil。这就会让saveIndex == nil 的判断失效。
+	//if arr == nil || saveIndex == nil {
+	//	return nil
+	//}
+
+	//刘阳建议使用长度判断切片是否有值
+	if len(arr) == 0 || len(saveIndex) == 0 {
+		return nil
+	}
+
+	if len(saveIndex) > len(arr) {
+		return nil
+	}
+
 	//拷贝临时数组，用于标记要保留的索引
 	tempPotArr := make([]int32, len(arr))
 	copy(tempPotArr, arr)
@@ -249,6 +305,10 @@ func ArrayCollectDelIndexInt32(arr []int32, saveIndex []uint32) []uint32 {
 
 	//fmt.Println("拷贝的临时数组值：", tempPotArr)
 	for i := 0; i < len(saveIndex); i++ {
+		//如果要保留的索引值超出或等于要操作的切片总长度时，为非法
+		if int(saveIndex[i]) >= len(tempPotArr) {
+			return nil
+		}
 		//将要保留的索引(1、3)标记为0
 		tempPotArr[saveIndex[i]] = 0
 	}
@@ -268,7 +328,23 @@ func ArrayCollectDelIndexInt32(arr []int32, saveIndex []uint32) []uint32 {
 }
 
 //收集要删除的索引值。参数：1要操作的切片、2要保留的索引。返回值：要删除的索引切片。该返回值主要配合liuyang.ArrayRemoveUint32()函数使用。
+//前题条件：要操作的切片中元素值不能为0，因为要保留的索引值就是以0为标记的。
 func ArrayCollectDelIndexInt(arr []int, saveIndex []uint32) []uint32 {
+	//过滤非法参数，但却漏掉了saveIndex参数值，因为它是[]uint32的空值。但却不为nil
+	//saveArr := []uint32{} //要保留的索引值在定义时设为某个类型的空值，但却不为nil。这就会让saveIndex == nil 的判断失效。
+	//if arr == nil || saveIndex == nil {
+	//	return nil
+	//}
+
+	//刘阳建议使用长度判断切片是否有值
+	if len(arr) == 0 || len(saveIndex) == 0 {
+		return nil
+	}
+
+	if len(saveIndex) > len(arr) {
+		return nil
+	}
+
 	//拷贝临时数组，用于标记要保留的索引
 	tempPotArr := make([]int, len(arr))
 	copy(tempPotArr, arr)
@@ -278,6 +354,10 @@ func ArrayCollectDelIndexInt(arr []int, saveIndex []uint32) []uint32 {
 
 	//fmt.Println("拷贝的临时数组值：", tempPotArr)
 	for i := 0; i < len(saveIndex); i++ {
+		//如果要保留的索引值超出或等于要操作的切片总长度时，为非法
+		if int(saveIndex[i]) >= len(tempPotArr) {
+			return nil
+		}
 		//将要保留的索引(1、3)标记为0
 		tempPotArr[saveIndex[i]] = 0
 	}
@@ -297,9 +377,25 @@ func ArrayCollectDelIndexInt(arr []int, saveIndex []uint32) []uint32 {
 }
 
 //收集要删除的索引值。参数：1要操作的切片、2要保留的索引。返回值：要删除的索引切片。该返回值主要配合liuyang.ArrayRemoveUint32()函数使用。
+//前题条件：要操作的切片中元素值不能为0，因为要保留的索引值就是以0为标记的。
 //string类型要注意。定义切片时不要将元素值设置为""，如：[]string{"刘阳", "", "", "璐璐", "凤凤"}，这样会误删掉1、2索引。
 //建议定义切片时将元素值设置为" "，带一个空格。这样就不会发生误删除的情况了。
 func ArrayCollectDelIndexString(arr []string, saveIndex []uint32) []uint32 {
+	//过滤非法参数，但却漏掉了saveIndex参数值，因为它是[]uint32的空值。但却不为nil
+	//saveArr := []uint32{} //要保留的索引值在定义时设为某个类型的空值，但却不为nil。这就会让saveIndex == nil 的判断失效。
+	//if arr == nil || saveIndex == nil {
+	//	return nil
+	//}
+
+	//刘阳建议使用长度判断切片是否有值
+	if len(arr) == 0 || len(saveIndex) == 0 {
+		return nil
+	}
+
+	if len(saveIndex) > len(arr) {
+		return nil
+	}
+
 	//拷贝临时数组，用于标记要保留的索引
 	tempPotArr := make([]string, len(arr))
 	copy(tempPotArr, arr)
@@ -309,6 +405,10 @@ func ArrayCollectDelIndexString(arr []string, saveIndex []uint32) []uint32 {
 
 	//fmt.Println("拷贝的临时数组值：", tempPotArr)
 	for i := 0; i < len(saveIndex); i++ {
+		//如果要保留的索引值超出或等于要操作的切片总长度时，为非法
+		if int(saveIndex[i]) >= len(tempPotArr) {
+			return nil
+		}
 		//将要保留的索引(1、3)标记为0
 		tempPotArr[saveIndex[i]] = ""
 	}
