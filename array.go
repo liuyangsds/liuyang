@@ -178,9 +178,158 @@ func ArrayDeleteKeyStringLength(s []string, index int, length int) []string {
 	return s
 }
 
-//===========================================批量删除切片元素=========================================================
+//===========================================以保留元索引为参数得到要删除的索引=========================================================
 
-//批量删除切片元素，以索引为条件，uint32类型
+//收集要删除的索引值。参数：1要操作的切片、2要保留的索引。返回值：要删除的索引切片。该返回值主要配合liuyang.ArrayRemoveUint32()函数使用。
+func ArrayCollectDelIndexUint32(arr []uint32, saveIndex []uint32) []uint32 {
+	//拷贝临时数组，用于标记要保留的索引
+	tempPotArr := make([]uint32, len(arr))
+	copy(tempPotArr, arr)
+
+	//用于接收要删除的索引值
+	var delArr = make([]uint32, 0)
+
+	//fmt.Println("拷贝的临时数组值：", tempPotArr)
+	for i := 0; i < len(saveIndex); i++ {
+		//将要保留的索引(1、3)标记为0
+		tempPotArr[saveIndex[i]] = 0
+	}
+
+	//遍历临时数组
+	var i uint32 = 0                     //声明uint32类型的i
+	var length = uint32(len(tempPotArr)) //获取临时数组长度
+	for i = 0; i < length; i++ {
+		//只要元素值大于0，就是要删除的索引值
+		if tempPotArr[i] > 0 {
+			//将要删除的索引值追加到临时删除索引收集数组中
+			delArr = append(delArr, i)
+		}
+	}
+
+	return delArr
+}
+
+//收集要删除的索引值。参数：1要操作的切片、2要保留的索引。返回值：要删除的索引切片。该返回值主要配合liuyang.ArrayRemoveUint32()函数使用。
+func ArrayCollectDelIndexUint64(arr []uint64, saveIndex []uint32) []uint32 {
+	//拷贝临时数组，用于标记要保留的索引
+	tempPotArr := make([]uint64, len(arr))
+	copy(tempPotArr, arr)
+
+	//用于接收要删除的索引值
+	var delArr = make([]uint32, 0)
+
+	//fmt.Println("拷贝的临时数组值：", tempPotArr)
+	for i := 0; i < len(saveIndex); i++ {
+		//将要保留的索引(1、3)标记为0
+		tempPotArr[saveIndex[i]] = 0
+	}
+
+	//遍历临时数组
+	var i uint32 = 0                     //声明uint32类型的i
+	var length = uint32(len(tempPotArr)) //获取临时数组长度
+	for i = 0; i < length; i++ {
+		//只要元素值大于0，就是要删除的索引值
+		if tempPotArr[i] > 0 {
+			//将要删除的索引值追加到临时删除索引收集数组中
+			delArr = append(delArr, i)
+		}
+	}
+
+	return delArr
+}
+
+//收集要删除的索引值。参数：1要操作的切片、2要保留的索引。返回值：要删除的索引切片。该返回值主要配合liuyang.ArrayRemoveUint32()函数使用。
+func ArrayCollectDelIndexInt32(arr []int32, saveIndex []uint32) []uint32 {
+	//拷贝临时数组，用于标记要保留的索引
+	tempPotArr := make([]int32, len(arr))
+	copy(tempPotArr, arr)
+
+	//用于接收要删除的索引值
+	var delArr = make([]uint32, 0)
+
+	//fmt.Println("拷贝的临时数组值：", tempPotArr)
+	for i := 0; i < len(saveIndex); i++ {
+		//将要保留的索引(1、3)标记为0
+		tempPotArr[saveIndex[i]] = 0
+	}
+
+	//遍历临时数组
+	var i uint32 = 0                     //声明uint32类型的i
+	var length = uint32(len(tempPotArr)) //获取临时数组长度
+	for i = 0; i < length; i++ {
+		//只要元素值大于0，就是要删除的索引值
+		if tempPotArr[i] > 0 {
+			//将要删除的索引值追加到临时删除索引收集数组中
+			delArr = append(delArr, i)
+		}
+	}
+
+	return delArr
+}
+
+//收集要删除的索引值。参数：1要操作的切片、2要保留的索引。返回值：要删除的索引切片。该返回值主要配合liuyang.ArrayRemoveUint32()函数使用。
+func ArrayCollectDelIndexInt(arr []int, saveIndex []uint32) []uint32 {
+	//拷贝临时数组，用于标记要保留的索引
+	tempPotArr := make([]int, len(arr))
+	copy(tempPotArr, arr)
+
+	//用于接收要删除的索引值
+	var delArr = make([]uint32, 0)
+
+	//fmt.Println("拷贝的临时数组值：", tempPotArr)
+	for i := 0; i < len(saveIndex); i++ {
+		//将要保留的索引(1、3)标记为0
+		tempPotArr[saveIndex[i]] = 0
+	}
+
+	//遍历临时数组
+	var i uint32 = 0                     //声明uint32类型的i
+	var length = uint32(len(tempPotArr)) //获取临时数组长度
+	for i = 0; i < length; i++ {
+		//只要元素值大于0，就是要删除的索引值
+		if tempPotArr[i] > 0 {
+			//将要删除的索引值追加到临时删除索引收集数组中
+			delArr = append(delArr, i)
+		}
+	}
+
+	return delArr
+}
+
+//收集要删除的索引值。参数：1要操作的切片、2要保留的索引。返回值：要删除的索引切片。该返回值主要配合liuyang.ArrayRemoveUint32()函数使用。
+//string类型要注意。定义切片时不要将元素值设置为""，如：[]string{"刘阳", "", "", "璐璐", "凤凤"}，这样会误删掉1、2索引。
+//建议定义切片时将元素值设置为" "，带一个空格。这样就不会发生误删除的情况了。
+func ArrayCollectDelIndexString(arr []string, saveIndex []uint32) []uint32 {
+	//拷贝临时数组，用于标记要保留的索引
+	tempPotArr := make([]string, len(arr))
+	copy(tempPotArr, arr)
+
+	//用于接收要删除的索引值
+	var delArr = make([]uint32, 0)
+
+	//fmt.Println("拷贝的临时数组值：", tempPotArr)
+	for i := 0; i < len(saveIndex); i++ {
+		//将要保留的索引(1、3)标记为0
+		tempPotArr[saveIndex[i]] = ""
+	}
+
+	//遍历临时数组
+	var i uint32 = 0                     //声明uint32类型的i
+	var length = uint32(len(tempPotArr)) //获取临时数组长度
+	for i = 0; i < length; i++ {
+		//只要元素值大于0，就是要删除的索引值
+		if tempPotArr[i] != "" {
+			//将要删除的索引值追加到临时删除索引收集数组中
+			delArr = append(delArr, i)
+		}
+	}
+
+	return delArr
+}
+
+//===========================================批量删除切片索引=========================================================
+
+//批量删除切片索引。参数：1要操作的切片、2要删除的索引。返回值：已批量删除索引后的切片。uint32类型
 func ArrayRemoveUint32(arr []uint32, delIndex []uint32) []uint32 {
 	//fmt.Println("原切片值：", arr)
 	//如果要删除的索引数量大于原数组中的元素数量时，直接返回原数组
@@ -217,7 +366,7 @@ func ArrayRemoveUint32(arr []uint32, delIndex []uint32) []uint32 {
 	return arr
 }
 
-//批量删除切片元素，以索引为条件，uint64类型
+//批量删除切片索引。参数：1要操作的切片、2要删除的索引。返回值：已批量删除索引后的切片。uint64类型
 func ArrayRemoveUint64(arr []uint64, delIndex []uint32) []uint64 {
 	//fmt.Println("原切片值：", arr)
 	//如果要删除的索引数量大于原数组中的元素数量时，直接返回原数组
@@ -254,7 +403,7 @@ func ArrayRemoveUint64(arr []uint64, delIndex []uint32) []uint64 {
 	return arr
 }
 
-//批量删除切片元素，以索引为条件，int类型
+//批量删除切片索引。参数：1要操作的切片、2要删除的索引。返回值：已批量删除索引后的切片。int类型
 func ArrayRemoveInt(arr []int, delIndex []uint32) []int {
 	//fmt.Println("原切片值：", arr)
 	//如果要删除的索引数量大于原数组中的元素数量时，直接返回原数组
@@ -291,7 +440,7 @@ func ArrayRemoveInt(arr []int, delIndex []uint32) []int {
 	return arr
 }
 
-//批量删除切片元素，以索引为条件，int32类型
+//批量删除切片索引。参数：1要操作的切片、2要删除的索引。返回值：已批量删除索引后的切片。int32类型
 func ArrayRemoveInt32(arr []int32, delIndex []uint32) []int32 {
 	//fmt.Println("原切片值：", arr)
 	//如果要删除的索引数量大于原数组中的元素数量时，直接返回原数组
@@ -328,7 +477,7 @@ func ArrayRemoveInt32(arr []int32, delIndex []uint32) []int32 {
 	return arr
 }
 
-//批量删除切片元素，以索引为条件，string类型
+//批量删除切片索引。参数：1要操作的切片、2要删除的索引。返回值：已批量删除索引后的切片。string类型
 func ArrayRemoveString(arr []string, delIndex []uint32) []string {
 	//fmt.Println("原切片值：", arr)
 	//如果要删除的索引数量大于原数组中的元素数量时，直接返回原数组
