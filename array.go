@@ -483,7 +483,7 @@ func ArrayRemoveUint32(arr []uint32, delIndex []uint32) []uint32 {
 	//fmt.Println("赋0后，切片值：", arr)
 
 	//遍历删除值为0的元素
-	for i := 0; i < len(arr); { //切记，这里的数组长度必须实时获取，不能用变接收，不然会数组越界
+	for i := 0; i < len(arr); { //切记，这里的数组长度必须实时获取，不能用变量接收，不然会数组越界
 		if arr[i] == 0 {
 			//fmt.Println("判断等于0时------>当前索引：", i, "，当前值：", arr[i])
 			arr = append(arr[:i], arr[i+1:]...)
@@ -520,7 +520,7 @@ func ArrayRemoveUint64(arr []uint64, delIndex []uint32) []uint64 {
 	//fmt.Println("赋0后，切片值：", arr)
 
 	//遍历删除值为0的元素
-	for i := 0; i < len(arr); { //切记，这里的数组长度必须实时获取，不能用变接收，不然会数组越界
+	for i := 0; i < len(arr); { //切记，这里的数组长度必须实时获取，不能用变量接收，不然会数组越界
 		if arr[i] == 0 {
 			//fmt.Println("判断等于0时------>当前索引：", i, "，当前值：", arr[i])
 			arr = append(arr[:i], arr[i+1:]...)
@@ -557,7 +557,7 @@ func ArrayRemoveInt(arr []int, delIndex []uint32) []int {
 	//fmt.Println("赋0后，切片值：", arr)
 
 	//遍历删除值为0的元素
-	for i := 0; i < len(arr); { //切记，这里的数组长度必须实时获取，不能用变接收，不然会数组越界
+	for i := 0; i < len(arr); { //切记，这里的数组长度必须实时获取，不能用变量接收，不然会数组越界
 		if arr[i] == 0 {
 			//fmt.Println("判断等于0时------>当前索引：", i, "，当前值：", arr[i])
 			arr = append(arr[:i], arr[i+1:]...)
@@ -594,7 +594,7 @@ func ArrayRemoveInt32(arr []int32, delIndex []uint32) []int32 {
 	//fmt.Println("赋0后，切片值：", arr)
 
 	//遍历删除值为0的元素
-	for i := 0; i < len(arr); { //切记，这里的数组长度必须实时获取，不能用变接收，不然会数组越界
+	for i := 0; i < len(arr); { //切记，这里的数组长度必须实时获取，不能用变量接收，不然会数组越界
 		if arr[i] == 0 {
 			//fmt.Println("判断等于0时------>当前索引：", i, "，当前值：", arr[i])
 			arr = append(arr[:i], arr[i+1:]...)
@@ -631,7 +631,7 @@ func ArrayRemoveString(arr []string, delIndex []uint32) []string {
 	//fmt.Println("赋0后，切片值：", arr)
 
 	//遍历删除值为0的元素
-	for i := 0; i < len(arr); { //切记，这里的数组长度必须实时获取，不能用变接收，不然会数组越界
+	for i := 0; i < len(arr); { //切记，这里的数组长度必须实时获取，不能用变量接收，不然会数组越界
 		if arr[i] == "" {
 			//fmt.Println("判断等于0时------>当前索引：", i, "，当前值：", arr[i])
 			arr = append(arr[:i], arr[i+1:]...)
@@ -866,4 +866,55 @@ func ArrayToString(arr interface{}, sep string) string {
 	str := strings.Replace(tt, " ", sep, -1)
 
 	return str
+}
+
+//切片中相同元素的数量统计。返回：元素值与出现的次数
+func ArraySameElementShowNum(arr []byte) map[byte]byte {
+	//对象键值对法
+	//该方法执行的速度比其他任何方法都快，就是占用的内存大一些
+	tempMap := make(map[byte]byte, 0)
+
+	//fmt.Println("初始，map的值：", tempMap, "，长度：", len(tempMap))
+
+	for _, value := range arr {
+		if _, ok := tempMap[value]; ok == true {
+			tempMap[value]++
+			//fmt.Println("是否有相同的key：", ok, value)
+		} else {
+			tempMap[value] = 1
+		}
+	}
+	//fmt.Println("赋值，map的值：", tempMap, "，长度：", len(tempMap))
+
+	//fmt.Println("=======================遍历=======================")
+	//for key, value := range tempMap {
+	//	fmt.Println("map的key：", key, "------>value：", value)
+	//}
+
+	return tempMap
+}
+
+//切片元素去重后。返回：新的去重后的切片
+func ArrayElementSingle(arr []byte) []byte {
+	//切片元素动去重
+	//对象键值对法
+	//该方法执行的速度比其他任何方法都快，就是占用的内存大一些
+	tempMap := make(map[byte]byte, 0)
+
+	//将所有元素设置为临时map的key
+	for _, value := range arr {
+		tempMap[value] = 1
+	}
+
+	//fmt.Println("=======================遍历=======================")
+
+	//临时切片
+	tempArr := make([]byte, 0)
+	//遍历临时map，取其key
+	for key, _ := range tempMap {
+		//收集去重后的元素
+		tempArr = append(tempArr, key)
+	}
+
+	return tempArr
 }
