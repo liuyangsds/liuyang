@@ -868,8 +868,12 @@ func ArrayToString(arr interface{}, sep string) string {
 	return str
 }
 
-//切片中相同元素的数量统计。返回：元素值与出现的次数
+//切片中相同元素的数量统计。返回：元素值与元素出现次数
 func ArraySameElementShowNum(arr []byte) map[byte]byte {
+	//校验长度
+	if len(arr) < 1 {
+		return nil
+	}
 	//对象键值对法
 	//该方法执行的速度比其他任何方法都快，就是占用的内存大一些
 	tempMap := make(map[byte]byte, 0)
@@ -884,7 +888,6 @@ func ArraySameElementShowNum(arr []byte) map[byte]byte {
 			tempMap[value] = 1
 		}
 	}
-	//fmt.Println("赋值，map的值：", tempMap, "，长度：", len(tempMap))
 
 	//fmt.Println("=======================遍历=======================")
 	//for key, value := range tempMap {
@@ -894,9 +897,13 @@ func ArraySameElementShowNum(arr []byte) map[byte]byte {
 	return tempMap
 }
 
-//切片元素去重后。返回：新的去重后的切片
+//切片元素去重。返回：去重后的切片
 func ArrayElementSingle(arr []byte) []byte {
-	//切片元素动去重
+	//校验长度，如果长度为0或1时，直接返回原切片。即使长度为1时也不用去重。
+	if len(arr) < 2 {
+		return arr
+	}
+
 	//对象键值对法
 	//该方法执行的速度比其他任何方法都快，就是占用的内存大一些
 	tempMap := make(map[byte]byte, 0)
