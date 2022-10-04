@@ -130,6 +130,14 @@ func ArraySortString(arr []string, sort uint8) []string {
 
 //删除数组切片======================================
 
+//删除一个切片元素，返回byte类型切片
+func ArrayDeleteKeyByte(s []byte, index int) []byte {
+
+	s = append(s[:index], s[index+1:]...)
+
+	return s
+}
+
 //删除一个切片元素，返回int类型切片
 func ArrayDeleteKeyInt(s []int, index int) []int {
 
@@ -163,6 +171,27 @@ func ArrayDeleteKeyUInt64(s []uint64, index int) []uint64 {
 func ArrayDeleteKeyString(s []string, index int) []string {
 
 	s = append(s[:index], s[index+1:]...)
+
+	return s
+}
+
+//删除一个或多个切片元素，参数1，切片，参数2：下标，参数3：要删除的个数。返回byte类型切片
+func ArrayDeleteKeyByteLength(s []byte, index int, length int) []byte {
+
+	if length < 1 { //当要删除的个数小于1也就是等于0或负数时，就直接返回数组
+		return s
+	}
+
+	keyCount := len(s)       //元素数量
+	offset := index + length //当前key的下标和要删除的数量
+	//当元素的总个数大于偏移量时，也就是当前要被删除的下标加上要删除的个数的和小于元素总个数，那么是可操作的。
+	if keyCount > offset {
+		s = append(s[:index], s[offset:]...)
+		return s
+	}
+
+	//否则偏移量就是大于或等于元素总个数，那么,这里不能写成：s[keyCount-1]...因为这样写，会把该数组中的最后一个元素加入进来
+	s = append(s[:index], s[keyCount:]...) //当前key的位置之前的所有元素和该数组的总元素数及以后的元素，总元素数的下标及以后也就是没有元素
 
 	return s
 }
