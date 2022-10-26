@@ -61,7 +61,7 @@ func GetRandomAngleRadian(bound uint32) (float64, float64) {
 //		IsKill:     false,            //是否被击杀，默认false
 //	}
 
-//判断两个圆是否发生碰撞
+//检测两个圆形物体之间是否发生碰撞
 //参数说明：s为self简写字母(自己)、e为enemy简写字母(敌人)、x轴、y轴、r半径长度
 func IsCircleCollision(sX, sY, sR, eX, eY, eR float64) bool {
 	//1，首先得到两个圆的圆心点的坐标。然让计算两个的圆心点之间的直线距离。
