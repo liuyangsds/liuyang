@@ -92,46 +92,25 @@ func IsCircleCollision(sX, sY, sR, eX, eY, eR float64) bool {
 //4，只有符合条件的，才能去判断自己坐标与敌方坐标的两点直线距离是否小于等于自己出招的长度
 //5，之所以最后才判断两点直线距离是否小于自己出招(半径)距离，是因为测试的时候方便，直接就可以循环中自增半径长度的方式进行测试。
 
-//技能出招-扇形
-//参数说明：e为enemy简写字母(敌人)、s为self简写字母(自己)、扇面夹角度数、扇面长度(以自己为圆心的半径)、扇面朝向角度
-func SkillAttack_Fan(eX, eY, sX, sY, sk_a, sk_l, dirAngle float64) bool {
+//检测是否命中敌方单位-扇形技能
+//参数说明：e为enemy简写字母(敌人)、s为self简写字母(自己)、扇面夹角度数、扇面长度(以自己为圆心的半径)、扇面朝向角度、敌方底座半径(人物脚下蓝圈)
+func IsHit_Fan(eX, eY, sX, sY, sk_a, sk_l, dirAngle float64) bool {
 	//1，以敌方坐标 - 自己坐标 = 某点坐标距离0,0坐标的差值坐标，再以差值坐标获取到敌方位置距离0,0坐标的角度值
 	e_angle := GetPositionAngel(eX, eY, sX, sY)
 	//fmt.Println("得到敌方坐标", eX, eY, "和", sX, sY, "的差值坐标：", eX-sX, eY-sY, "与0,0坐标的角度为：", e_angle)
+	i_e_angle := Float64ToInt32(e_angle)
 
 	var offsetWeight = sk_a / 2 //扇面夹角宽度的一半
 
-	//fmt.Println("原朝向角度是：", dirAngle)
-	s_dirAngle := Float64ToString(dirAngle, 0)            //float四舍五入成string
-	i_dirAngle := StringToInt32(s_dirAngle)               //将string。转int32
-	d_angle, _, _ := GetDirectionSideTwoAngle(i_dirAngle) //以出招朝向角度获取左右两侧面向的角度
+	i_dirAngle := Float64ToInt32(dirAngle)
 
-	if d_angle >= 0 && d_angle < 90 { //如果朝向右下时
-		//问题：
-		//得到敌方坐标 9 4 和 5 5 的差值坐标： 4 -1 与0,0坐标的角度为： 345.96375653207355
-		//出招朝向角度： 1 敌方所在角度： 345.96375653207355 ，区间差值角度： -29 31
-		if e_angle >= 270 && e_angle < 360 {
-			e_angle = e_angle - 360 //敌方所在角度由于在0度之上，需要减掉360度变成-5.5度才能符合判断需要
-		}
-		//解决：
-		//得到敌方坐标 9 4 和 5 5 的差值坐标： 4 -1 与0,0坐标的角度为： 345.96375653207355
-		//出招朝向角度： 1 敌方所在角度： -14.036243467926454 ，区间差值角度： -29 31
-		//条件1达成------>出招朝向角度： 1 敌方所在角度： -14.036243467926454 符合区间差值角度： -29 31
-	} else if d_angle >= 270 && d_angle < 360 { //如果朝向右上时
-		//问题：
-		//得到敌方坐标 9 6 和 5 5 的差值坐标： 4 1 与0,0坐标的角度为： 14.036243467926479
-		//出招朝向角度： 359 敌方所在角度： 14.036243467926479 ，区间差值角度： 329 389
-		if e_angle >= 0 && e_angle < 90 {
-			e_angle = e_angle + 360 //敌方所在角度由于模掉了360度，需要加回来变成374度才能符合判断需要
-		}
-		//得到敌方坐标 9 6 和 5 5 的差值坐标： 4 1 与0,0坐标的角度为： 14.036243467926479
-		//出招朝向角度： 359 敌方所在角度： 374.03624346792645 ，区间差值角度： 329 389
-		//条件1达成------>出招朝向角度： 359 敌方所在角度： 374.03624346792645 符合区间差值角度： 329 389
-	}
+	//获取符合判断条件的角度值
+	i_d_angle, i_e_angle := GetJudgeAngle(i_dirAngle, i_e_angle)
 
-	var dir_angle = float64(d_angle)
+	var dir_angle = float64(i_d_angle)
+	e_angle = float64(i_e_angle)
 
-	//fmt.Println("出招朝向角度：", d_angle, "敌方所在角度：", e_angle, "，区间差值角度：", dir_angle-offsetWeight, dir_angle+offsetWeight)
+	//fmt.Println("出招朝向角度：", i_d_angle, "敌方所在角度：", e_angle, "，区间差值角度：", dir_angle-offsetWeight, dir_angle+offsetWeight)
 
 	//3，判断该角度值是否 >= 自己出招角度-出招扇面宽度 && 该角度值是否 <= 自己出招角度+出招扇面宽度
 	if e_angle >= dir_angle-offsetWeight && e_angle <= dir_angle+offsetWeight {
@@ -151,6 +130,16 @@ func SkillAttack_Fan(eX, eY, sX, sY, sk_a, sk_l, dirAngle float64) bool {
 		}
 	}
 
+	//注意：
+	//1，如果上面以敌方中心点为准的判断如果不成立时，还要检测一下敌方距离出招角度最近的坐标点，判断该坐标点是否符合条件才行。就是技能区域粘到敌方边缘位置的情况，
+	//2，新的判断两点之间的直线距离就要以敌方距离出招角度最近的坐标为准了。
+	//但是，这里千万不要使用递规方式再次调用当前函数，否则会导致无限递规的发生。
+	//原因如下：
+	//如果出招角度未击中敌方时，也就是顺序到达此处调用本函数方法，接着又会在本函数中继续执行到这里，这就会导致连return都没有机会执行，造成无限递规。
+	//步骤：角度不在扇面中->调用本函数->角度不在扇面中->调用本函数->无限递规(因为本函数中的return false根本没机会执行)
+	//所以，在使用递规时，一定要注意返回的条件。
+	//另外需要注意的是：递规中的参数最好是可变的，不然参数不变的情况，就会容易忽略返回的条件，进而造成无限递规。
+
 	return false
 }
 
@@ -163,15 +152,13 @@ func SkillAttack_Fan(eX, eY, sX, sY, sk_a, sk_l, dirAngle float64) bool {
 //然后判断，某人与左侧点角度值 大于等于 技能出招朝向角度 并且 某人与右侧点角度值 小于等于 技能出招朝向角度
 //4，之所以最后才判断两点直线距离是否小于自己出招(半径)距离，是因为测试的时候方便，直接就可以循环中自增半径长度的方式进行测试。
 
-//技能出招-长方形
+//检测是否命中敌方单位-长方形技能
 //参数说明：e为enemy简写字母(敌人)、s为self简写字母(自己)、长方技能宽度、长方技能长度、长方技能朝向角度
 //出招宽度，宽度除以2才是以自己为圆心的以左右为两点的圆心半径，这样才能得到左右两点坐标
 //条件1：敌方位置在出招技能宽度范围内(左右两点的角度内)
 //条件2：敌方位置在出招技能长度范围内(半径长度内)
-func SkillAttack_Rectangle(eX, eY, sX, sY, sk_w, sk_l, dirAngle float64) bool {
-	//fmt.Println("原朝向角度是：", dirAngle)
-	s_dirAngle := Float64ToString(dirAngle, 0)                        //float四舍五入成string
-	i_dirAngle := StringToInt32(s_dirAngle)                           //将string。转int32
+func IsHit_Rectangle(eX, eY, sX, sY, sk_w, sk_l, dirAngle float64) bool {
+	i_dirAngle := Float64ToInt32(dirAngle)
 	d_angle, l_angle, r_angle := GetDirectionSideTwoAngle(i_dirAngle) //以出招朝向角度获取左右两侧面向的角度
 
 	var sk_r = sk_w / 2 //扇面夹角宽度的一半
@@ -183,7 +170,7 @@ func SkillAttack_Rectangle(eX, eY, sX, sY, sk_w, sk_l, dirAngle float64) bool {
 	//r_x1, r_y1 := GetRoundEdgePosition(sX, sY, bb, sk_r) //得到出招时的圆边右点位置
 	//fmt.Println("未处理出招长方形时的朝向角度：", dirAngle, "，左右两侧角度：", aa, bb, "，两侧坐标点：", l_x1, l_y1, r_x1, r_y1)
 
-	//1，出到出招朝向时的两侧坐标点
+	//以圆心点坐标、角度、半径获取圆边某点坐标位置
 	l_x, l_y := GetRoundEdgePosition(sX, sY, float64(l_angle), sk_r) //得到出招时的圆边左点位置
 	r_x, r_y := GetRoundEdgePosition(sX, sY, float64(r_angle), sk_r) //得到出招时的圆边右点位置
 
@@ -235,17 +222,17 @@ func SkillAttack_Rectangle(eX, eY, sX, sY, sk_w, sk_l, dirAngle float64) bool {
 
 	var dir_angle = float64(d_angle)
 
-	//如果左侧坐标点与敌方坐标点的角度大于等于出招角度并且右侧坐标点与敌方坐标点的角度小于等于出招角度时
-	//并且左侧角度-朝向角度小于等于90度，并且朝向角度-右侧角度也小于等于90度时，才能证明敌方位置在技能出招的左右两点之内，则条件1达成。
-	if e_l_angle >= dir_angle && e_r_angle <= dir_angle {
-		//为了便于清晰理解，将一个判断拆成两个判断
-		if e_l_angle-dir_angle <= 90 && dir_angle-e_r_angle <= 90 {
-			//fmt.Println("条件1达成------>技能已击中敌方")
-
+	//只有左侧角度-朝向角度小于等于90度，并且朝向角度-右侧角度也小于等于90度时，才符合出招技能的基本判断标准。
+	if e_l_angle-dir_angle <= 90 && dir_angle-e_r_angle <= 90 {
+		//fmt.Println("条件1达成------>左侧角度-朝向角度小于等于90度，并且朝向角度-右侧角度也小于等于90度")
+		//如果左侧坐标点与敌方坐标点的角度大于等于出招角度并且右侧坐标点与敌方坐标点的角度小于等于出招角度时。则条件2达成。
+		if e_l_angle >= dir_angle && e_r_angle <= dir_angle {
+			//fmt.Println("条件2达成------>已在出招朝向角度范围内")
 			//获取两点之间的直线距离
 			distance := GetTwoPointDistance(sX, sY, eX, eY)
+			//如果直线距离小于等于技能长度(出招半径)时，则条件3达成。
 			if distance <= sk_l {
-				//fmt.Println("条件2达成------>自己坐标与敌方坐标的两点直线距离：", distance, "，小于等于自己出招的长度：", sk_l)
+				//fmt.Println("条件3达成------>自己坐标与敌方坐标的两点直线距离：", distance, "，小于等于自己出招的长度：", sk_l)
 				//===============================执行长方形技能覆盖敌人条件成立后的逻辑===============================
 				//
 				//
@@ -258,7 +245,9 @@ func SkillAttack_Rectangle(eX, eY, sX, sY, sk_w, sk_l, dirAngle float64) bool {
 		}
 	}
 
-	//fmt.Println("未能击中敌方")
+	//注意：
+	//1，如果上面以敌方中心点为准的判断如果不成立时，还要检测一下敌方距离出招角度最近的坐标点，判断该坐标点是否符合条件才行。就是技能区域粘到敌方边缘位置的情况，
+	//2，新的判断两点之间的直线距离就要以敌方距离出招角度最近的坐标为准了。
 
 	return false
 }
