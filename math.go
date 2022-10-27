@@ -165,3 +165,20 @@ func GetPositiveAngle(angle int32) int32 {
 
 	return angle
 }
+
+//获取机率触发的可能性。参数：机率值0-100，返回：机率达成返true、未达成返false。
+func GetOdds(n int) bool {
+	//如果机率值大于等于100时，则百分之百触发。
+	if n >= 100 {
+		return true
+	}
+
+	//随机0-99之间的数，不会超过100。
+	randX := RandomNumber(100)
+	//fmt.Println("判定值：", n, "------>随机数：", randX)
+	if randX < n {
+		return true
+	}
+
+	return false
+}
