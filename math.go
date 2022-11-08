@@ -200,28 +200,28 @@ func GetOdds(n int) bool {
 }
 
 //获取物体碰到边框后反弹时的随机角度与弧度。参数：碰到的边界标识。返回：角度值、弧度值
-func GetRandomAngleRadian(bound_flag uint32) (float64, float64) {
+func GetRandomAngleRadian(border_flag uint32) (float64, float64) {
 	//过滤，必须
-	if bound_flag < bound_Up || bound_flag > bound_Right {
+	if border_flag < border_Up || border_flag > border_Right {
 		return 0, 0
 	}
 
 	var newAngle float64 = 0
 
-	if bound_flag == bound_Up { //如果碰到上边界
+	if border_flag == border_Up { //如果碰到上边界
 		randX := RandomNumberRange(10, 170)
 		newAngle = float64(randX)
 		//fmt.Println("当前角度：", angle, "，碰到上边界，返回10-170的新角度为：", newAngle)
-	} else if bound_flag == bound_Down {
+	} else if border_flag == border_Down {
 		randX := RandomNumberRange(190, 350)
 		newAngle = float64(randX)
 		//fmt.Println("当前角度：", angle, "，碰到下边界，返回190-350的新角度为：", newAngle)
-	} else if bound_flag == bound_Left {
+	} else if border_flag == border_Left {
 		randX := RandomNumberRange(280, 440)
 		tempN := randX % 360
 		newAngle = float64(tempN)
 		//fmt.Println("当前角度：", angle, "，碰到左边界，返回280-80的新角度为：", newAngle)
-	} else if bound_flag == bound_Right {
+	} else if border_flag == border_Right {
 		randX := RandomNumberRange(100, 260)
 		newAngle = float64(randX)
 		//fmt.Println("当前角度：", angle, "，碰到右边界，返回100-260的新角度为：", newAngle)

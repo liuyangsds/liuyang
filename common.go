@@ -1,7 +1,7 @@
 package liuyang
 
-//边框标识定义
-const bound_Up = 1    //上
-const bound_Left = 2  //左
-const bound_Down = 3  //下
-const bound_Right = 4 //右
+//边界标识定义
+const border_Up = 1    //上
+const border_Left = 2  //左
+const border_Down = 3  //下
+const border_Right = 4 //右

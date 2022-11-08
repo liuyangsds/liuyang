@@ -108,14 +108,14 @@ func GetObjectReboundVector(sX, sY, tX, tY float64) (float64, float64) {
 //获取物体对象碰到边界后的反弹向量(也就是某个方向每步要移动的值)。返回：x方向每步移动值、y方向每步移动值。不进行移动。
 //参数说明：边界标识->上1、左2、下3、右4
 //判断说明：以左上0,0为起始点
-func GetBorderReboundVector(bound_flag uint32) (float64, float64) {
+func GetBorderReboundVector(border_flag uint32) (float64, float64) {
 	//过滤，必须要单独过滤，不然即使下面的函数会返角度0和弧度0，也会导至cos(0)=1,sin(0)=0，也就是stepX会是1，也就是整个函数会返1,0。而不是想要的0,0
-	if bound_flag < bound_Up || bound_flag > bound_Right {
+	if border_flag < border_Up || border_flag > border_Right {
 		return 0, 0
 	}
 
 	//获取边界标识的反弹弧度
-	_, radian := GetRandomAngleRadian(bound_flag)
+	_, radian := GetRandomAngleRadian(border_flag)
 
 	stepX := math.Cos(radian) //得到x方向的每步速度
 	stepY := math.Sin(radian) //得到y方向的每步速度
@@ -123,36 +123,36 @@ func GetBorderReboundVector(bound_flag uint32) (float64, float64) {
 	return stepX, stepY
 }
 
-//检测是否碰到边界。返回：碰到的边界位置：上1、左2、下3、右4，是否碰到边界：true碰到、false未碰到
+//检测圆形物体是否碰到边界。返回：碰到的边界位置：上1、左2、下3、右4，是否碰到边界：true碰到、false未碰到
 //参数说明：物体的x坐标、物体的y坐标、物体的半径、屏幕的宽、屏幕的高
 //判断说明：以左上0,0为起始点
 func CheckCollideBorder(x, y, r, w, h float64) (uint32, bool) {
 	//临时变量
-	var isCollide = false     //是否碰撞，默认false未碰撞
-	var bound_flag uint32 = 0 //边界标识
+	var isCollide = false      //是否碰撞，默认false未碰撞
+	var border_flag uint32 = 0 //边界标识
 
 	//检测边界碰撞。注意：只在气泡与边界发生碰撞时才重新获取角度、弧度、正弦、余弦。
 	if x-r <= 0 { //如果 气泡坐标x+x方向速度-半径值 小于等于 0 时，说明小球已到达左侧边界
 
-		bound_flag = bound_Left //碰撞的边界为：左
-		isCollide = true        //发生碰撞
+		border_flag = border_Left //碰撞的边界为：左
+		isCollide = true          //发生碰撞
 
 	} else if x+r >= w { //如果 气泡坐标x+x方向速度-半径值 大于等于 屏幕宽度 时，说明小球已到达右侧边界
 
-		bound_flag = bound_Right //碰撞的边界为：右
-		isCollide = true         //发生碰撞
+		border_flag = border_Right //碰撞的边界为：右
+		isCollide = true           //发生碰撞
 
 	} else if y-r <= 0 { //如果 气泡坐标y+y方向速度-半径值 小于等于 0 时，说明小球已到达上侧边界
 
-		bound_flag = bound_Up //碰撞的边界为：上
-		isCollide = true      //发生碰撞
+		border_flag = border_Up //碰撞的边界为：上
+		isCollide = true        //发生碰撞
 
 	} else if y+r >= h { //如果 气泡坐标y+y方向速度+半径值 大于等于 屏幕高度 时，说明小球已到达下侧边界
 
-		bound_flag = bound_Down //碰撞的边界为：下
-		isCollide = true        //发生碰撞
+		border_flag = border_Down //碰撞的边界为：下
+		isCollide = true          //发生碰撞
 
 	}
 
-	return bound_flag, isCollide
+	return border_flag, isCollide
 }
