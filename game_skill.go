@@ -4,22 +4,16 @@ package liuyang
 
 //=======================================================检测敌人位置是否在自己出招范围内=======================================================
 
-//扇面技能出招
-//1，以目标(敌方)坐标 - 自己坐标 = 某点坐标距离0,0坐标的差值坐标
-//2，以差值坐标获取到距离0,0坐标的角度值
-//3，判断该角度值是否 >= 自己出招角度-出招扇面宽度 && 该角度值是否 <= 自己出招角度+出招扇面宽度
-//4，只有符合条件的，才能去判断自己坐标与敌方坐标的两点直线距离是否小于等于自己出招的长度
-//5，之所以最后才判断两点直线距离是否小于自己出招(半径)距离，是因为测试的时候方便，直接就可以循环中自增半径长度的方式进行测试。
-
-//检测是否命中目标(敌方)单位-扇形技能
-//参数说明：t为target简写字母(目标)、s为self简写字母(自己)、扇面夹角度数、扇面长度(以自己为圆心的半径)、扇面朝向角度。
-func CheckHit_Fan(tX, tY, sX, sY, sk_a, sk_l, dirAngle float64) bool {
+//检测是否命中目标单位-扇形技能
+//参数说明：s为self简写字母(自己)、扇面夹角度数、扇面长度(以自己为圆心的半径)、扇面朝向角度、t为target简写字母(目标)、目标鸡蛋壳半径。
+//需要与检测圆与直线是否发生碰撞函数配合使用。
+func CheckHit_Fan(sX, sY, sk_a, sk_l, dirAngle, tX, tY, tR float64) bool {
 	//1，以目标(敌方)坐标 - 自己坐标 = 某点坐标距离0,0坐标的差值坐标，再以差值坐标获取到敌方位置距离0,0坐标的角度值
 	e_angle := GetPositionAngel(tX, tY, sX, sY)
 	//fmt.Println("得到目标(敌方)坐标", tX, tY, "和", sX, sY, "的差值坐标：", tX-sX, tY-sY, "与0,0坐标的角度为：", e_angle)
 	i_e_angle := Float64ToInt32(e_angle)
 
-	var offsetWeight = sk_a / 2 //扇面夹角宽度的一半
+	var angleOffset = sk_a / 2 //扇面夹角宽度的一半
 
 	i_dirAngle := Float64ToInt32(dirAngle)
 
@@ -27,12 +21,15 @@ func CheckHit_Fan(tX, tY, sX, sY, sk_a, sk_l, dirAngle float64) bool {
 	i_d_angle, i_e_angle := GetJudgeAngle(i_dirAngle, i_e_angle)
 
 	var dir_angle = float64(i_d_angle)
+	leftLineAngle := dir_angle - angleOffset  //得到左侧直线角度
+	rightLineAngle := dir_angle + angleOffset //得到右侧直线角度
+
 	e_angle = float64(i_e_angle)
 
 	//fmt.Println("出招朝向角度：", i_d_angle, "敌方所在角度：", e_angle, "，区间差值角度：", dir_angle-offsetWeight, dir_angle+offsetWeight)
 
 	//3，判断该角度值是否 >= 自己出招角度-出招扇面宽度 && 该角度值是否 <= 自己出招角度+出招扇面宽度
-	if e_angle >= dir_angle-offsetWeight && e_angle <= dir_angle+offsetWeight {
+	if e_angle >= leftLineAngle && e_angle <= rightLineAngle {
 		//4，只有符合条件的，才能去判断自己坐标与敌方坐标的两点直线距离是否小于等于自己出招的长度
 		//fmt.Println("条件1达成------>出招朝向角度：", dir_angle, "敌方所在角度：", e_angle, "符合区间差值角度：", dir_angle-offsetWeight, dir_angle+offsetWeight)
 		//获取两点之间的直线距离
@@ -49,7 +46,8 @@ func CheckHit_Fan(tX, tY, sX, sY, sk_a, sk_l, dirAngle float64) bool {
 		}
 	}
 
-	//注意：
+	//第一次的注意：
+	//此处现在只作提醒用。
 	//1，如果上面以敌方中心点为准的判断如果不成立时，还要检测一下敌方距离出招角度最近的坐标点，判断该坐标点是否符合条件才行。就是技能区域粘到敌方边缘位置的情况，
 	//2，新的判断两点之间的直线距离就要以敌方距离出招角度最近的坐标为准了。
 	//但是，这里千万不要使用递规方式再次调用当前函数，否则会导致无限递规的发生。
@@ -59,114 +57,77 @@ func CheckHit_Fan(tX, tY, sX, sY, sk_a, sk_l, dirAngle float64) bool {
 	//所以，在使用递规时，一定要注意返回的条件。
 	//另外需要注意的是：递规中的参数最好是可变的，不然参数不变的情况，就会容易忽略返回的条件，进而造成无限递规。
 
+	//第二次的注意：
+	//如果扇面没有覆盖到目标点时，还要判断一下扇面两侧的直线是否粘边到目标(鸡蛋壳)边缘。
+	//fmt.Println("左右两侧直线朝向角度：", leftLineAngle, rightLineAngle)
+	//以自身圆心点坐标、角度、半径获取圆边某点坐标位置
+	leftEndX, leftEndY := GetRoundEdgePosition(sX, sY, leftLineAngle, sk_l)
+	rightEndX, rightEndY := GetRoundEdgePosition(sX, sY, rightLineAngle, sk_l)
+	//fmt.Println("扇面左侧直线终点坐标：", leftEndX, leftEndY)
+	//fmt.Println("扇面右侧直线终点坐标：", rightEndX, rightEndY)
+
+	//检测圆形物体与直线物体之间是否发生碰撞。参数中直线宽度为0，只有长方形技能时该参数才会大于0。
+	leftHit := CheckCircleLineCollide(tX, tY, tR, sX, sY, leftEndX, leftEndY, 0)
+	rightHit := CheckCircleLineCollide(tX, tY, tR, sX, sY, rightEndX, rightEndY, 0)
+	//fmt.Println("左侧是否击中：", leftHit)
+	//fmt.Println("右侧是否击中：", rightHit)
+
+	//如果扇面的左侧直线与目标发生碰撞时
+	if leftHit == true {
+		return true
+	}
+
+	//如果扇面的右侧直线与目标发生碰撞时
+	if rightHit == true {
+		return true
+	}
+
 	return false
 }
 
-//长方形技能出招
-//待完成：
-//1，获取技能出招时朝向的角度的两侧面向的角度值。
-//2，封装函数：以圆心点、半径、角度获取圆边某点坐标
-//3，判断疾光电影所朝方向时以自己为圆心，以技能招式的宽度为半径得到技能招式的左右圆边上的两点。
-//然后判断覆盖面上的所有人，得到技能招式圆边左点与当前敌人的角度和技能招式圆边右点与当前敌人的角度。
-//然后判断，某人与左侧点角度值 大于等于 技能出招朝向角度 并且 某人与右侧点角度值 小于等于 技能出招朝向角度
-//4，之所以最后才判断两点直线距离是否小于自己出招(半径)距离，是因为测试的时候方便，直接就可以循环中自增半径长度的方式进行测试。
+//检测是否命中目标单位-长方形技能
+//参数说明：s为self简写字母(自己)、长方形的长度(以自己为圆心的半径)、长方形的宽度、长方形朝向角度、t为target简写字母(目标)、目标鸡蛋壳半径。
+func CheckHit_Rectangle(sX, sY, sk_l, sk_w, dirAngle, tX, tY, tR float64) bool {
+	//以自身圆心点坐标、朝向角度、技能长度(半径)获取圆边某点坐标
+	endX, endY := GetRoundEdgePosition(sX, sY, dirAngle, sk_l)
+	//fmt.Println("长方形终点坐标：", endX, endY)
 
-//检测是否命中目标(敌方)单位-长方形技能
-//参数说明：t为target简写字母(目标)、s为self简写字母(自己)、长方形技能宽度、长方形技能长度、长方形技能朝向角度
-//出招宽度，宽度除以2才是以自己为圆心的以左右为两点的圆心半径，这样才能得到左右两点坐标
-//条件1：敌方位置在出招技能宽度范围内(左右两点的角度内)
-//条件2：敌方位置在出招技能长度范围内(半径长度内)
-func CheckHit_Rectangle(tX, tY, sX, sY, sk_w, sk_l, dirAngle float64) bool {
-	i_dirAngle := Float64ToInt32(dirAngle)
-	d_angle, l_angle, r_angle := GetDirectionSideTwoAngle(i_dirAngle) //以出招朝向角度获取左右两侧面向的角度
+	//得到长方形技能宽度的一半(半径)
+	sk_w_r := sk_w / 2
 
-	var sk_r = sk_w / 2 //扇面夹角宽度的一半
-
-	//GetRoundEdgePosition()函数中，角度按大于0的角度或按象线位置的负数角度传值都是一样的结果。
-	//var aa = dirAngle - 90
-	//var bb = dirAngle + 90
-	//l_x1, l_y1 := GetRoundEdgePosition(sX, sY, aa, sk_r) //得到出招时的圆边左点位置
-	//r_x1, r_y1 := GetRoundEdgePosition(sX, sY, bb, sk_r) //得到出招时的圆边右点位置
-	//fmt.Println("未处理出招长方形时的朝向角度：", dirAngle, "，左右两侧角度：", aa, bb, "，两侧坐标点：", l_x1, l_y1, r_x1, r_y1)
-
-	//以圆心点坐标、角度、半径获取圆边某点坐标位置
-	l_x, l_y := GetRoundEdgePosition(sX, sY, float64(l_angle), sk_r) //得到出招时的圆边左点位置
-	r_x, r_y := GetRoundEdgePosition(sX, sY, float64(r_angle), sk_r) //得到出招时的圆边右点位置
-
-	//fmt.Println("处理后出招长方形时的朝向角度：", d_angle, "，左右两侧角度：", l_angle, r_angle, "，两侧坐标点：", l_x, l_y, r_x, r_y)
-
-	//2，以敌方坐标和出招朝向时的两侧坐标点计算出差值坐标对应0,0坐标的角度
-	e_l_angle := GetPositionAngel(tX, tY, l_x, l_y) //以敌方坐标和出招时的左侧坐标得到差值坐标对应0,0坐标的角度
-	e_r_angle := GetPositionAngel(tX, tY, r_x, r_y) //以敌方坐标和出招时的右侧坐标得到差值坐标对应0,0坐标的角度
-
-	//fmt.Println("以敌方坐标和出招朝向时的两侧坐标点计算出差值坐标对应0,0坐标的角度：", e_l_angle, e_r_angle)
-
-	//===================================注意，为避免359、0、1这样的求模过渡
-	//朝向角度大于等于0度并且小于90度时，要将右侧角度值+360度，将其变为大于左侧180度，这样才能保证大于左边的起始270度值
-	//朝向角度： 0 ，获取左右角度为--->left： 270 --->right： 90
-	//朝向角度： 1 ，获取左右角度为--->left： 271 --->right： 91
-	//朝向角度： 2 ，获取左右角度为--->left： 272 --->right： 92
-
-	//朝向角度： 89 ，获取左右角度为--->left： 359 --->right： 179
-	//朝向角度： 90 ，获取左右角度为--->left： 0 --->right： 180
-	//朝向角度： 91 ，获取左右角度为--->left： 1 --->right： 181
-
-	//朝向角度大于等于270度并且小于360度时，要将左侧角度值-360度，将其变为小于右侧180度，这样才能保集小于右边的起始0度值
-	//朝向角度： 269 ，获取左右角度为--->left： 179 --->right： 359
-	//朝向角度： 270 ，获取左右角度为--->left： 180 --->right： 0	#这里开始应该判断一下，将右侧角度按左侧角度+180后才是正确的
-	//朝向角度： 271 ，获取左右角度为--->left： 181 --->right： 1
-
-	//朝向角度： 358 ，获取左右角度为--->left： 268 --->right： 88
-	//朝向角度： 359 ，获取左右角度为--->left： 269 --->right： 89
-	//朝向角度： 360 ，获取左右角度为--->left： 270 --->right： 90
-
-	//由于左侧坐标点与敌方坐标点的角度一直要小于右侧坐标点与敌方坐标点的角度的，但是朝向右侧时，会有357、358、359、0、1、2这样的满360会求模的地方
-	//就会导致左侧坐标点与敌方坐标点的角度大于右侧坐标点与敌方坐标点的角度，那么，此时就要判断一下：
-	//如果出招朝向角度为右下时，则右侧坐标点与敌方坐标点的角度需要-360，以便小于0度的判断需要。
-	//如果出招朝向角度为右上时，则左侧坐标点与敌方坐标点的角度需要+360，以便大于360度的判断需要。
-	//前题条件必须是以下两个条件都成立时才可以操作。
-	//1，右侧坐标点与敌方坐标点的角度为270到360(不含360)度之间
-	//2，左侧坐标点与敌方坐标点的角度为0到90(不含90)度之间时。
-	if d_angle >= 0 && d_angle < 90 {
-		if e_r_angle >= 270 && e_r_angle < 360 && e_l_angle >= 0 && e_l_angle < 90 {
-			e_r_angle = e_r_angle - 360
-		}
-	} else if d_angle >= 270 && d_angle < 360 {
-		if e_r_angle >= 270 && e_r_angle < 360 && e_l_angle >= 0 && e_l_angle < 90 {
-			e_l_angle = e_l_angle + 360
-		}
+	//检测圆形物体与直线物体之间是否发生碰撞。参数中直线宽度为0，只有长方形技能时该参数才会大于0。
+	isCollide := CheckCircleLineCollide(tX, tY, tR, sX, sY, endX, endY, sk_w_r)
+	if isCollide == true {
+		return true
 	}
 
-	//fmt.Println("朝向角度：", d_angle, "，左右两侧角度：", e_l_angle, e_r_angle)
+	return false
+}
 
-	var dir_angle = float64(d_angle)
-
-	//只有左侧角度-朝向角度小于等于90度，并且朝向角度-右侧角度也小于等于90度时，才符合出招技能的基本判断标准。
-	if e_l_angle-dir_angle <= 90 && dir_angle-e_r_angle <= 90 {
-		//fmt.Println("条件1达成------>左侧角度-朝向角度小于等于90度，并且朝向角度-右侧角度也小于等于90度")
-		//如果左侧坐标点与敌方坐标点的角度大于等于出招角度并且右侧坐标点与敌方坐标点的角度小于等于出招角度时。则条件2达成。
-		if e_l_angle >= dir_angle && e_r_angle <= dir_angle {
-			//fmt.Println("条件2达成------>已在出招朝向角度范围内")
-			//获取两点之间的直线距离
-			distance := GetTwoPointDistance(sX, sY, tX, tY)
-			//如果直线距离小于等于技能长度(出招半径)时，则条件3达成。
-			if distance <= sk_l {
-				//fmt.Println("条件3达成------>自己坐标与敌方坐标的两点直线距离：", distance, "，小于等于自己出招的长度：", sk_l)
-				//===============================执行长方形技能覆盖敌人条件成立后的逻辑===============================
-				//
-				//
-				//
-				//===============================执行长方形技能覆盖敌人条件成立后的逻辑===============================
-
-				return true
-			}
-
-		}
+//检测是否命中目标单位-长方形技能X3
+//参数说明：s为self简写字母(自己)、长方形的长度(以自己为圆心的半径)、长方形的宽度、长方形朝向角度、左右两侧长方形的间隔角度、t为target简写字母(目标)、目标鸡蛋壳半径。
+func CheckHit_Rectangle_3(sX, sY, sk_l, sk_w, dirAngle, spaceAngle, tX, tY, tR float64) bool {
+	//检测中间长方形的朝向角度是否命中目标
+	isCollide := CheckHit_Rectangle(sX, sY, sk_l, sk_w, dirAngle, tX, tY, tR)
+	if isCollide == true {
+		return true
 	}
 
-	//注意：
-	//1，如果上面以敌方中心点为准的判断如果不成立时，还要检测一下敌方距离出招角度最近的坐标点，判断该坐标点是否符合条件才行。就是技能区域粘到敌方边缘位置的情况，
-	//2，新的判断两点之间的直线距离就要以敌方距离出招角度最近的坐标为准了。
+	//获得左右两侧长方形朝向角度
+	leftDirAngle := dirAngle - spaceAngle  //以中间朝向角度 - 间隔角度 = 左侧长方形朝向角度
+	rightDirAngle := dirAngle + spaceAngle //以中间朝向角度 + 间隔角度 = 右侧长方形朝向角度
+
+	//检测左侧长方形的朝向角度是否命中目标
+	leftIsCollide := CheckHit_Rectangle(sX, sY, sk_l, sk_w, leftDirAngle, tX, tY, tR)
+	if leftIsCollide == true {
+		return true
+	}
+
+	//检测右侧长方形的朝向角度是否命中目标
+	rightIsCollide := CheckHit_Rectangle(sX, sY, sk_l, sk_w, rightDirAngle, tX, tY, tR)
+	if rightIsCollide == true {
+		return true
+	}
 
 	return false
 }

@@ -55,7 +55,7 @@ func GetPositionAngel(tX, tY, sX, sY float64) float64 {
 	return angle
 }
 
-//以圆心点坐标、角度、半径获取圆边某点坐标位置。参数角度为正数或按象线位置传负数都可以。
+//以圆心点坐标、角度、半径获取圆边某点坐标。参数角度为正数或按象线位置传负数都可以。
 func GetRoundEdgePosition(x0, y0, angle, r float64) (float64, float64) {
 	radian := GetRadian(angle) //角度值转为弧度值
 	//tempAngle := liuyang.GetAngle(radian)

@@ -156,3 +156,162 @@ func CheckCollideBorder(x, y, r, w, h float64) (uint32, bool) {
 
 	return border_flag, isCollide
 }
+
+//检测圆形物体与矩形物体之间是否发生碰撞
+//参数：圆心点x、圆心点y、圆的半径、矩形起始点x、矩形起始点y、矩形宽度、矩形高度
+func CheckCircleRectCollide(circleX, circleY, radius, rectX, rectY, rectW, rectH float64) bool {
+	//分别判断矩形4个顶点与圆心的距离是否<=圆半径；如果<=，说明碰撞成功
+
+	//矩形起始点x - 圆点点x = a边长度
+	//矩形起始点y - 圆心点y = b边长度
+	//a*a + b*b <= c*c 证明矩形左上点与圆发生碰撞
+	if ((rectX-circleX)*(rectX-circleX) + (rectY-circleY)*(rectY-circleY)) <= radius*radius {
+		//fmt.Println("证明矩形左上点与圆发生碰撞")
+		return true
+	}
+
+	//矩形起始点x + 矩形宽度 - 圆点点x = a边长度
+	//矩形起始点y - 圆心点y = b边长度
+	//a*a + b*b <= c*c 证明矩形右上点与圆发生碰撞
+	if ((rectX+rectW-circleX)*(rectX+rectW-circleX) + (rectY-circleY)*(rectY-circleY)) <= radius*radius {
+		//fmt.Println("证明矩形右上点与圆发生碰撞")
+		return true
+	}
+
+	//矩形起始点x - 圆点点x = a边长度
+	//矩形起始点y + 矩形高度 - 圆心点y = b边长度
+	//a*a + b*b <= c*c 证明矩形左下点与圆发生碰撞
+	if ((rectX-circleX)*(rectX-circleX) + (rectY+rectH-circleY)*(rectY+rectH-circleY)) <= radius*radius {
+		//fmt.Println("证明矩形左下点与圆发生碰撞")
+		return true
+	}
+
+	//矩形起始点x + 矩形宽度 - 圆点点x = a边长度
+	//矩形起始点y + 矩形高度 - 圆心点y = b边长度
+	//a*a + b*b <= c*c 证明矩形右下点与圆发生碰撞
+	if ((rectX+rectW-circleX)*(rectX+rectW-circleX) + (rectY+rectH-circleY)*(rectY+rectH-circleY)) <= radius*radius {
+		//fmt.Println("证明矩形右下点与圆发生碰撞")
+		return true
+	}
+
+	//判断当圆心的Y坐标进入矩形内时X的位置，如果X在(rectX-radius)到(rectX+rectW+radius)这个范围内，则碰撞成功
+	var minDisX float64 = 0
+	//如果圆心点y 大于等于 矩形起始点y 并且圆心点y 小于等于 矩形起始点y + 矩形长度 时，
+	//也就是圆在长方形的高度范围内时，则判断圆心点x 是否在矩形宽度之内。
+	if circleY >= rectY && circleY <= rectY+rectH {
+		//fmt.Println("圆在长方形的高度范围内时，则判断圆心点x 是否在矩形宽度之内。")
+		if circleX < rectX {
+			//如果圆心点x 小于 矩形起始点x 时，也就是圆在矩形左侧时，则得到左侧圆的圆心点x距离右侧矩形左侧边(矩形起始点x)的距离
+			minDisX = rectX - circleX
+			//fmt.Println("如果圆心点x 小于 矩形起始点x 时，也就是圆在矩形左侧时")
+		} else if circleX > rectX+rectW {
+			//如果圆心点x 大于 矩形起始点x + 矩形宽度 时，也就是圆在矩形右侧时，则得到右侧圆的圆心点x距离左侧矩形右侧边(矩形起始点x+矩形宽度)的距离
+			minDisX = circleX - rectX - rectW
+			//fmt.Println("如果圆心点x 大于 矩形起始点x + 矩形宽度 时，也就是圆在矩形右侧时")
+		} else {
+			//否则圆心点x 正好在矩形的左侧边与右侧边之间的位置，说明圆与矩形发生碰撞
+			//fmt.Println("否则圆心点x 正好在矩形的左侧边与右侧边之间的位置，说明圆与矩形发生碰撞")
+			return true
+		}
+
+		//如果圆心点x距离矩形的左侧边或右侧边的距离 小于等于 圆的半径 时，证明圆与矩形发生碰撞
+		if minDisX <= radius {
+			//fmt.Println("如果圆心点x距离矩形的左侧边或右侧边的距离 小于等于 圆的半径 时")
+			return true
+		}
+	}
+
+	//判断当圆心的X坐标进入矩形内时Y的位置，如果X在(rectY-radius)到(rectY+rectH+radius)这个范围内，则碰撞成功
+	var minDisY float64 = 0
+	//如果圆心点x 大于等于 矩形起始点x 并且圆心点x 小于等于 矩形起始点x + 矩形宽度 时，
+	//也就是圆在长方形的宽度范围内时，则判断圆心点y 是否在矩形高度之内。
+	if circleX >= rectX && circleX <= rectX+rectW {
+		//fmt.Println("圆在长方形的宽度范围内时，则判断圆心点y 是否在矩形高度之内。")
+		if circleY < rectY {
+			//如果圆心点y 小于 矩形起始点y 时，也就是圆在矩形上侧时，则得到上侧圆的圆心点y距离下侧矩形上侧边(矩形起始点y)的距离
+			minDisY = rectY - circleY
+			//fmt.Println("如果圆心点y 小于 矩形起始点y 时，也就是圆在矩形上侧时")
+		} else if circleY > rectY+rectH {
+			//如果圆心点y 大于 矩形起始点y + 矩形高度 时，也就是圆在矩形下侧时，则得到下侧圆的圆心点y距离上侧矩形下侧边(矩形起始点y+矩形高度)的距离
+			minDisY = circleY - rectY - rectH
+			//fmt.Println("如果圆心点y 大于 矩形起始点y + 矩形高度 时，也就是圆在矩形下侧时")
+		} else {
+			//否则圆心点y 正好在矩形的上侧边与下侧边之间的位置，说明圆与矩形发生碰撞
+			//fmt.Println("否则圆心点y 正好在矩形的上侧边与下侧边之间的位置，说明圆与矩形发生碰撞")
+			return true
+		}
+
+		//如果圆心点y距离矩形的上侧边或下侧边的距离 小于等于 圆的半径 时，证明圆与矩形发生碰撞
+		if minDisY <= radius {
+			//fmt.Println("如果圆心点y距离矩形的上侧边或下侧边的距离 小于等于 圆的半径 时，证明圆与矩形发生碰撞")
+			return true
+		}
+	}
+
+	return false
+}
+
+//检测圆形物体与直线物体之间是否发生碰撞
+//参数：圆心点x、圆心点y、圆的半径、直线起始点x、直线起始点y、直线终点x、直线终点y、直线半径(宽度的一半)
+func CheckCircleLineCollide(circleX, circleY, circleRadius, startX, startY, endX, endY, lineRadius float64) bool {
+	//圆心点x 与 线段起始点x 的差值
+	var c_s_x = circleX - startX //圆心点x - 线段起始点x
+	//圆心点y 与 线段起始点y 的差值
+	var c_s_y = circleY - startY //圆心点y - 线段起始点y
+
+	//线段终点x 与 线段起始点x 的差值
+	var e_s_x = endX - startX //线段终点x - 线段起始点x
+	//线段终点y 与 线段起始点y 的差值
+	var e_s_y = endY - startY //线段终点y - 线段起始点y
+
+	//线段长度：线段起始点与线段终点的两点直线距离
+	var lineLength = math.Sqrt(e_s_x*e_s_x + e_s_y*e_s_y)
+	//fmt.Println("线段长度：", lineLength)
+
+	// v2.normalize()
+	m_cosA := e_s_x / lineLength //角a的邻边比斜边=b/c = cosA(余弦)
+	m_sinA := e_s_y / lineLength //角a的对边比斜边=a/c = sinA(正弦)
+
+	// u = v1.dot(v2)
+	// u is the vector projection length of vector v1 onto vector v2.
+	//u是向量v1到向量v2的向量投影长度
+	var projectLength = c_s_x*m_cosA + c_s_y*m_sinA //(圆心点x 与 线段起始点x 的差值) 乘余弦 + (圆心点y 与 线段起始点y 的差值) 乘正弦
+	//fmt.Println("投影长度是：", projectLength)
+
+	// determine the nearest point on the lineseg
+	//确定线段上最近的点
+	var pX float64 = 0      //投影点坐标x
+	var pY float64 = 0      //投影点坐标y
+	if projectLength <= 0 { //如果投影长度小于等于0时
+		// p is on the left of p1, so p1 is the nearest point on lineseg
+		//p在p1的左边，所以p1是线段上最近的点
+		//此判断主要是为了防止圆在线段起始点以左很远的情况
+		pX = startX
+		pY = startY
+	} else if projectLength >= lineLength { //如果投影长度大于等于线段长度时
+		// p is on the right of p2, so p2 is the nearest point on lineseg
+		//p在p2的右边，所以p2是线段上最近的点
+		//此判断主要是为了防止圆在线段终点以右很远的情况
+		pX = endX
+		pY = endY
+	} else { //否则投影长度大于0并且小于线段长度时
+
+		pX = startX + projectLength*m_cosA //线段起始点x + 投影长度 乘 余弦 = 投影点坐标x
+		pY = startY + projectLength*m_sinA //线段起始点y + 投影长度 乘 正弦 = 投影点坐标y
+
+		//fmt.Println("得到投影点的坐标是：", pX, pY)
+	}
+
+	//return (circleX-x0)*(circleX-x0)+(circleY-y0)*(circleY-y0) <= radius*radius
+
+	//根据勾股定理，求得投影点与圆心点的距离
+	tempValue := (circleX-pX)*(circleX-pX) + (circleY-pY)*(circleY-pY)
+	distance := math.Sqrt(tempValue)
+
+	//如果投点与与圆心点的直线距离小于等于圆的半径+线段半径(宽度的一半)时，证明发生碰撞
+	if distance <= circleRadius+lineRadius {
+		return true
+	}
+
+	return false
+}
