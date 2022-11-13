@@ -11,14 +11,14 @@ func CheckHit_Fan(sX, sY, sk_a, sk_l, dirAngle, tX, tY, tR float64) bool {
 	//1，以目标(敌方)坐标 - 自己坐标 = 某点坐标距离0,0坐标的差值坐标，再以差值坐标获取到敌方位置距离0,0坐标的角度值
 	e_angle := GetPositionAngel(tX, tY, sX, sY)
 	//fmt.Println("得到目标(敌方)坐标", tX, tY, "和", sX, sY, "的差值坐标：", tX-sX, tY-sY, "与0,0坐标的角度为：", e_angle)
-	i_e_angle := Float64ToInt32(e_angle)
+	n_e_angle := Float64ToInt32(e_angle)
 
 	var angleOffset = sk_a / 2 //扇面夹角宽度的一半
 
-	i_dirAngle := Float64ToInt32(dirAngle)
+	n_dirAngle := Float64ToInt32(dirAngle)
 
-	//获取符合判断条件的角度值
-	i_d_angle, i_e_angle := GetJudgeAngle(i_dirAngle, i_e_angle)
+	//获取符合判断条件的角度值。参数：朝向角度、敌人距0,0的角度(-90至450之间的整数)
+	i_d_angle, i_e_angle := GetJudgeAngle(n_dirAngle, n_e_angle)
 
 	var dir_angle = float64(i_d_angle)
 	leftLineAngle := dir_angle - angleOffset  //得到左侧直线角度
