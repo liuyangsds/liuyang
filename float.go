@@ -2,7 +2,6 @@ package liuyang
 
 import (
 	"fmt"
-	"math"
 	"strconv"
 )
 
@@ -57,15 +56,16 @@ func Float64ToFloat64(ff float64, n int) float64 {
 //float四舍五入后的int类型值
 func Float64ToInt(ff float64) int {
 	str := Float64ToString(ff, 0) //float四舍五入成string
-	n, err := strconv.Atoi(str)   //将string。转int32
-	if err != nil {
-		//字符串中的数字大于32位最大值10位时的报错
-		return 0 //这里不用返回该类型的最大值，返回0就代表转换失败
-	}
-	//如果转换后的数值大于当前类型的最大值时，返回0
-	if n > math.MaxInt {
-		return 0
-	}
+	n := StringToInt(str)         //将string。转int
+	//n, err := strconv.Atoi(str)   //将string。转int
+	//if err != nil {
+	//	//字符串中的数字大于32位最大值10位时的报错
+	//	return 0 //这里不用返回该类型的最大值，返回0就代表转换失败
+	//}
+	////如果转换后的数值大于当前类型的最大值时，返回0
+	//if n > math.MaxInt {
+	//	return 0
+	//}
 
 	return n
 }
@@ -81,7 +81,7 @@ func Float64ToInt32(ff float64) int32 {
 //float四舍五入后的int64类型值
 func Float64ToInt64(ff float64) int64 {
 	str := Float64ToString(ff, 0) //float四舍五入成string
-	n := StringToInt64(str)       //将string。转int32
+	n := StringToInt64(str)       //将string。转int64
 
 	return n
 }

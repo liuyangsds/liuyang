@@ -8,14 +8,14 @@ package liuyang
 //参数说明：s为self简写字母(自己)、扇面夹角度数、扇面长度(以自己为圆心的半径)、扇面朝向角度、t为target简写字母(目标)、目标鸡蛋壳半径。
 //需要与检测圆与直线是否发生碰撞函数配合使用。
 func CheckHit_Fan(sX, sY, sk_a, sk_l, dirAngle, tX, tY, tR float64) bool {
-	//1，以目标(敌方)坐标 - 自己坐标 = 某点坐标距离0,0坐标的差值坐标，再以差值坐标获取到敌方位置距离0,0坐标的角度值
+	//以目标(敌方)坐标 - 自己坐标 = 某点坐标距离0,0坐标的差值坐标，再以差值坐标获取到敌方位置距离0,0坐标的角度值
 	e_angle := GetPositionAngel(tX, tY, sX, sY)
 	//fmt.Println("得到目标(敌方)坐标", tX, tY, "和", sX, sY, "的差值坐标：", tX-sX, tY-sY, "与0,0坐标的角度为：", e_angle)
-	n_e_angle := Float64ToInt32(e_angle)
+	n_e_angle := Float64ToInt(e_angle)
 
 	var angleOffset = sk_a / 2 //扇面夹角宽度的一半
 
-	n_dirAngle := Float64ToInt32(dirAngle)
+	n_dirAngle := Float64ToInt(dirAngle)
 
 	//获取符合判断条件的角度值。参数：朝向角度、敌人距0,0的角度(-90至450之间的整数)
 	i_d_angle, i_e_angle := GetJudgeAngle(n_dirAngle, n_e_angle)
@@ -28,20 +28,13 @@ func CheckHit_Fan(sX, sY, sk_a, sk_l, dirAngle, tX, tY, tR float64) bool {
 
 	//fmt.Println("出招朝向角度：", i_d_angle, "敌方所在角度：", e_angle, "，区间差值角度：", dir_angle-offsetWeight, dir_angle+offsetWeight)
 
-	//3，判断该角度值是否 >= 自己出招角度-出招扇面宽度 && 该角度值是否 <= 自己出招角度+出招扇面宽度
+	//判断该角度值是否 >= 自己出招角度-出招扇面宽度 && 该角度值是否 <= 自己出招角度+出招扇面宽度
 	if e_angle >= leftLineAngle && e_angle <= rightLineAngle {
-		//4，只有符合条件的，才能去判断自己坐标与敌方坐标的两点直线距离是否小于等于自己出招的长度
-		//fmt.Println("条件1达成------>出招朝向角度：", dir_angle, "敌方所在角度：", e_angle, "符合区间差值角度：", dir_angle-offsetWeight, dir_angle+offsetWeight)
-		//获取两点之间的直线距离
-		distance := GetTwoPointDistance(sX, sY, tX, tY)
-		if distance <= sk_l {
-			//fmt.Println("自己坐标与敌方坐标的两点直线距离：", distance, "，小于等于自己出招的长度：", sk_l)
-			//===============================执行扇面覆盖敌人条件成立后的逻辑===============================
-			//
-			//
-			//
-			//===============================执行扇面覆盖敌人条件成立后的逻辑===============================
-
+		//只有符合条件的，才能去判断自己坐标与敌方坐标的两点直线距离是否小于等于自己出招的长度
+		//注意，要计算的是两点之间的直线距离小于等于自己出招长度和目标半径长度。而不是只小于等于自己出招长度。所以直接检测两个圆形物体之间是否发生碰撞即可
+		//检测两个圆形物体之间是否发生碰撞
+		isCollide := CheckCircleCollide(sX, sY, sk_l, tX, tY, tR)
+		if isCollide == true {
 			return true
 		}
 	}

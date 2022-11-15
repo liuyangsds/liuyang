@@ -243,6 +243,21 @@ func StringToUInt16(s string) uint16 {
 	return uint16(n)
 }
 
+//string类型转int
+func StringToInt(s string) int {
+	n, err := strconv.ParseInt(s, 10, 64)
+	if err != nil {
+		//字符串中的数字大于64位最大值19位时的报错
+		return 0 //这里不用返回该类型的最大值，返回0就代表转换失败
+	}
+	//如果转换后的数值大于当前类型的最大值时，返回0
+	if n > math.MaxInt {
+		return 0
+	}
+
+	return int(n)
+}
+
 //string类型转int32
 func StringToInt32(s string) int32 {
 	n, err := strconv.ParseInt(s, 10, 64)
