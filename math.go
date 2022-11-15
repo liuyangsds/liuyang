@@ -288,7 +288,7 @@ func GetObjectReboundAngle(sX, sY, tX, tY float64) (int, float64) {
 	return randX, radian
 }
 
-//获取物体碰到边框后反弹时的随机角度与弧度。参数：碰到的边界标识。返回：角度值、弧度值
+//获取物体碰到边框后的反弹角度与弧度。参数：碰到的边界标识。返回：角度值、弧度值
 //判断说明：坐标以左上0,0为起始点、角度以右起顺时针0到360
 func GetBorderReboundAngle(border_flag uint32) (int, float64) {
 	//过滤，必须
