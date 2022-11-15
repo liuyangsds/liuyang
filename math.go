@@ -18,6 +18,15 @@ func GetAngle(radian float64) float64 {
 	return angle
 }
 
+//以弧度值获取x与y的向量值，参数：弧度
+func GetVector(radian float64) (float64, float64) {
+	//以弧度值获取余弦值和正弦值
+	stepX := math.Cos(radian) //得到x方向的每步速度
+	stepY := math.Sin(radian) //得到y方向的每步速度
+
+	return stepX, stepY
+}
+
 //获取两点之间的直线距离，利用勾股定理，求两个坐标点直线距离。参数：a坐标点的x,y和b坐标点的x,y。返回两点的直线距离。
 func GetTwoPointDistance(aX, aY, bX, bY float64) float64 {
 	//这里不要取绝对值，因为3 - -2 的实际长度为5，但取绝对值后会是3-2=1，所以不要取绝值对。
@@ -58,7 +67,6 @@ func GetPositionAngel(tX, tY, sX, sY float64) float64 {
 //以圆心点坐标、角度、半径获取圆边某点坐标。参数角度为正数或按象线位置传负数都可以。
 func GetRoundEdgePosition(x0, y0, angle, r float64) (float64, float64) {
 	radian := GetRadian(angle) //角度值转为弧度值
-	//tempAngle := liuyang.GetAngle(radian)
 	//fmt.Println("弧度：", radian, "，转角度：", tempAngle)
 	//打印：弧度： 3.6651914291880923 ，转角度： 210.00000000000003
 	x1 := x0 + r*math.Cos(radian) //圆心点x坐标 + 半径 * 余弦(角度转换后的弧度值)
@@ -154,7 +162,7 @@ func GetDirectionSideEnemyAngle(dirAngle, enemyAngle int) (int, int, int) {
 //获取正整数角度值。返回：0-359之间的正整数
 func GetPositiveAngle(angle int) int {
 	//将角度置为0-359之间
-	if angle >= 360 || angle <= 360 { //必须要判断大于等于或小于等于才行
+	if angle <= -360 || angle >= 360 { //必须要判断大于等于或小于等于才行
 		angle = angle % 360
 	}
 
@@ -199,38 +207,117 @@ func GetOdds(n int) bool {
 	return false
 }
 
+//获取物体对象碰到另一物体对象后的反弹向量(参考传奇占位，A英雄碰到B英雄后的反弹向量，也就是某个方向每步要移动的值)。返回：反弹角度、x方向每步移动值、y方向每步移动值。不进行移动。
+//参数说明：s为self简写字母(自己)、t为target简写字母(目标)
+//判断说明：以左上0,0为起始点
+func GetObjectReboundVector(sX, sY, tX, tY float64) (float64, float64) {
+	//获取物体对象碰到另一物体对象后的反弹角度与弧度
+	_, radian := GetObjectReboundAngle(sX, sY, tX, tY)
+	//得到x与y方向的每步速度
+	stepX, stepY := GetVector(radian)
+
+	return stepX, stepY
+}
+
+//获取物体对象碰到边界后的反弹向量(也就是某个方向每步要移动的值)。返回：反弹角度、x方向每步移动值、y方向每步移动值。不进行移动。
+//参数说明：边界标识->上1、左2、下3、右4
+//判断说明：以左上0,0为起始点
+func GetBorderReboundVector(border_flag uint32) (float64, float64) {
+	//过滤，必须要单独过滤，不然即使下面的函数会返角度0和弧度0，也会导至cos(0)=1,sin(0)=0，也就是stepX会是1，也就是整个函数会返1,0。而不是想要的0,0
+	if border_flag < border_Up || border_flag > border_Right {
+		return 0, 0
+	}
+
+	//获取物体碰到边框后反弹时的随机角度与弧度
+	_, radian := GetBorderReboundAngle(border_flag)
+
+	stepX, stepY := GetVector(radian) //得到x与y方向的每步速度
+
+	return stepX, stepY
+}
+
+//获取物体对象碰到另一物体对象后的反弹角度与弧度(参考传奇占位，A英雄碰到B英雄后的反弹)。返回：反弹角度、弧度
+//参数说明：s为self简写字母(自己)、t为target简写字母(目标)
+//判断说明：坐标以左上0,0为起始点、角度以右起顺时针0到360
+func GetObjectReboundAngle(sX, sY, tX, tY float64) (int, float64) {
+	//临时变量
+	var randX = 0 //接收随机数
+
+	//如果当前球在右下方时，弹向右下角
+	if sX > tX && sY > tY {
+		//如果当前球在右下方时，弹向右下角
+		randX = RandomNumberRange(0, 90)
+
+	} else if sX > tX && sY < tY {
+		//如果当前球在右上方时，弹向右上角
+		randX = RandomNumberRange(270, 360)
+
+	} else if sX < tX && sY < tY {
+		//如果当前球在左上方时，弹向左上角
+		randX = RandomNumberRange(180, 270)
+
+	} else if sX < tX && sY > tY {
+		//如果当前球在左下方时，弹向左下角
+		randX = RandomNumberRange(90, 180)
+
+	} else if sX < tX && sY == tY {
+		//如果当前球与另一球在同一水平线时，且当前球在正左侧时，弹向左侧面
+		randX = RandomNumberRange(90, 270)
+
+	} else if sX > tX && sY == tY {
+		//如果当前球与另一球在同一水平线时，且当前球在正右侧时，弹向右侧面
+		tempX := RandomNumberRange(270, 450)
+		randX = tempX % 360 //超出360时必须取模值
+
+	} else if sX == tX && sY < tY {
+		//如果当前球与另一球在同一竖平线时，且当前球在正上侧时，弹向上侧面
+		randX = RandomNumberRange(180, 360)
+
+	} else if sX == tX && sY > tY {
+		//如果当前球与另一球在同一竖平线时，且当前球在正下侧时，弹向下侧面
+		randX = RandomNumberRange(0, 180)
+
+	} else if sX == tX && sY == tY {
+		//如果当前球与另一球在同一坐标点上时，则弹向0-360
+		randX = RandomNumberRange(0, 360)
+	}
+
+	//以角度值获取弧度值
+	radian := GetRadian(float64(randX))
+
+	return randX, radian
+}
+
 //获取物体碰到边框后反弹时的随机角度与弧度。参数：碰到的边界标识。返回：角度值、弧度值
-func GetRandomAngleRadian(border_flag uint32) (float64, float64) {
+//判断说明：坐标以左上0,0为起始点、角度以右起顺时针0到360
+func GetBorderReboundAngle(border_flag uint32) (int, float64) {
 	//过滤，必须
 	if border_flag < border_Up || border_flag > border_Right {
 		return 0, 0
 	}
 
-	var newAngle float64 = 0
+	//临时变量
+	var randX = 0 //接收随机数
 
 	if border_flag == border_Up { //如果碰到上边界
-		randX := RandomNumberRange(10, 170)
-		newAngle = float64(randX)
+		randX = RandomNumberRange(10, 170)
 		//fmt.Println("当前角度：", angle, "，碰到上边界，返回10-170的新角度为：", newAngle)
 	} else if border_flag == border_Down {
-		randX := RandomNumberRange(190, 350)
-		newAngle = float64(randX)
+		randX = RandomNumberRange(190, 350)
 		//fmt.Println("当前角度：", angle, "，碰到下边界，返回190-350的新角度为：", newAngle)
 	} else if border_flag == border_Left {
-		randX := RandomNumberRange(280, 440)
-		tempN := randX % 360
-		newAngle = float64(tempN)
+		tempX := RandomNumberRange(280, 440)
+		randX = tempX % 360
 		//fmt.Println("当前角度：", angle, "，碰到左边界，返回280-80的新角度为：", newAngle)
 	} else if border_flag == border_Right {
-		randX := RandomNumberRange(100, 260)
-		newAngle = float64(randX)
+		randX = RandomNumberRange(100, 260)
 		//fmt.Println("当前角度：", angle, "，碰到右边界，返回100-260的新角度为：", newAngle)
 	}
 
-	//角度 * (pi / 180) = 弧度
-	radian := GetRadian(newAngle)
+	//以角度值获取弧度值
+	radian := GetRadian(float64(randX))
 
-	return newAngle, radian
+	return randX, radian
 }
 
 //获取某个索引的对称坐标偏移位置。如：(0)-385、(1)-275、(2)-165、(3)-55、(4)55、(5)165、(6)275、(7)385
