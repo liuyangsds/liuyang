@@ -2,6 +2,7 @@ package liuyang
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -878,7 +879,7 @@ func ArrayCopyRangeString(arr []string, start int, length int) []string {
 }
 
 //复制数组切片======================================
-//将所有int类型的数组分割成以逗号连接的字符串
+//将所有类型的数组分割成以指定符号连接的字符串。该函数简单暴力，和下面ArrayImplode()函数的功能是一样的。
 func ArrayToString(arr interface{}, sep string) string {
 	temp_str := fmt.Sprint(arr)
 	//fmt.Println(str) //[1 2 3 4 5 6 7 8 9]，字符串类型
@@ -897,7 +898,92 @@ func ArrayToString(arr interface{}, sep string) string {
 	return str
 }
 
-//切片中相同元素的数量统计。返回：元素值与元素出现次数
+//获取一个由int类型切片元素转成以指定符号连接的字符串。该方法学习自2010年长春好萝卜公司的同事冷志伟先生。
+func ArrayImplode(arr []int, sep string) string {
+	//临时变量
+	var str string
+	for i := 0; i < len(arr); i++ {
+		//如果当前i的值小于元素总个数-1时，也就是最后一个key之前的值时，后面可以连接逗号
+		if i < len(arr)-1 {
+			str += strconv.Itoa(arr[i]) + sep
+		} else {
+			//否则i的值等于最后一个key时，后面就不要连接逗号了
+			str += strconv.Itoa(arr[i])
+		}
+	}
+
+	return str
+}
+
+//获取一个由int32类型切片元素转成以指定符号连接的字符串。
+func ArrayImplodeInt32(arr []int32, sep string) string {
+	//临时变量
+	var str string
+	for i := 0; i < len(arr); i++ {
+		//如果当前i的值小于元素总个数-1时，也就是最后一个key之前的值时，后面可以连接逗号
+		if i < len(arr)-1 {
+			str += Int32ToString(arr[i]) + sep
+		} else {
+			//否则i的值等于最后一个key时，后面就不要连接逗号了
+			str += Int32ToString(arr[i])
+		}
+	}
+
+	return str
+}
+
+//获取一个由uint32类型切片元素转成以指定符号连接的字符串。
+func ArrayImplodeUInt32(arr []uint32, sep string) string {
+	//临时变量
+	var str string
+	for i := 0; i < len(arr); i++ {
+		//如果当前i的值小于元素总个数-1时，也就是最后一个key之前的值时，后面可以连接逗号
+		if i < len(arr)-1 {
+			str += UInt32ToString(arr[i]) + sep
+		} else {
+			//否则i的值等于最后一个key时，后面就不要连接逗号了
+			str += UInt32ToString(arr[i])
+		}
+	}
+
+	return str
+}
+
+//获取一个由int64类型切片元素转成以指定符号连接的字符串。
+func ArrayImplodeInt64(arr []int64, sep string) string {
+	//临时变量
+	var str string
+	for i := 0; i < len(arr); i++ {
+		//如果当前i的值小于元素总个数-1时，也就是最后一个key之前的值时，后面可以连接逗号
+		if i < len(arr)-1 {
+			str += Int64ToString(arr[i]) + sep
+		} else {
+			//否则i的值等于最后一个key时，后面就不要连接逗号了
+			str += Int64ToString(arr[i])
+		}
+	}
+
+	return str
+}
+
+//获取一个由uint64类型切片元素转成以指定符号连接的字符串。
+func ArrayImplodeUInt64(arr []uint64, sep string) string {
+	//临时变量
+	var str string
+	for i := 0; i < len(arr); i++ {
+		//如果当前i的值小于元素总个数-1时，也就是最后一个key之前的值时，后面可以连接逗号
+		if i < len(arr)-1 {
+			str += UInt64ToString(arr[i]) + sep
+		} else {
+			//否则i的值等于最后一个key时，后面就不要连接逗号了
+			str += UInt64ToString(arr[i])
+		}
+	}
+
+	return str
+}
+
+//切片中相同元素的数量统计(byte类型)。返回：元素值与元素出现次数
 func ArraySameElementShowNum(arr []byte) map[byte]byte {
 	//校验长度
 	if len(arr) < 1 {
@@ -926,7 +1012,36 @@ func ArraySameElementShowNum(arr []byte) map[byte]byte {
 	return tempMap
 }
 
-//切片元素去重。返回：去重后的切片
+//切片中相同元素的数量统计(int类型)。返回：元素值与元素出现次数
+func ArraySameElementShowNumInt(arr []int) map[int]int {
+	//校验长度
+	if len(arr) < 1 {
+		return nil
+	}
+	//对象键值对法
+	//该方法执行的速度比其他任何方法都快，就是占用的内存大一些
+	tempMap := make(map[int]int, 0)
+
+	//fmt.Println("初始，map的值：", tempMap, "，长度：", len(tempMap))
+
+	for _, value := range arr {
+		if _, ok := tempMap[value]; ok == true {
+			tempMap[value]++
+			//fmt.Println("是否有相同的key：", ok, value)
+		} else {
+			tempMap[value] = 1
+		}
+	}
+
+	//fmt.Println("=======================遍历=======================")
+	//for key, value := range tempMap {
+	//	fmt.Println("map的key：", key, "------>value：", value)
+	//}
+
+	return tempMap
+}
+
+//切片元素去重(byte类型)。返回：去重后的切片
 func ArrayElementSingle(arr []byte) []byte {
 	//校验长度，如果长度为0或1时，直接返回原切片。即使长度为1时也不用去重。
 	if len(arr) < 2 {
@@ -946,6 +1061,35 @@ func ArrayElementSingle(arr []byte) []byte {
 
 	//临时切片
 	tempArr := make([]byte, 0)
+	//遍历临时map，取其key
+	for key, _ := range tempMap {
+		//收集去重后的元素
+		tempArr = append(tempArr, key)
+	}
+
+	return tempArr
+}
+
+//切片元素去重(int类型)。返回：去重后的切片
+func ArrayElementSingleInt(arr []int) []int {
+	//校验长度，如果长度为0或1时，直接返回原切片。即使长度为1时也不用去重。
+	if len(arr) < 2 {
+		return arr
+	}
+
+	//对象键值对法
+	//该方法执行的速度比其他任何方法都快，就是占用的内存大一些
+	tempMap := make(map[int]int, 0)
+
+	//将所有元素设置为临时map的key
+	for _, value := range arr {
+		tempMap[value] = 1
+	}
+
+	//fmt.Println("=======================遍历=======================")
+
+	//临时切片
+	tempArr := make([]int, 0)
 	//遍历临时map，取其key
 	for key, _ := range tempMap {
 		//收集去重后的元素
