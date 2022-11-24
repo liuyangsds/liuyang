@@ -1,6 +1,8 @@
 package liuyang
 
-import "math"
+import (
+	"math"
+)
 
 //以角度值获取弧度值，参数：角度
 func GetRadian(angle float64) float64 {
@@ -69,8 +71,8 @@ func GetRoundEdgePosition(x0, y0, angle, r float64) (float64, float64) {
 	radian := GetRadian(angle) //角度值转为弧度值
 	//fmt.Println("弧度：", radian, "，转角度：", tempAngle)
 	//打印：弧度： 3.6651914291880923 ，转角度： 210.00000000000003
-	x1 := x0 + r*math.Cos(radian) //圆心点x坐标 + 半径 * 余弦(角度转换后的弧度值)
-	y1 := y0 + r*math.Sin(radian) //圆心点y坐标 + 半径 * 正弦(角度转换后的弧度值)
+	x1 := x0 + r*math.Cos(radian) //圆心点x坐标 + 半径 * 余弦值(也就是x轴的向量)
+	y1 := y0 + r*math.Sin(radian) //圆心点y坐标 + 半径 * 正弦值(也就是y轴的向量)
 	//fmt.Println("得到的圆边某点坐标------>x：", x1, "，y：", y1)
 
 	return x1, y1
@@ -318,4 +320,60 @@ func GetBorderReboundAngle(border_flag uint32) (int, float64) {
 	radian := GetRadian(float64(randX))
 
 	return randX, radian
+}
+
+//获取圆的两侧切线坐标--->点p到圆的右侧切线坐标、点p到圆的左侧切线坐标、是否获取到切线坐标
+//说明：点p如果在圆内时是得不到切线坐标的，所以会返：0,0,0,0,false
+//说明：点p如果在圆外时是可以得到切线坐标的，所以会返：坐标1、坐标2、true
+//	:param px: 圆外点P横坐标
+//	:param py: 圆外点P纵坐标
+//	:param cx: 圆心横坐标
+//	:param cy: 圆心纵坐标
+//	:param r:  圆半径
+//	:return:   过点P的俩条切线坐标
+//作者：josepa https: //www.bilibili.com/read/cv13951079 出处：bilibili
+func GetCircleTangentCoor(px, py, cx, cy, r float64) (float64, float64, float64, float64, bool) {
+	//求点p到圆心的距离
+	distance := math.Sqrt((px-cx)*(px-cx) + (py-cy)*(py-cy))
+	//fmt.Println("两点直线距离：", distance)
+
+	//aa := GetTwoPointDistance(px, py, cx, cy)
+	//fmt.Println("刘阳函数获取的两点直线距离：", aa)
+
+	//点p所在圆内时，这里必须要校验，不然下面求点p到切点的距离会是NaN
+	if distance <= r {
+		//fmt.Println("输入的数值不在范围内--->点p所在圆内")
+		return 0, 0, 0, 0, false
+	}
+
+	//否则点p所在圆外时，继续下面的逻辑
+
+	//点p到切点的距离
+	length := math.Sqrt(distance*distance - r*r)
+	//fmt.Println("点p到切点的距离：", length) //点p到切点的距离： NaN
+
+	//点p到圆心的单位向量
+	ux := (cx - px) / distance
+	uy := (cy - py) / distance
+	//fmt.Println("ux：", ux)
+	//fmt.Println("uy：", uy)
+
+	//计算切线与圆心连线的夹角
+	angle := math.Asin(r / distance)
+
+	//fmt.Println("计算切线与圆心连线的夹角：", angle)
+
+	//向正反两个方向旋转单位向量
+	q1x := ux*math.Cos(angle) - uy*math.Sin(angle)
+	q1y := ux*math.Sin(angle) + uy*math.Cos(angle)
+	q2x := ux*math.Cos(-angle) - uy*math.Sin(-angle)
+	q2y := ux*math.Sin(-angle) + uy*math.Cos(-angle)
+
+	//得到新坐标
+	q1x = q1x*length + px
+	q1y = q1y*length + py
+	q2x = q2x*length + px
+	q2y = q2y*length + py
+
+	return q1x, q1y, q2x, q2y, true
 }

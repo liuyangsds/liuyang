@@ -196,14 +196,14 @@ func CheckCircleLineCollide(circleX, circleY, circleRadius, startX, startY, endX
 	var lineLength = math.Sqrt(e_s_x*e_s_x + e_s_y*e_s_y)
 	//fmt.Println("线段长度：", lineLength)
 
-	// v2.normalize()
-	m_cosA := e_s_x / lineLength //角a的邻边比斜边=b/c = cosA(余弦)
-	m_sinA := e_s_y / lineLength //角a的对边比斜边=a/c = sinA(正弦)
+	//得到向量值
+	m_cosA := e_s_x / lineLength //角a的邻边比斜边=b/c = 余弦值(也就是x轴的向量)
+	m_sinA := e_s_y / lineLength //角a的对边比斜边=a/c = 正弦值(也就是y轴的向量)
 
 	// u = v1.dot(v2)
 	// u is the vector projection length of vector v1 onto vector v2.
 	//u是向量v1到向量v2的向量投影长度
-	var projectLength = c_s_x*m_cosA + c_s_y*m_sinA //(圆心点x 与 线段起始点x 的差值) 乘余弦 + (圆心点y 与 线段起始点y 的差值) 乘正弦
+	var projectLength = c_s_x*m_cosA + c_s_y*m_sinA //(圆心点x 与 线段起始点x 的差值) 乘余弦值 + (圆心点y 与 线段起始点y 的差值) 乘正弦值
 	//fmt.Println("投影长度是：", projectLength)
 
 	// determine the nearest point on the lineseg
@@ -224,8 +224,8 @@ func CheckCircleLineCollide(circleX, circleY, circleRadius, startX, startY, endX
 		pY = endY
 	} else { //否则投影长度大于0并且小于线段长度时
 
-		pX = startX + projectLength*m_cosA //线段起始点x + 投影长度 乘 余弦 = 投影点坐标x
-		pY = startY + projectLength*m_sinA //线段起始点y + 投影长度 乘 正弦 = 投影点坐标y
+		pX = startX + projectLength*m_cosA //线段起始点x + 投影长度 乘 余弦值 = 投影点坐标x
+		pY = startY + projectLength*m_sinA //线段起始点y + 投影长度 乘 正弦值 = 投影点坐标y
 
 		//fmt.Println("得到投影点的坐标是：", pX, pY)
 	}
