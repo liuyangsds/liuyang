@@ -322,7 +322,7 @@ func GetBorderReboundAngle(border_flag uint32) (int, float64) {
 	return randX, radian
 }
 
-//获取圆的两侧切线坐标--->点p到圆的右侧切线坐标、点p到圆的左侧切线坐标、是否获取到切线坐标
+//获取圆的两侧切线坐标--->点p到圆的右侧切线坐标、点p到圆的左侧切线坐标、点p与圆的切线->与点p与圆心直线的夹角度数、是否获取到切线坐标与角度值
 //说明：点p如果在圆内时是得不到切线坐标的，所以会返：0,0,0,0,false
 //说明：点p如果在圆外时是可以得到切线坐标的，所以会返：坐标1、坐标2、true
 //	:param px: 圆外点P横坐标
@@ -332,7 +332,7 @@ func GetBorderReboundAngle(border_flag uint32) (int, float64) {
 //	:param r:  圆半径
 //	:return:   过点P的俩条切线坐标
 //作者：josepa https: //www.bilibili.com/read/cv13951079 出处：bilibili
-func GetCircleTangentCoor(px, py, cx, cy, r float64) (float64, float64, float64, float64, bool) {
+func GetCircleTangentCoor(px, py, cx, cy, r float64) (float64, float64, float64, float64, float64, bool) {
 	//求点p到圆心的距离
 	distance := math.Sqrt((px-cx)*(px-cx) + (py-cy)*(py-cy))
 	//fmt.Println("两点直线距离：", distance)
@@ -343,7 +343,7 @@ func GetCircleTangentCoor(px, py, cx, cy, r float64) (float64, float64, float64,
 	//点p所在圆内时，这里必须要校验，不然下面求点p到切点的距离会是NaN
 	if distance <= r {
 		//fmt.Println("输入的数值不在范围内--->点p所在圆内")
-		return 0, 0, 0, 0, false
+		return 0, 0, 0, 0, 0, false
 	}
 
 	//否则点p所在圆外时，继续下面的逻辑
@@ -357,11 +357,18 @@ func GetCircleTangentCoor(px, py, cx, cy, r float64) (float64, float64, float64,
 	uy := (cy - py) / distance
 	//fmt.Println("ux：", ux)
 	//fmt.Println("uy：", uy)
+	//ux： 0.7071067811865475
+	//uy： 0.7071067811865475
 
-	//计算切线与圆心连线的夹角
-	angle := math.Asin(r / distance)
+	//计算切线与圆心连线的夹角(弧度值)
+	angle := math.Asin(r / distance) //返回的是弧度值
+	//fmt.Println("计算切线与圆心连线的夹角(弧度值)：", angle)
 
-	//fmt.Println("计算切线与圆心连线的夹角：", angle)
+	//将弧度值转成角度值
+	a_angle := GetAngle(angle)
+	//fmt.Println("将弧度值转成角度值：", a_angle)
+	//计算切线与圆心连线的夹角(弧度值)： 1.084101371720123
+	//将弧度值转成角度值： 62.11443316390628
 
 	//向正反两个方向旋转单位向量
 	q1x := ux*math.Cos(angle) - uy*math.Sin(angle)
@@ -375,5 +382,5 @@ func GetCircleTangentCoor(px, py, cx, cy, r float64) (float64, float64, float64,
 	q2x = q2x*length + px
 	q2y = q2y*length + py
 
-	return q1x, q1y, q2x, q2y, true
+	return q1x, q1y, q2x, q2y, a_angle, true
 }
