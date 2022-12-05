@@ -9,27 +9,17 @@ package liuyang
 //需要与检测圆与直线是否发生碰撞函数配合使用。
 func CheckHit_Fan(sX, sY, sk_a, sk_l, dirAngle, tX, tY, tR float64) bool {
 	//以目标(敌方)坐标 - 自己坐标 = 某点坐标距离0,0坐标的差值坐标，再以差值坐标获取到敌方位置距离0,0坐标的角度值
-	e_angle := GetPositionAngel(tX, tY, sX, sY)
+	targetAngle, _ := GetPositionAngel(tX, tY, sX, sY) //得到0-359之间的角度值
 	//fmt.Println("得到目标(敌方)坐标", tX, tY, "和", sX, sY, "的差值坐标：", tX-sX, tY-sY, "与0,0坐标的角度为：", e_angle)
-	n_e_angle := Float64ToInt(e_angle)
+	target_angle := Float64ToInt(targetAngle) //将角度转为int类型
 
-	var angleOffset = sk_a / 2 //扇面夹角宽度的一半
+	offsetAngle := int(sk_a / 2) //扇面夹角宽度的一半
 
-	n_dirAngle := Float64ToInt(dirAngle)
+	dir_angle := Float64ToInt(dirAngle)
 
-	//获取符合判断条件的角度值。参数：朝向角度、敌人距0,0的角度(-90至450之间的整数)
-	i_d_angle, i_e_angle := GetJudgeAngle(n_dirAngle, n_e_angle)
-
-	var dir_angle = float64(i_d_angle)
-	leftLineAngle := dir_angle - angleOffset  //得到左侧直线角度
-	rightLineAngle := dir_angle + angleOffset //得到右侧直线角度
-
-	e_angle = float64(i_e_angle)
-
-	//fmt.Println("出招朝向角度：", i_d_angle, "敌方所在角度：", e_angle, "，区间差值角度：", dir_angle-offsetWeight, dir_angle+offsetWeight)
-
-	//判断该角度值是否 >= 自己出招角度-出招扇面宽度 && 该角度值是否 <= 自己出招角度+出招扇面宽度
-	if e_angle >= leftLineAngle && e_angle <= rightLineAngle {
+	//检测目标角度是否在朝向角度与偏移角度区间内。返回：左侧偏移后的角度、右侧偏移后的角度、是否在左侧到右侧角度内：true是、false否
+	leftLineAngle, rightLineAngle, rangeOk := CheckTargetAtOffsetAngle(dir_angle, offsetAngle, target_angle)
+	if rangeOk == true {
 		//只有符合条件的，才能去判断自己坐标与敌方坐标的两点直线距离是否小于等于自己出招的长度
 		//注意，要计算的是两点之间的直线距离小于等于自己出招长度和目标半径长度。而不是只小于等于自己出招长度。所以直接检测两个圆形物体之间是否发生碰撞即可
 		//检测两个圆形物体之间是否发生碰撞
@@ -38,6 +28,57 @@ func CheckHit_Fan(sX, sY, sk_a, sk_l, dirAngle, tX, tY, tR float64) bool {
 			return true
 		}
 	}
+
+	////已放弃调用该函数，因为扇面夹角超过180度时会有问题。
+	////获取符合判断条件的角度值。参数：朝向角度、敌人距0,0的角度(-90至450之间的整数)
+	////i_d_angle, i_e_angle := GetJudgeAngle(n_dirAngle, n_e_angle)
+	//
+	//已将下面注释代码封装到CheckTargetAtOffsetAngle()函数中。
+	////var dir_angle = float64(i_d_angle)
+	//leftLineAngle := dir_angle - angleOffset  //得到左侧直线角度
+	//rightLineAngle := dir_angle + angleOffset //得到右侧直线角度
+	//
+	////e_angle = float64(i_e_angle)
+	//
+	//fmt.Println("出招朝向角度：", dir_angle, "敌方所在角度：", n_e_angle, "，区间差值角度：", leftLineAngle, rightLineAngle)
+	//
+	////将左侧角度和右侧角度求模后得到0-359之间的正整数
+	//leftLineAngle = GetPositiveAngle(leftLineAngle)
+	//rightLineAngle = GetPositiveAngle(rightLineAngle)
+	//fmt.Println("出招朝向角度：", dir_angle, "敌方所在角度：", n_e_angle, "，区间差值取模后的新角度：", leftLineAngle, rightLineAngle)
+	////出招朝向角度： 2 敌方所在角度： 11 ，区间差值角度： -28 32
+	////出招朝向角度： 2 敌方所在角度： 11 ，区间差值取模后的新角度： 332 32
+	//
+	////如果左侧角度值大于右侧角度值时，说明两个角度区间包含358、359、0、1、2这种过渡问题，则符合下面一个条件即可
+	//if leftLineAngle > rightLineAngle {
+	//	fmt.Println("如果左侧角度值大于右侧角度值时，说明两个角度区间包含358、359、0、1、2满360过渡问题。")
+	//	//如果目标角度大于等于左侧角度 或者 小于等于右侧角度时
+	//	if n_e_angle >= leftLineAngle || n_e_angle <= rightLineAngle {
+	//		//只有符合条件的，才能去判断自己坐标与敌方坐标的两点直线距离是否小于等于自己出招的长度
+	//		//注意，要计算的是两点之间的直线距离小于等于自己出招长度和目标半径长度。而不是只小于等于自己出招长度。所以直接检测两个圆形物体之间是否发生碰撞即可
+	//		//检测两个圆形物体之间是否发生碰撞
+	//		isCollide := CheckCircleCollide(sX, sY, sk_l, tX, tY, tR)
+	//		if isCollide == true {
+	//			return true
+	//		}
+	//	}
+	//
+	//} else {
+	//	//否则是左侧角度值小于右侧角度值时，则是正常情况，则要符合下面两个条件才行
+	//
+	//	fmt.Println("否则是左侧角度值小于右侧角度值时，则是正常情况，则要符合下面两个条件才行")
+	//
+	//	//如果目标角度大于等于左侧角度 并且 小于等于右侧角度时
+	//	if n_e_angle >= leftLineAngle && n_e_angle <= rightLineAngle {
+	//		//只有符合条件的，才能去判断自己坐标与敌方坐标的两点直线距离是否小于等于自己出招的长度
+	//		//注意，要计算的是两点之间的直线距离小于等于自己出招长度和目标半径长度。而不是只小于等于自己出招长度。所以直接检测两个圆形物体之间是否发生碰撞即可
+	//		//检测两个圆形物体之间是否发生碰撞
+	//		isCollide := CheckCircleCollide(sX, sY, sk_l, tX, tY, tR)
+	//		if isCollide == true {
+	//			return true
+	//		}
+	//	}
+	//}
 
 	//第一次的注意：
 	//此处现在只作提醒用。
@@ -54,8 +95,8 @@ func CheckHit_Fan(sX, sY, sk_a, sk_l, dirAngle, tX, tY, tR float64) bool {
 	//如果扇面没有覆盖到目标点时，还要判断一下扇面两侧的直线是否粘边到目标(鸡蛋壳)边缘。
 	//fmt.Println("左右两侧直线朝向角度：", leftLineAngle, rightLineAngle)
 	//以自身圆心点坐标、角度、半径获取圆边某点坐标位置
-	leftEndX, leftEndY := GetRoundEdgePosition(sX, sY, leftLineAngle, sk_l)
-	rightEndX, rightEndY := GetRoundEdgePosition(sX, sY, rightLineAngle, sk_l)
+	leftEndX, leftEndY := GetRoundEdgePosition(sX, sY, float64(leftLineAngle), sk_l)
+	rightEndX, rightEndY := GetRoundEdgePosition(sX, sY, float64(rightLineAngle), sk_l)
 	//fmt.Println("扇面左侧直线终点坐标：", leftEndX, leftEndY)
 	//fmt.Println("扇面右侧直线终点坐标：", rightEndX, rightEndY)
 
