@@ -529,3 +529,34 @@ func CheckTargetAtOffsetAngle(dirAngle int, offsetAngle int, targetAngle int) (i
 
 	return leftLineAngle, rightLineAngle, false
 }
+
+//获取两个数之间的最大值
+func GetTwoNubmerMax(a, b int) int {
+	//比较大小
+	if a > b { //如果a大于b，则返回a
+		return a
+	}
+
+	return b
+}
+
+//获取三个数之间的最大值
+func GetThreeNubmerMax(a, b, c int) int {
+	//临时变量：最大值
+	var maxValue = 0
+
+	//比较大小
+	if a > b { //如果a大于b，则将a值赋到临时变量上
+		maxValue = a
+	} else { //否则，将b值赋到临时变量上
+		maxValue = b
+	}
+
+	//如果c大于临时变量上的值时，则将c值赋到临时变量上
+	if c > maxValue {
+		maxValue = c
+	}
+
+	//否则，返回临时变量上的最大值
+	return maxValue
+}
