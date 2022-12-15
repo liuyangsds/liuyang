@@ -133,6 +133,7 @@ var CubeOffsetArr = [][]int{
 }
 
 //获取立方体坐标的周围的邻居位置(六个格子)
+//顺序：左起开始
 func GetCubeNeighborArr(x, y, z int) [][]int {
 	//格子位置数据集，位置元素最多6个。
 	tempArr := make([][]int, 0)
@@ -177,6 +178,7 @@ var TipOddOffsetOddRowArr = [][]int{
 //获取偏移坐标(尖朝上-奇数行偏移)周围的邻居位置(六个格子)
 //参数：列位置、行位置、列数最大值、行数最大值
 //返回：某位置周围合法的位置(除去<0或超出最大值或等于列最大值时的奇数行最后一个位置)
+//顺序：左起开始
 func GetOffsetTipOddNeighborArr(x, y, X_max, Y_max int) [][]int {
 	//过滤非法坐标
 	if x < 0 || x > X_max || y < 0 || y > Y_max {
@@ -329,4 +331,47 @@ func CoordOffsetToCubeSideEven(col, row int) (int, int, int) {
 	//fmt.Printf("x：%d，y：%d，z：%d\n", tempX, tempY, tempZ)
 
 	return x, y, z
+}
+
+//===================================================================================
+//获取偏移坐标(尖朝上-奇数行偏移)周围的邻居位置(六个格子)所对应的角度
+func GetOffsetTipOddNeighborAngle(sX, sY, tX, tY, X_max, Y_max int) int {
+
+	//获取偏移坐标(尖朝上-奇数行偏移)周围的邻居位置(六个格子)
+	arr := GetOffsetTipOddNeighborArr(sX, sY, X_max, Y_max)
+	//fmt.Println("偏移坐标的邻居：", arr)
+	//偏移坐标的邻居： [[1 2] [1 1] [2 1] [3 2] [2 3] [1 3]]
+	//偏移坐标的邻居所对应角度： 120
+
+	//如果有效的邻居个数大于0时，才去获取对应索引并计算角度
+	if len(arr) > 0 {
+		index := 0 //索引
+		angle := 0 //角度
+		for i := 0; i < len(arr); i++ {
+			if arr[i][0] == tX && arr[i][1] == tY {
+				//得到邻居所在的索引：左起0、1、2、3、4、5
+				index = i
+				break
+			}
+		}
+
+		switch index {
+		case 0:
+			angle = 180 //左起第1个(正左)
+		case 1:
+			angle = 240 //左起第2个(左上)
+		case 2:
+			angle = 300 //左起第3个(右上)
+		case 3:
+			angle = 0 //左起第4个(正右)
+		case 4:
+			angle = 60 //左起第5个(右下)
+		case 5:
+			angle = 120 //左起第6个(左上)
+		}
+
+		return angle
+	}
+
+	return 0
 }
