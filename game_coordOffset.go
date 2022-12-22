@@ -247,6 +247,27 @@ func GetOffsetTipOddNeighborArr(x, y, X_max, Y_max int) [][]int {
 	return tempArr
 }
 
+//获取偏移坐标(尖朝上-奇数行偏移)对应位置的索引。返回值：索引、是否找到对应索引
+//参数：偏移坐标中的某位置(中心坐标)x、某位置(中心坐标)y、最大列、最大行、要获取对应索引的目标位置x、目标位置y
+func GetOffsetTipOddPositionIndex(x, y, X_max, Y_max, targetX, targetY int) (int, bool) {
+	//获取偏移坐标(尖朝上-奇数行偏移)周围的邻居位置(六个格子)
+	arr := GetOffsetTipOddNeighborArr(x, y, X_max, Y_max)
+	//fmt.Println("偏移坐标的邻居：", arr)
+
+	flag_ok := false
+	index := 0
+	for i := 0; i < len(arr); i++ {
+		if arr[i][0] == targetX && arr[i][1] == targetY {
+			//fmt.Println("当前位置：", i)
+			index = i      //记得找到的索引
+			flag_ok = true //标记找到对应索引
+			break
+		}
+	}
+
+	return index, flag_ok
+}
+
 //==========================================================================
 
 //立方体坐标转偏移坐标-尖朝上-奇数行偏移
