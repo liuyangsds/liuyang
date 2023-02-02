@@ -24,7 +24,7 @@ func RandomNumber(max int) int {
 	return randX
 }
 
-//生成一个随机数，得到大于等于参数值min并且小于参数值max的随机数
+//生成一个随机数，得到大于等于参数值min并且小于参数值max的随机数(不包含最大值)
 func RandomNumberRange(min int, max int) int {
 	if max <= 0 {
 		return 0
@@ -33,6 +33,21 @@ func RandomNumberRange(min int, max int) int {
 	//rand.Seed(time.Now().UnixNano())
 	//差值 = 最大数 - 最小数
 	offset := max - min
+	randX := rand.Intn(offset)
+
+	//区间数 = 最小数 + 随机(差值)
+	return randX + min
+}
+
+//生成一个随机数，得到大于等于参数值min并且小于等于参数值max的随机数(包含最大值)
+func RandomNumberRangeContain(min int, max int) int {
+	if max <= 0 {
+		return 0
+	}
+	//随机种子必须要有，并且要用公用的，不能写在方法里，不然不利于循环
+	//rand.Seed(time.Now().UnixNano())
+	//差值 = 最大数 - 最小数
+	offset := max + 1 - min
 	randX := rand.Intn(offset)
 
 	//区间数 = 最小数 + 随机(差值)
