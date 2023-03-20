@@ -70,7 +70,7 @@ func CompareVersion(verS1, verS2 string) int {
 	arrlen1 := len(arr1)
 	arrlen2 := len(arr2)
 
-	//如果字符串1转换数组后的元素个数大于字符串2转换数组后的元素个数时，划是相等时
+	//如果字符串1转换数组后的元素个数大于字符串2转换数组后的元素个数时，或是相等时
 	if arrlen1 > arrlen2 || arrlen1 == arrlen2 {
 		//fmt.Println("如果arrlen1 > arrlen2 || arrlen1 == arrlen2时")
 		for key, _ := range arr1 {
@@ -366,4 +366,46 @@ func StringToBytes(s string) []byte {
 //byte转string的高级写法，bytes2string将字节片转换为字符串，无需内存分配
 func BytesToString(b []byte) string {
 	return *(*string)(unsafe.Pointer(&b))
+}
+
+//===============================================================================
+
+//将带有百分号的字符串转成小数字符串。参数：带有百分号的数字或小数%(正负皆可)、保留小数位个数。返回：0.15
+func ScaleToString(str string, n int) (string, bool) {
+	//如果后缀带有百分号“%”时
+	if strings.HasSuffix(str, "%") == true {
+
+		//获取除最后一个字符外的所有字符
+		tempStr := str[0 : len(str)-1]
+		//fmt.Println("值是：", tempStr) //15
+
+		//如果不全是数字时，直接返回
+		//有符号(正负)检查小数，可输入0.000000，或输入小于1000000000(9个0)的正整数或小数(精确0至6位)，刘阳推荐
+		if Check_s_decimal_6(tempStr) == false {
+			//fmt.Println("如果不全是数字时，直接返回")
+			return "", false
+		}
+
+		//将string转成float64
+		f_str := StringToFloat64(tempStr)
+		f_str1 := f_str / 100
+
+		//将float64再转回str
+		s_str := Float64ToString(f_str1, n)
+
+		return s_str, true
+	}
+
+	return "", false
+}
+
+//将数字或小数(正负皆可)转成带有百分号的字符串。参数：数字或小数(正负皆可)、保留小数位个数。返回：15%
+func StringToScale(str string, n int) string {
+	f := StringToFloat64(str)
+	ff := f * 100
+
+	s_f := Float64ToString(ff, n)
+	s_f += "%" //连接百分号
+
+	return s_f
 }

@@ -8,7 +8,7 @@ import (
 //方式1，将float64类型的小数四舍六入五成双后，得到一个字符串，且保留指定位数的小数
 func Float64ToString(ff float64, n int) string {
 	//参数n表示：
-	//0，不保留小数，校例：
+	//0，不保留小数，样例：
 	//var tempF float64 = 12345678.51
 	//var tempF float64 = 12345678.50 //第2位是0则第1位的5就不向前进1了
 	//保留0位后： 12345679
