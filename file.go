@@ -9,14 +9,67 @@ import (
 	"strconv"
 )
 
+//旧函数：很笨的写法
+//将数值转为文件类型数值，如：KB、MB、GB、TB、HB为单位的数值字符串。
+//func File_size(filesize uint64) string {
+//	var KB uint64 = 1024 //1KB
+//	MB := KB * 1024      //1MB
+//	GB := MB * 1024      //1GB
+//	TB := GB * 1024      //1TB
+//	PB := TB * 1024      //1PB
+//	EB := PB * 1024      //1EB
+//	/*
+//		1024							4		1KB
+//		1048576							7		1MB
+//		1073741824						10		1GB
+//		1099511627776					13		1TB
+//		1125899906842624				16		1PB
+//		1152921504606846976				19		1EB
+//	*/
+//	var temp float64 = 0
+//	//不足1KB时，以B结尾
+//	if filesize < KB { //这里必须要判断小于，不能判断小于等于，不然会出现1024B的情况。
+//
+//		return strconv.FormatUint(filesize, 10) + "B"
+//
+//	} else if filesize < MB { //如果小于MB，也就是大于KB，而小于MB时，就除以KB，并保留两位小数。
+//
+//		temp = float64(filesize) / float64(KB)
+//		return Float64ToString(temp, 2) + "KB"
+//
+//	} else if filesize < GB {
+//
+//		temp = float64(filesize) / float64(MB)
+//		return Float64ToString(temp, 2) + "MB"
+//
+//	} else if filesize < TB {
+//
+//		temp = float64(filesize) / float64(GB)
+//		return Float64ToString(temp, 2) + "GB"
+//
+//	} else if filesize < PB {
+//
+//		temp = float64(filesize) / float64(TB)
+//		return Float64ToString(temp, 2) + "TB"
+//
+//	} else if filesize < EB {
+//
+//		temp = float64(filesize) / float64(PB)
+//		return Float64ToString(temp, 2) + "PB"
+//
+//	} else if filesize < math.MaxUint64 {
+//
+//		temp = float64(filesize) / float64(EB)
+//		return Float64ToString(temp, 2) + "EB"
+//
+//	}
+//
+//	return "数值超过uint64的最大长度，无法计算"
+//}
+
+//新函数：聪明的写法
 //将数值转为文件类型数值，如：KB、MB、GB、TB、HB为单位的数值字符串。
 func File_size(filesize uint64) string {
-	var KB uint64 = 1024 //1KB
-	MB := KB * 1024      //1MB
-	GB := MB * 1024      //1GB
-	TB := GB * 1024      //1TB
-	PB := TB * 1024      //1PB
-	EB := PB * 1024      //1EB
 	/*
 		1024							4		1KB
 		1048576							7		1MB
@@ -25,45 +78,34 @@ func File_size(filesize uint64) string {
 		1125899906842624				16		1PB
 		1152921504606846976				19		1EB
 	*/
-	var temp float64 = 0
-	//不足1KB时，以B结尾
-	if filesize < KB { //这里必须要判断小于，不能判断小于等于，不然会出现1024B的情况。
 
-		return strconv.FormatUint(filesize, 10) + "B"
-
-	} else if filesize < MB { //如果小于MB，也就是大于KB，而小于MB时，就除以KB，并保留两位小数。
-
-		temp = float64(filesize) / float64(KB)
-		return Float64ToString(temp, 2) + "KB"
-
-	} else if filesize < GB {
-
-		temp = float64(filesize) / float64(MB)
-		return Float64ToString(temp, 2) + "MB"
-
-	} else if filesize < TB {
-
-		temp = float64(filesize) / float64(GB)
-		return Float64ToString(temp, 2) + "GB"
-
-	} else if filesize < PB {
-
-		temp = float64(filesize) / float64(TB)
-		return Float64ToString(temp, 2) + "TB"
-
-	} else if filesize < EB {
-
-		temp = float64(filesize) / float64(PB)
-		return Float64ToString(temp, 2) + "PB"
-
-	} else if filesize < math.MaxInt64 {
-
-		temp = float64(filesize) / float64(EB)
-		return Float64ToString(temp, 2) + "EB"
-
+	if filesize < 1024 {
+		return UInt64ToString(filesize) + "B"
 	}
 
-	return "数值" + strconv.FormatUint(filesize, 10) + "超过uint64的最大长度，无法计算。"
+	if filesize > math.MaxUint64 {
+		return "数值超过uint64的最大长度，无法计算"
+	}
+
+	arr := []string{"B", "KB", "MB", "GB", "TB", "PB", "EB"}
+
+	f_size := float64(filesize)
+
+	var index = 0
+	for i := 0; i < len(arr); i++ {
+		f_size /= 1024 //每次都除以1024
+		index++        //索引自增
+		//fmt.Println("当前大小：", f_size)
+		//如果小于1024时就停止
+		if f_size < 1024 {
+			//必须是小于1024才行，如果判断小于等于1024的话会在1024*1024这样的值时出现1024KB而不是1.00MB的情况。
+			break
+		}
+	}
+
+	s_size := Float64ToString(f_size, 2)
+
+	return s_size + arr[index] //1.00 + KB = 1.00KB
 }
 
 //文件操作===========================================
