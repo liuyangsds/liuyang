@@ -1098,3 +1098,213 @@ func ArrayElementSingleInt(arr []int) []int {
 
 	return tempArr
 }
+
+//检测元素是否在切片中(int类型)。返回：true存在、false不存在
+func CheckInArray(item int, arr []int) bool {
+	//临时变量，用于标记找寻状态
+	var flag_ok = false
+	//遍历切片，逐一比对元素
+	for _, value := range arr {
+		//如果切片中有相同元素时，及时停止遍历
+		if value == item {
+			flag_ok = true //标记已找到
+			break          //及时停止
+		}
+	}
+
+	return flag_ok
+}
+
+//检测元素是否在切片中(uint类型)。返回：true存在、false不存在
+func CheckInArrayUint(item uint, arr []uint) bool {
+	//临时变量，用于标记找寻状态
+	var flag_ok = false
+	//遍历切片，逐一比对元素
+	for _, value := range arr {
+		//如果切片中有相同元素时，及时停止遍历
+		if value == item {
+			flag_ok = true //标记已找到
+			break          //及时停止
+		}
+	}
+
+	return flag_ok
+}
+
+//检测元素是否在切片中(int8类型)。返回：true存在、false不存在
+func CheckInArrayInt8(item int8, arr []int8) bool {
+	//临时变量，用于标记找寻状态
+	var flag_ok = false
+	//遍历切片，逐一比对元素
+	for _, value := range arr {
+		//如果切片中有相同元素时，及时停止遍历
+		if value == item {
+			flag_ok = true //标记已找到
+			break          //及时停止
+		}
+	}
+
+	return flag_ok
+}
+
+//检测元素是否在切片中(uint8类型)。返回：true存在、false不存在
+func CheckInArrayUint8(item uint8, arr []uint8) bool {
+	//临时变量，用于标记找寻状态
+	var flag_ok = false
+	//遍历切片，逐一比对元素
+	for _, value := range arr {
+		//如果切片中有相同元素时，及时停止遍历
+		if value == item {
+			flag_ok = true //标记已找到
+			break          //及时停止
+		}
+	}
+
+	return flag_ok
+}
+
+//检测元素是否在切片中(int16类型)。返回：true存在、false不存在
+func CheckInArrayInt16(item int16, arr []int16) bool {
+	//临时变量，用于标记找寻状态
+	var flag_ok = false
+	//遍历切片，逐一比对元素
+	for _, value := range arr {
+		//如果切片中有相同元素时，及时停止遍历
+		if value == item {
+			flag_ok = true //标记已找到
+			break          //及时停止
+		}
+	}
+
+	return flag_ok
+}
+
+//检测元素是否在切片中(uint16类型)。返回：true存在、false不存在
+func CheckInArrayUint16(item uint16, arr []uint16) bool {
+	//临时变量，用于标记找寻状态
+	var flag_ok = false
+	//遍历切片，逐一比对元素
+	for _, value := range arr {
+		//如果切片中有相同元素时，及时停止遍历
+		if value == item {
+			flag_ok = true //标记已找到
+			break          //及时停止
+		}
+	}
+
+	return flag_ok
+}
+
+//检测元素是否在切片中(int32类型)。返回：true存在、false不存在
+func CheckInArrayInt32(item int32, arr []int32) bool {
+	//临时变量，用于标记找寻状态
+	var flag_ok = false
+	//遍历切片，逐一比对元素
+	for _, value := range arr {
+		//如果切片中有相同元素时，及时停止遍历
+		if value == item {
+			flag_ok = true //标记已找到
+			break          //及时停止
+		}
+	}
+
+	return flag_ok
+}
+
+//检测元素是否在切片中(uint32类型)。返回：true存在、false不存在
+func CheckInArrayUint32(item uint32, arr []uint32) bool {
+	//临时变量，用于标记找寻状态
+	var flag_ok = false
+	//遍历切片，逐一比对元素
+	for _, value := range arr {
+		//如果切片中有相同元素时，及时停止遍历
+		if value == item {
+			flag_ok = true //标记已找到
+			break          //及时停止
+		}
+	}
+
+	return flag_ok
+}
+
+//检测元素是否在切片中(int64类型)。返回：true存在、false不存在
+func CheckInArrayInt64(item int64, arr []int64) bool {
+	//临时变量，用于标记找寻状态
+	var flag_ok = false
+	//遍历切片，逐一比对元素
+	for _, value := range arr {
+		//如果切片中有相同元素时，及时停止遍历
+		if value == item {
+			flag_ok = true //标记已找到
+			break          //及时停止
+		}
+	}
+
+	return flag_ok
+}
+
+//检测元素是否在切片中(uint64类型)。返回：true存在、false不存在
+func CheckInArrayUint64(item uint64, arr []uint64) bool {
+	//临时变量，用于标记找寻状态
+	var flag_ok = false
+	//遍历切片，逐一比对元素
+	for _, value := range arr {
+		//如果切片中有相同元素时，及时停止遍历
+		if value == item {
+			flag_ok = true //标记已找到
+			break          //及时停止
+		}
+	}
+
+	return flag_ok
+}
+
+//检测元素是否在切片中(string类型)。返回：true存在、false不存在
+func CheckInArrayString(item string, arr []string) bool {
+	//临时变量，用于标记找寻状态
+	var flag_ok = false
+	//遍历切片，逐一比对元素
+	for _, value := range arr {
+		//如果切片中有相同元素时，及时停止遍历
+		if value == item {
+			flag_ok = true //标记已找到
+			break          //及时停止
+		}
+	}
+
+	return flag_ok
+}
+
+//注意：float类型不建议使用本方法，因为会涉及到丢精度问题
+//检测元素是否在切片中(float32类型)。返回：true存在、false不存在
+func CheckInArrayFloat32(item float32, arr []float32) bool {
+	//临时变量，用于标记找寻状态
+	var flag_ok = false
+	//遍历切片，逐一比对元素
+	for _, value := range arr {
+		//如果切片中有相同元素时，及时停止遍历
+		if value == item {
+			flag_ok = true //标记已找到
+			break          //及时停止
+		}
+	}
+
+	return flag_ok
+}
+
+//注意：float类型不建议使用本方法，因为会涉及到丢精度问题
+//检测元素是否在切片中(float64类型)。返回：true存在、false不存在
+func CheckInArrayFloat64(item float64, arr []float64) bool {
+	//临时变量，用于标记找寻状态
+	var flag_ok = false
+	//遍历切片，逐一比对元素
+	for _, value := range arr {
+		//如果切片中有相同元素时，及时停止遍历
+		if value == item {
+			flag_ok = true //标记已找到
+			break          //及时停止
+		}
+	}
+
+	return flag_ok
+}
