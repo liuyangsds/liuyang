@@ -1,8 +1,8 @@
 package liuyang
 
-//获取坐标偏移地图中两个格子之间的距离。返回：以自身为起始的相距格子数量。
-//如：0：与自身相距0格、1：与自身相距1格，也就是相邻的6个格子、2：与自身相距2格，也就是中间会隔一格(6个邻居)。
-//参数：自身列、自身行、目标列、目标行、偏移坐标的类型：0尖朝上奇数行偏移、1尖朝上偶数行偏移、2边朝上奇数列偏移、3边朝上偶数列偏移、其他值视为0。
+// 获取坐标偏移地图中两个格子之间的距离。返回：以自身为起始的相距格子数量。
+// 如：0：与自身相距0格、1：与自身相距1格，也就是相邻的6个格子、2：与自身相距2格，也就是中间会隔一格(6个邻居)。
+// 参数：自身列、自身行、目标列、目标行、偏移坐标的类型：0尖朝上奇数行偏移、1尖朝上偶数行偏移、2边朝上奇数列偏移、3边朝上偶数列偏移、其他值视为0。
 func GetCoordOffsetGridDistance(sX, sY, tX, tY, offsetType int) int {
 	//如果自身坐标与目标坐标一样时，说明是同一坐标，直接返回0，代表0距离
 	if sX == tX && sY == tY {
@@ -73,7 +73,7 @@ func GetCoordOffsetGridDistance(sX, sY, tX, tY, offsetType int) int {
 	}
 
 	//获取三个数之间的最大值
-	maxValue := GetThreeNubmerMax(x, y, z)
+	maxValue := GetMax3(x, y, z)
 
 	//否则，返回临时变量上的最大值
 	return maxValue
@@ -81,8 +81,8 @@ func GetCoordOffsetGridDistance(sX, sY, tX, tY, offsetType int) int {
 
 //==================================================================
 
-//检测偏移坐标中(六边形地图)两个坐标点的距离是否在某一距离内(小于等于指定距离)
-//参数：自身列、自身行、目标列、目标行、距离、偏移坐标的类型：0尖朝上奇数行偏移、1尖朝上偶数行偏移、2边朝上奇数列偏移、3边朝上偶数列偏移、其他值视为0。
+// 检测偏移坐标中(六边形地图)两个坐标点的距离是否在某一距离内(小于等于指定距离)
+// 参数：自身列、自身行、目标列、目标行、距离、偏移坐标的类型：0尖朝上奇数行偏移、1尖朝上偶数行偏移、2边朝上奇数列偏移、3边朝上偶数列偏移、其他值视为0。
 func CheckOffsetCoordDistance(sX, sY, tX, tY, distance, offsetType int) bool {
 	//获取坐标偏移地图中两个格子之间的距离。返回：以自身为起始的相距格子数量。
 	tempDistance := GetCoordOffsetGridDistance(sX, sY, tX, tY, offsetType)
@@ -94,8 +94,8 @@ func CheckOffsetCoordDistance(sX, sY, tX, tY, distance, offsetType int) bool {
 	return false
 }
 
-//检测偏移坐标中(六边形地图)两个坐标点的距离是否在某一距离区间内(大于等于最小距离并且小于等于最大距离)
-//参数：自身列、自身行、目标列、目标行、距离最小值、距离最大值、偏移坐标的类型：0尖朝上奇数行偏移、1尖朝上偶数行偏移、2边朝上奇数列偏移、3边朝上偶数列偏移、其他值视为0。
+// 检测偏移坐标中(六边形地图)两个坐标点的距离是否在某一距离区间内(大于等于最小距离并且小于等于最大距离)
+// 参数：自身列、自身行、目标列、目标行、距离最小值、距离最大值、偏移坐标的类型：0尖朝上奇数行偏移、1尖朝上偶数行偏移、2边朝上奇数列偏移、3边朝上偶数列偏移、其他值视为0。
 func CheckOffsetCoordDistanceRange(sX, sY, tX, tY, distanceMin, distanceMax, offsetType int) bool {
 	//获取坐标偏移地图中两个格子之间的距离。返回：以自身为起始的相距格子数量。
 	tempDistance := GetCoordOffsetGridDistance(sX, sY, tX, tY, offsetType)
@@ -107,8 +107,8 @@ func CheckOffsetCoordDistanceRange(sX, sY, tX, tY, distanceMin, distanceMax, off
 	return false
 }
 
-//检测偏移坐标中(六边形地图)两个坐标点的距离是否等于某一距离(等于指定距离)
-//参数：自身列、自身行、目标列、目标行、距离、偏移坐标的类型：0尖朝上奇数行偏移、1尖朝上偶数行偏移、2边朝上奇数列偏移、3边朝上偶数列偏移、其他值视为0。
+// 检测偏移坐标中(六边形地图)两个坐标点的距离是否等于某一距离(等于指定距离)
+// 参数：自身列、自身行、目标列、目标行、距离、偏移坐标的类型：0尖朝上奇数行偏移、1尖朝上偶数行偏移、2边朝上奇数列偏移、3边朝上偶数列偏移、其他值视为0。
 func CheckOffsetCoordDistanceEqual(sX, sY, tX, tY, distance, offsetType int) bool {
 	//获取坐标偏移地图中两个格子之间的距离。返回：以自身为起始的相距格子数量。
 	tempDistance := GetCoordOffsetGridDistance(sX, sY, tX, tY, offsetType)
@@ -122,7 +122,7 @@ func CheckOffsetCoordDistanceEqual(sX, sY, tX, tY, distance, offsetType int) boo
 
 //==================================================================
 
-//立方体偏移幅度(邻居)-数据集
+// 立方体偏移幅度(邻居)-数据集
 var CubeOffsetArr = [][]int{
 	{-1, +1, 0}, //左起第1个格子(x-1, y+1, z)
 	{0, +1, -1}, //左起第2个格子(x, y+1, z-1)
@@ -132,8 +132,8 @@ var CubeOffsetArr = [][]int{
 	{-1, 0, +1}, //左起第6个格子(x-1, y, z+1)
 }
 
-//获取立方体坐标的周围的邻居位置(六个格子)
-//顺序：左起开始
+// 获取立方体坐标的周围的邻居位置(六个格子)
+// 顺序：左起开始
 func GetCubeNeighborArr(x, y, z int) [][]int {
 	//格子位置数据集，位置元素最多6个。
 	tempArr := make([][]int, 0)
@@ -155,7 +155,7 @@ func GetCubeNeighborArr(x, y, z int) [][]int {
 	return tempArr
 }
 
-//偏移幅度(邻居)-尖朝上-奇数行偏移--->偶数行邻居-数据集。如：0、2、4、6、8行
+// 偏移幅度(邻居)-尖朝上-奇数行偏移--->偶数行邻居-数据集。如：0、2、4、6、8行
 var TipOddOffsetEvenRowArr = [][]int{
 	{-1, 0},  //左起第1个格子(x-1, y)
 	{-1, -1}, //左起第2个格子(x-1, y-1)
@@ -165,7 +165,7 @@ var TipOddOffsetEvenRowArr = [][]int{
 	{-1, 1},  //左起第6个格子(x-1, y+1)
 }
 
-//偏移幅度(邻居)-尖朝上-奇数行偏移--->奇数行邻居-数据集。如：1、3、5、7、9行
+// 偏移幅度(邻居)-尖朝上-奇数行偏移--->奇数行邻居-数据集。如：1、3、5、7、9行
 var TipOddOffsetOddRowArr = [][]int{
 	{-1, 0}, //左起第1个格子(x-1, y)
 	{0, -1}, //左起第2个格子(x, y-1)
@@ -175,10 +175,10 @@ var TipOddOffsetOddRowArr = [][]int{
 	{0, 1},  //左起第6个格子(x, y+1)
 }
 
-//获取偏移坐标(尖朝上-奇数行偏移)周围的邻居位置(六个格子)
-//参数：列位置、行位置、列数最大值、行数最大值
-//返回：某位置周围合法的位置(除去<0或超出最大值或等于列最大值时的奇数行最后一个位置)
-//顺序：左起开始
+// 获取偏移坐标(尖朝上-奇数行偏移)周围的邻居位置(六个格子)
+// 参数：列位置、行位置、列数最大值、行数最大值
+// 返回：某位置周围合法的位置(除去<0或超出最大值或等于列最大值时的奇数行最后一个位置)
+// 顺序：左起开始
 func GetOffsetTipOddNeighborArr(x, y, X_max, Y_max int) [][]int {
 	//过滤非法坐标
 	if x < 0 || x > X_max || y < 0 || y > Y_max {
@@ -247,8 +247,8 @@ func GetOffsetTipOddNeighborArr(x, y, X_max, Y_max int) [][]int {
 	return tempArr
 }
 
-//获取偏移坐标(尖朝上-奇数行偏移)对应位置的索引。返回值：索引、是否找到对应索引
-//参数：偏移坐标中的某位置(中心坐标)x、某位置(中心坐标)y、最大列、最大行、要获取对应索引的目标位置x、目标位置y
+// 获取偏移坐标(尖朝上-奇数行偏移)对应位置的索引。返回值：索引、是否找到对应索引
+// 参数：偏移坐标中的某位置(中心坐标)x、某位置(中心坐标)y、最大列、最大行、要获取对应索引的目标位置x、目标位置y
 func GetOffsetTipOddPositionIndex(x, y, X_max, Y_max, targetX, targetY int) (int, bool) {
 	//获取偏移坐标(尖朝上-奇数行偏移)周围的邻居位置(六个格子)
 	arr := GetOffsetTipOddNeighborArr(x, y, X_max, Y_max)
@@ -270,7 +270,7 @@ func GetOffsetTipOddPositionIndex(x, y, X_max, Y_max, targetX, targetY int) (int
 
 //==========================================================================
 
-//立方体坐标转偏移坐标-尖朝上-奇数行偏移
+// 立方体坐标转偏移坐标-尖朝上-奇数行偏移
 func CoordCubeToOffsetTipOdd(x, z int) (int, int) {
 	//立体坐标转偏移坐标
 	col := x + (z-(z&1))/2 //列
@@ -280,7 +280,7 @@ func CoordCubeToOffsetTipOdd(x, z int) (int, int) {
 	return col, row
 }
 
-//偏移坐标转立方体坐标-尖朝上-奇数行偏移
+// 偏移坐标转立方体坐标-尖朝上-奇数行偏移
 func CoordOffsetToCubeTipOdd(col, row int) (int, int, int) {
 	//偏移坐标转立体坐标
 	x := col - (row-(row&1))/2
@@ -291,7 +291,7 @@ func CoordOffsetToCubeTipOdd(col, row int) (int, int, int) {
 	return x, y, z
 }
 
-//立方体坐标转偏移坐标-尖朝上-偶数行偏移
+// 立方体坐标转偏移坐标-尖朝上-偶数行偏移
 func CoordCubeToOffsetTipEven(x, z int) (int, int) {
 	//立体坐标转偏移坐标
 	col := x + (z+(z&1))/2 //列
@@ -301,7 +301,7 @@ func CoordCubeToOffsetTipEven(x, z int) (int, int) {
 	return col, row
 }
 
-//偏移坐标转立方体坐标-尖朝上-偶数行偏移
+// 偏移坐标转立方体坐标-尖朝上-偶数行偏移
 func CoordOffsetToCubeTipEven(col, row int) (int, int, int) {
 	//偏移坐标转立体坐标
 	x := col - (row+(row&1))/2
@@ -312,7 +312,7 @@ func CoordOffsetToCubeTipEven(col, row int) (int, int, int) {
 	return x, y, z
 }
 
-//立方体坐标转偏移坐标-边朝上-奇数列偏移
+// 立方体坐标转偏移坐标-边朝上-奇数列偏移
 func CoordCubeToOffsetSideOdd(x, z int) (int, int) {
 	//立体坐标转偏移坐标
 	col := x               //列
@@ -322,7 +322,7 @@ func CoordCubeToOffsetSideOdd(x, z int) (int, int) {
 	return col, row
 }
 
-//偏移坐标转立方体坐标-边朝上-奇数列偏移
+// 偏移坐标转立方体坐标-边朝上-奇数列偏移
 func CoordOffsetToCubeSideOdd(col, row int) (int, int, int) {
 	//偏移坐标转立体坐标
 	x := col
@@ -333,7 +333,7 @@ func CoordOffsetToCubeSideOdd(col, row int) (int, int, int) {
 	return x, y, z
 }
 
-//立方体坐标转偏移坐标-边朝上-偶数列偏移
+// 立方体坐标转偏移坐标-边朝上-偶数列偏移
 func CoordCubeToOffsetSideEven(x, z int) (int, int) {
 	//立体坐标转偏移坐标
 	col := x               //列
@@ -343,7 +343,7 @@ func CoordCubeToOffsetSideEven(x, z int) (int, int) {
 	return col, row
 }
 
-//偏移坐标转立方体坐标-边朝上-偶数列偏移
+// 偏移坐标转立方体坐标-边朝上-偶数列偏移
 func CoordOffsetToCubeSideEven(col, row int) (int, int, int) {
 	//偏移坐标转立体坐标
 	x := col
@@ -354,8 +354,8 @@ func CoordOffsetToCubeSideEven(col, row int) (int, int, int) {
 	return x, y, z
 }
 
-//===================================================================================
-//获取偏移坐标(尖朝上-奇数行偏移)周围的邻居位置(六个格子)所对应的角度
+// ===================================================================================
+// 获取偏移坐标(尖朝上-奇数行偏移)周围的邻居位置(六个格子)所对应的角度
 func GetOffsetTipOddNeighborAngle(sX, sY, tX, tY, X_max, Y_max int) int {
 
 	//获取偏移坐标(尖朝上-奇数行偏移)周围的邻居位置(六个格子)

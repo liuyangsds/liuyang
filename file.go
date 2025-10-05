@@ -67,8 +67,8 @@ import (
 //	return "数值超过uint64的最大长度，无法计算"
 //}
 
-//新函数：聪明的写法
-//将数值转为文件类型数值，如：KB、MB、GB、TB、HB为单位的数值字符串。
+// 新函数：聪明的写法
+// 将数值转为文件类型数值，如：KB、MB、GB、TB、HB为单位的数值字符串。
 func File_size(filesize uint64) string {
 	/*
 		1024							4		1KB
@@ -108,8 +108,8 @@ func File_size(filesize uint64) string {
 	return s_size + arr[index] //1.00 + KB = 1.00KB
 }
 
-//文件操作===========================================
-//将字符串写入文件中，追加（文件内容尾部追加），返回写入的字节数和可能遇到的任何错误
+// 文件操作===========================================
+// 将字符串写入文件中，追加（文件内容尾部追加），返回写入的字节数和可能遇到的任何错误
 func File_put_contents(filename string, data string) (int, error) {
 	//判断文件是否存在
 	if File_exits(filename) == false { //文件不存在
@@ -125,7 +125,7 @@ func File_put_contents(filename string, data string) (int, error) {
 	return fwrite(fopen, data)
 }
 
-//文件写操作
+// 文件写操作
 func fwrite(fopen *os.File, content string) (int, error) {
 
 	//调用系统内置方法，将字符串写入文件中
@@ -134,7 +134,7 @@ func fwrite(fopen *os.File, content string) (int, error) {
 	return wbyte, werr
 }
 
-//将字符串写入文件中，重写（清空文件内容），返回写入的字节数和可能遇到的任何错误
+// 将字符串写入文件中，重写（清空文件内容），返回写入的字节数和可能遇到的任何错误
 func File_put_contents_rewrite(filename string, data string) (int, error) {
 	//判断文件是否存在
 	if File_exits(filename) == false { //文件不存在
@@ -157,9 +157,9 @@ func File_put_contents_rewrite(filename string, data string) (int, error) {
 	return fwrite(fopen, data)
 }
 
-//读取文件内容，该函数名模仿php中的读文件函数File_get_contents。
-//之所以这样定义，是因为刘阳的初始技能为php。
-//新写法，封装标准库，读取文件内容，并将读到的byte转string后返回，推荐使用
+// 读取文件内容，该函数名模仿php中的读文件函数File_get_contents。
+// 之所以这样定义，是因为刘阳的初始技能为php。
+// 新写法，封装标准库，读取文件内容，并将读到的byte转string后返回，推荐使用
 func File_get_contents(filename string) (string, bool) {
 	//判断读文件是否已读到[]byte数据
 	byteArr, ok := File_get_data(filename)
@@ -172,7 +172,7 @@ func File_get_contents(filename string) (string, bool) {
 	return "", false
 }
 
-//新写法，封装标准库，读取文件内容，推荐使用
+// 新写法，封装标准库，读取文件内容，推荐使用
 func File_get_data(filename string) ([]byte, bool) {
 	//判断文件是否不存在
 	if File_exits(filename) == false { //文件不存在
@@ -189,8 +189,8 @@ func File_get_data(filename string) ([]byte, bool) {
 	return nil, false
 }
 
-//原File_get_contents，现更名，将原名让给标准库中的写法。
-//二次封装，读取文件内容，将读到的[]byte数据用高级写法转成string，并和bool值一起返回
+// 原File_get_contents，现更名，将原名让给标准库中的写法。
+// 二次封装，读取文件内容，将读到的[]byte数据用高级写法转成string，并和bool值一起返回
 func File_get_string(filename string) (string, bool) {
 
 	bb, istrue := File_get_byte(filename)
@@ -201,8 +201,8 @@ func File_get_string(filename string) (string, bool) {
 	return BytesToString(bb), true
 }
 
-//原File_get_data，现更名，将原名让给标准库中的写法。
-//读取文件内容，返回[]byte数据和bool值。
+// 原File_get_data，现更名，将原名让给标准库中的写法。
+// 读取文件内容，返回[]byte数据和bool值。
 func File_get_byte(filename string) ([]byte, bool) {
 	//判断文件是否不存在
 	if File_exits(filename) == false { //文件不存在
@@ -219,7 +219,7 @@ func File_get_byte(filename string) ([]byte, bool) {
 	return fread(fopen, Sinfo.Size()), true
 }
 
-//读取文件操作，返回[]byte
+// 读取文件操作，返回[]byte
 func fread(fopen *os.File, length int64) []byte {
 
 	//创建byte类型的数组
@@ -236,7 +236,7 @@ func fread(fopen *os.File, length int64) []byte {
 	//return BytesToString(byteArr[0:rbyte])//高级转法
 }
 
-//二次封装，读取文件内容，参数1，要读取的文件名称及路径，参数2，要读取的开始位置，参数3，要读取的长度，将读取的[]byte用高级写法转成string后和bool一起返回
+// 二次封装，读取文件内容，参数1，要读取的文件名称及路径，参数2，要读取的开始位置，参数3，要读取的长度，将读取的[]byte用高级写法转成string后和bool一起返回
 func File_get_contents_index(filename string, index int64, length int64) (string, bool) {
 
 	bb, istrue := File_get_data_index(filename, index, length)
@@ -248,7 +248,7 @@ func File_get_contents_index(filename string, index int64, length int64) (string
 	return BytesToString(bb), true
 }
 
-//读取文件内容，参数1，要读取的文件名称，参数2，要读取的开始位置，参数3，要读取的长度，返回读取到的[]byte数据和bool值
+// 读取文件内容，参数1，要读取的文件名称，参数2，要读取的开始位置，参数3，要读取的长度，返回读取到的[]byte数据和bool值
 func File_get_data_index(filename string, index int64, length int64) ([]byte, bool) {
 	//判断文件是否不存在
 	if File_exits(filename) == false { //文件不存在
@@ -270,7 +270,7 @@ func File_get_data_index(filename string, index int64, length int64) ([]byte, bo
 	return fread_index(fopen, index, length), true
 }
 
-//读取文件内容操作，参数1，文件名柄指针，参数2，要读取的开始位置，参数3，要读取的长度，返回[]byte数据
+// 读取文件内容操作，参数1，文件名柄指针，参数2，要读取的开始位置，参数3，要读取的长度，返回[]byte数据
 func fread_index(fopen *os.File, index int64, length int64) []byte {
 
 	//创建byte类型的数组
@@ -286,7 +286,7 @@ func fread_index(fopen *os.File, index int64, length int64) []byte {
 	return byteArr[0:rbyte]
 }
 
-//检查文件或目录是否存在，如果存在返回true，不存在返回false
+// 检查文件或目录是否存在，如果存在返回true，不存在返回false
 func File_exits(path string) bool {
 	_, ferr := os.Stat(path) //只有不存在时，ferr才有内容，否则是nil
 	//这里的ferr在不等于nil时，也有可能是"aa/bb"这样的字符串，而没有实际目录文件。所以不能以是否为nil作为判断依据。
@@ -300,12 +300,12 @@ func File_exits(path string) bool {
 	return false //不存在
 }
 
-//得到文件信息
+// 得到文件信息
 func File_info(filename string) (os.FileInfo, error) {
 	return os.Stat(filename)
 }
 
-//获取路径中的目录并创建
+// 获取路径中的目录并创建
 func File_mkdir(filename string) error {
 	//第一步，获取目录
 	//文件路径为liuyang/sunlulu/nihao/aa.jpg时会得到：liuyang/sunlulu/nihao
@@ -319,7 +319,7 @@ func File_mkdir(filename string) error {
 
 //文件操作===========================================
 
-//断点续传，参数1：源文件、参数2：目标文件
+// 断点续传，参数1：源文件、参数2：目标文件
 func File_xu_chuan(src_file string, desc_file string) error {
 
 	//测试复制断点续传
@@ -432,8 +432,8 @@ func File_xu_chuan(src_file string, desc_file string) error {
 	return nil
 }
 
-//统计目录中的文件夹数量与文件数量，参数1为：目录地址，参数2为：层次计数
-//返回：文件夹数量累加递规返回的文件夹数量，文件数量累加递规返回的文件数量
+// 统计目录中的文件夹数量与文件数量，参数1为：目录地址，参数2为：层次计数
+// 返回：文件夹数量累加递规返回的文件夹数量，文件数量累加递规返回的文件数量
 func File_folder_total(dir string, level int) (int, int) {
 	fileInfo_arr, fileInfo_err := ioutil.ReadDir(dir)
 	CheckErr(fileInfo_err)

@@ -5,7 +5,7 @@ import (
 	"reflect"
 )
 
-//打印map或struct类型的数据的键和值
+// 打印map或struct类型的数据的键和值
 func Print_I(ia interface{}) {
 
 	obj := reflect.TypeOf(ia) //Type类型
@@ -43,13 +43,13 @@ func Print_I(ia interface{}) {
 	fmt.Println("其他类型：", ia)
 }
 
-//打印参数的类型，得出变量的系统类型
+// 打印参数的类型，得出变量的系统类型
 func Print_T(i interface{}) { //struct，slice
 	obj := reflect.TypeOf(i)
 	fmt.Println("当前值的类型为：", obj.Kind().String())
 }
 
-//打印参数的类型，得出变量的实际类型(具体的实际类型，更细节)，如下打印类型的对比
+// 打印参数的类型，得出变量的实际类型(具体的实际类型，更细节)，如下打印类型的对比
 func Print_TT(i interface{}) { //main.Fangchong，[]int
 	fmt.Printf("当前值的类型为：%T\n", i)
 }

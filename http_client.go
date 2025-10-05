@@ -3,7 +3,7 @@ package liuyang
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 )
@@ -65,10 +65,18 @@ func Http_Client_test()  {
 */
 //http请求操作===========================================
 
-//http请求,get方式
-func HttpRequestGET(url string) (string, error) {
+// http请求,get方式
+// 样例
+// url := "http://www.ddy.com/pc/Reglogin/http_get"
+// result, err := test_new.HttpRequestGet(url)
+// fmt.Println(err)
+// fmt.Println(result)
+// 打印
+// <nil>
+// {"A":"Hello","B":"World","C":{"name":"liuyang","age":25,"height":175},"D":"this is Get"}
+func HttpRequestGet(url string) (string, error) {
 	client := &http.Client{}
-	reqest,_ := http.NewRequest("GET", url, nil) //建立一个请求
+	reqest, _ := http.NewRequest("GET", url, nil) //建立一个请求
 	//返回的err没有用
 	//defer reqest.Body.Close()//设置关闭会导致错误，不要写。
 	//设置头协议
@@ -88,28 +96,44 @@ func HttpRequestGET(url string) (string, error) {
 	//}
 
 	if response.StatusCode == 200 {
-		body, err := ioutil.ReadAll(response.Body)
+		body, err := io.ReadAll(response.Body) //go>1.16
+		//body, err := ioutil.ReadAll(response.Body)go<1.16
 		if err != nil {
 			return "", err
 		}
 		return string(body), nil
 	}
 
-	return "", fmt.Errorf("服务器响应异常，状态：%s",response.Status)
+	return "", fmt.Errorf("服务器响应异常，状态：%s", response.Status)
 
 }
 
-//http请求,post方式,post内容为常规字段和内容。非json。
-func HttpRequestPOST(url string, data map[string]interface{}) (string, error) {
+// http请求,post方式
+// 样例
+// url := "http://www.ddy.com/pc/Reglogin/http_post"
+//
+//	mm := map[string]interface{}{
+//		"name":   "刘阳",
+//		"age":    25,
+//		"height": 175,
+//	}
+//
+// result, err := test_new.HttpRequestPost(url, mm)
+// fmt.Println(err)
+// fmt.Println(result)
+// 打印
+// <nil>
+// {"A":"Hello","B":{"accept-encoding":"gzip"},"C":{"name":"\u5218\u9633","age":"25","height":"166"},"D":{"name":"\u5218\u9633","age":"25","height":"175"}}
+func HttpRequestPost(url string, data map[string]interface{}) (string, error) {
 	client := &http.Client{}
 	//reqest, _ := http.NewRequest("POST",url,strings.NewReader("name=刘阳&sex=男&age=30"))
 	//本来传参为string,为了方便传map，再由MapToString()方法转string
-	str := MapToString(data)//调用map转string函数
-	reqest, _ := http.NewRequest("POST",url,strings.NewReader(str))
+	str := MapToString(data) //调用map转string函数
+	reqest, _ := http.NewRequest("POST", url, strings.NewReader(str))
 	//返回的err没有用
 	//defer reqest.Body.Close()//设置关闭会导致错误，不要写。
 	//设置头协议
-	reqest.Header.Set("Content-Type","application/x-www-form-urlencoded")
+	reqest.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	reqest.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
 	reqest.Header.Set("Accept-Language", "ja,zh-CN;q=0.8,zh;q=0.6")
 	reqest.Header.Set("Connection", "keep-alive")
@@ -126,23 +150,45 @@ func HttpRequestPOST(url string, data map[string]interface{}) (string, error) {
 	//}
 
 	if response.StatusCode == 200 {
-		body, err := ioutil.ReadAll(response.Body)
+		body, err := io.ReadAll(response.Body)
+		//body, err := ioutil.ReadAll(response.Body)
 		if err != nil {
 			return "", err
 		}
 		return string(body), nil
 	}
 
-	return "", fmt.Errorf("服务器响应异常，状态：%s",response.Status)
+	return "", fmt.Errorf("服务器响应异常，状态：%s", response.Status)
 }
 
+// http请求,post方式->json数据传参
+// 样例
+// url := "http://www.ddy.com/pc/Reglogin/http_post_json"
+//
+//	mm := map[string]interface{}{
+//		"name":   "刘阳",
+//		"age":    25,
+//		"height": 175,
+//	}
+//
+// jsonByte, jsonErr := json.Marshal(mm)
+// fmt.Println(jsonErr)
+// fmt.Println(jsonByte)
+// fmt.Println("-----------------------------------------------")
+// result, err := test_new.HttpRequestPostJson(url, jsonByte)
+// fmt.Println(err)
+// fmt.Println(result)
+// 打印
+// <nil>
+// [123 34 97 103 101 34 58 50 53 44 34 104 101 105 103 104 116 34 58 49 55 53 44 34 110 97 109 101 34 58 34 229 136 152 233 152 179 34 125]
+// -----------------------------------------------
+// <nil>
+// {"age":25,"height":175,"name":"刘阳"}
+func HttpRequestPostJson(url string, jsonByte []byte) (string, error) {
 
-//http发起post请求，提交数据为：json字符串。前题是服务端设置了接收json类型的数据提交。
-func HttpRequestPOSTJSON(url, jsonstr string) (string, error) {
+	//requestBody := fmt.Sprintf(`%s`, jsonstr)
 
-	requestBody := fmt.Sprintf(`%s`,jsonstr)
-
-	jsonByte := []byte(requestBody)
+	//jsonByte := []byte(jsonstr)
 
 	req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonByte))
 
@@ -150,7 +196,7 @@ func HttpRequestPOSTJSON(url, jsonstr string) (string, error) {
 
 	client := &http.Client{}
 
-	resp, resErr := client.Do(req)//提交请求
+	resp, resErr := client.Do(req) //提交请求
 
 	if resErr != nil {
 		return "", resErr
@@ -159,13 +205,12 @@ func HttpRequestPOSTJSON(url, jsonstr string) (string, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode == 200 {
-		body, err := ioutil.ReadAll(resp.Body)
+		body, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return "", err
 		}
 		return string(body), nil
 	}
 
-	return "", fmt.Errorf("服务器响应异常，状态：%s",resp.Status)
+	return "", fmt.Errorf("服务器响应异常，状态：%s", resp.Status)
 }
-

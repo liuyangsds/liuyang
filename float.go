@@ -5,10 +5,10 @@ import (
 	"strconv"
 )
 
-//方式1，将float64类型的小数四舍六入五成双后，得到一个字符串，且保留指定位数的小数
+// 方式1，将float64类型的小数四舍六入五成双后，得到一个字符串，且保留指定位数的小数
 func Float64ToString(ff float64, n int) string {
 	//参数n表示：
-	//0，不保留小数，样例：
+	//0，不保留小数，校例：
 	//var tempF float64 = 12345678.51
 	//var tempF float64 = 12345678.50 //第2位是0则第1位的5就不向前进1了
 	//保留0位后： 12345679
@@ -30,13 +30,13 @@ func Float64ToString(ff float64, n int) string {
 	return str
 }
 
-//方式2，将float64类型的小数四舍六入五成双后，得到一个固定保留2位小数的字符串
+// 方式2，将float64类型的小数四舍六入五成双后，得到一个固定保留2位小数的字符串
 func Float64ToString2(ff float64) string {
 	str := fmt.Sprintf("%.2f", ff)
 	return str
 }
 
-//将float64转成指定小数位的float64
+// 将float64转成指定小数位的float64
 func Float64ToFloat64(ff float64, n int) float64 {
 	//1，先将float类型转成string类型，并指定保留的小数个数
 	str := Float64ToString(ff, n)
@@ -53,7 +53,7 @@ func Float64ToFloat64(ff float64, n int) float64 {
 //	return int64(f)
 //}
 
-//float四舍五入后的int类型值
+// float四舍五入后的int类型值
 func Float64ToInt(ff float64) int {
 	str := Float64ToString(ff, 0) //float四舍五入成string
 	n := StringToInt(str)         //将string。转int
@@ -70,7 +70,7 @@ func Float64ToInt(ff float64) int {
 	return n
 }
 
-//float四舍五入后的int32类型值
+// float四舍五入后的int32类型值
 func Float64ToInt32(ff float64) int32 {
 	str := Float64ToString(ff, 0) //float四舍五入成string
 	n := StringToInt32(str)       //将string。转int32
@@ -78,7 +78,7 @@ func Float64ToInt32(ff float64) int32 {
 	return n
 }
 
-//float四舍五入后的int64类型值
+// float四舍五入后的int64类型值
 func Float64ToInt64(ff float64) int64 {
 	str := Float64ToString(ff, 0) //float四舍五入成string
 	n := StringToInt64(str)       //将string。转int64

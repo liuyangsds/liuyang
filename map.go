@@ -6,7 +6,7 @@ import (
 
 //将struct类型数据转换成map类型数据，转不了，不要再试了。也没必要转，直接将struct转成map岂不更好。
 
-//将map数据转成post提交所需格式的字符串
+// 将map数据转成post提交所需格式的字符串
 func MapToString(mm map[string]interface{}) string {
 	//样例：name=65.56&sex=25&age=true&
 	//将最后面的字符"&"去掉，有两种方式：
@@ -24,14 +24,12 @@ func MapToString(mm map[string]interface{}) string {
 	//result := str[0:index]
 	//return result
 
-
-
 	//方式2：
-	str := ""//总接收变量
-	temp := ""//临时接收拼接的变量
-	i := 0//自增变量
-	cnt := len(mm)//map元素个数
-	for key,value := range mm {
+	str := ""      //总接收变量
+	temp := ""     //临时接收拼接的变量
+	i := 0         //自增变量
+	cnt := len(mm) //map元素个数
+	for key, value := range mm {
 		zhi := ValueToString(value)
 		if i < (cnt - 1) {
 			temp = key + "=" + zhi + "&"
@@ -39,12 +37,12 @@ func MapToString(mm map[string]interface{}) string {
 			temp = key + "=" + zhi
 		}
 		str += temp
-		i++//临时变量自增
+		i++ //临时变量自增
 	}
 	return str
 }
 
-//interface值转string
+// interface值转string
 func ValueToString(i interface{}) string {
 	//fmt.Println(i)//打印参数值
 
@@ -64,7 +62,7 @@ func ValueToString(i interface{}) string {
 	case int32:
 		str = strconv.Itoa(int(idata))
 	case int64:
-		str = strconv.FormatInt(idata,10)
+		str = strconv.FormatInt(idata, 10)
 	case uint:
 		str = strconv.Itoa(int(idata))
 	case uint8:
@@ -72,21 +70,20 @@ func ValueToString(i interface{}) string {
 	case uint16:
 		str = strconv.Itoa(int(idata))
 	case uint32:
-		str = strconv.FormatInt(int64(idata),10)
+		str = strconv.FormatInt(int64(idata), 10)
 	case uint64:
-		str = strconv.FormatInt(int64(idata),10)
+		str = strconv.FormatInt(int64(idata), 10)
 	case float32:
-		str = strconv.FormatFloat(float64(idata),'f',-1,32)
+		str = strconv.FormatFloat(float64(idata), 'f', -1, 32)
 	case float64:
-		str = strconv.FormatFloat(idata,'f',-1,64)
+		str = strconv.FormatFloat(idata, 'f', -1, 64)
 	case bool:
 		str = strconv.FormatBool(idata)
 	case []byte:
 		str = string(idata)
 	default:
-		str = "error"//未知类型时，返回error字符串
+		str = "error" //未知类型时，返回error字符串
 	}
 
 	return str
 }
-

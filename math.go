@@ -1,10 +1,11 @@
 package liuyang
 
 import (
+	"cmp"
 	"math"
 )
 
-//以角度值获取弧度值，参数：角度
+// 以角度值获取弧度值，参数：角度
 func GetRadian(angle float64) float64 {
 	//弧度值 = 角度 * (pi/180)
 	radian := angle * (math.Pi / 180) //角度转弧度
@@ -12,7 +13,7 @@ func GetRadian(angle float64) float64 {
 	return radian
 }
 
-//以弧度值获取角度值，参数：弧度
+// 以弧度值获取角度值，参数：弧度
 func GetAngle(radian float64) float64 {
 	//角度值 = 弧度 * (180/pi)
 	angle := radian * (180 / math.Pi) //弧度转角度
@@ -20,7 +21,7 @@ func GetAngle(radian float64) float64 {
 	return angle
 }
 
-//以弧度值获取x与y的向量值，参数：弧度
+// 以弧度值获取x与y的向量值，参数：弧度
 func GetVector(radian float64) (float64, float64) {
 	//以弧度值获取余弦值和正弦值
 	stepX := math.Cos(radian) //得到x方向的每步速度
@@ -29,7 +30,11 @@ func GetVector(radian float64) (float64, float64) {
 	return stepX, stepY
 }
 
-//获取两点之间的直线距离，利用勾股定理，求两个坐标点直线距离。参数：a坐标点的x,y和b坐标点的x,y。返回两点的直线距离。
+// 获取两点之间的直线距离，利用勾股定理，求两个坐标点直线距离。参数：a坐标点的x,y和b坐标点的x,y。返回两点的直线距离。
+// 样例
+// cc := test_new.GetTwoPointDistance(3, 3, 5, 5)
+// 打印
+// 2.8284271247461903
 func GetTwoPointDistance(aX, aY, bX, bY float64) float64 {
 	//这里不要取绝对值，因为3 - -2 的实际长度为5，但取绝对值后会是3-2=1，所以不要取绝值对。
 	a := aX - bX //得到直角三角形a边的边长
@@ -46,8 +51,8 @@ func GetTwoPointDistance(aX, aY, bX, bY float64) float64 {
 	return c
 }
 
-//获取目标坐标距自己坐标的角度值(0-359)和对应的弧度值
-//参数说明：t为target简写字母(目标)，s为self简写字母(自己)
+// 获取目标坐标距自己坐标的角度值(0-359)和对应的弧度值
+// 参数说明：t为target简写字母(目标)，s为self简写字母(自己)
 func GetPositionAngel(tX, tY, sX, sY float64) (float64, float64) {
 	//1，必须要以目标(敌方)坐标 - 自己坐标 = 才能得到某点坐标距离0,0坐标的差值，也就是a边和b边的长度
 	aline := tY - sY //y轴差值为a边长度
@@ -58,10 +63,10 @@ func GetPositionAngel(tX, tY, sX, sY float64) (float64, float64) {
 	return angle, radian
 }
 
-//获取反正切函数得到的角度值(0-359)和对应的弧度值。参数：
-//y轴差值(正负值都可以),x轴差值(正负数都可以)
-//a边长度(正负值都可以),b边长度(正负值都可以)
-//正弦值(正负值都可以),余弦值(正负值都可以)
+// 获取反正切函数得到的角度值(0-359)和对应的弧度值。参数：
+// y轴差值(正负值都可以),x轴差值(正负数都可以)
+// a边长度(正负值都可以),b边长度(正负值都可以)
+// 正弦值(正负值都可以),余弦值(正负值都可以)
 func GetAtan2AngleRadian(y, x float64) (float64, float64) {
 	//类似Atan(y/x)，但会根据x，y的正负号确定象限。
 	//推荐使用反正切函数Atan2()函数，好处是不用考虑象线，而使用反正切函数Atan()就需要自己处理象线问题了。
@@ -89,7 +94,7 @@ func GetAtan2AngleRadian(y, x float64) (float64, float64) {
 	return angle, radian
 }
 
-//以圆心点坐标、角度、半径获取圆边某点坐标。参数角度为正数或按象线位置传负数都可以。
+// 以圆心点坐标、角度、半径获取圆边某点坐标。参数角度为正数或按象线位置传负数都可以。
 func GetRoundEdgePosition(x0, y0, angle, r float64) (float64, float64) {
 	radian := GetRadian(angle) //角度值转为弧度值
 	//fmt.Println("弧度：", radian, "，转角度：", tempAngle)
@@ -101,7 +106,7 @@ func GetRoundEdgePosition(x0, y0, angle, r float64) (float64, float64) {
 	return x1, y1
 }
 
-//以出招朝向角度获取左右两侧面向的角度(0-359之间的正整数)
+// 以出招朝向角度获取左右两侧面向的角度(0-359之间的正整数)
 func GetDirectionSideTwoAngle(dirAngle int) (int, int, int) {
 	//0(右)、90(下)、180(左)、270(上)
 	d_angle := GetPositiveAngle(dirAngle)
@@ -114,8 +119,8 @@ func GetDirectionSideTwoAngle(dirAngle int) (int, int, int) {
 	return d_angle, l_angle, r_angle
 }
 
-//不推荐使用，因为扇面夹角超过180度时会有问题。
-//获取符合判断条件的角度值。参数：朝向角度、敌人距0,0的角度(-90至450之间的整数)
+// 不推荐使用，因为扇面夹角超过180度时会有问题。
+// 获取符合判断条件的角度值。参数：朝向角度、敌人距0,0的角度(-90至450之间的整数)
 func GetJudgeAngle(dirAngle, enemyAngle int) (int, int) {
 	//0(右)、90(下)、180(左)、270(上)
 	//直接模掉360度
@@ -152,8 +157,8 @@ func GetJudgeAngle(dirAngle, enemyAngle int) (int, int) {
 	return d_angle, e_angle
 }
 
-//以出招朝向角度获取敌方最近距离面向的角度。参参：出招朝向角度、敌方距离0,0的角度。
-//返回：出招朝向角度、敌方距离0,0的角度、敌方距离出招角度最近的角度(0-359之间的正整数)
+// 以出招朝向角度获取敌方最近距离面向的角度。参数：出招朝向角度、敌方距离0,0的角度。
+// 返回：出招朝向角度、敌方距离0,0的角度、敌方距离出招角度最近的角度(0-359之间的正整数)
 func GetDirectionSideEnemyAngle(dirAngle, enemyAngle int) (int, int, int) {
 	//0(右)、90(下)、180(左)、270(上)
 	//定义临时变量
@@ -185,7 +190,7 @@ func GetDirectionSideEnemyAngle(dirAngle, enemyAngle int) (int, int, int) {
 	return d_angle, e_angle, near_angle
 }
 
-//获取正整数角度值。返回：0-359之间的正整数
+// 获取正整数角度值。返回：0-359之间的正整数
 func GetPositiveAngle(angle int) int {
 	//将角度置为0-359之间
 	if angle <= -360 || angle >= 360 { //必须要判断大于等于或小于等于才行
@@ -200,18 +205,18 @@ func GetPositiveAngle(angle int) int {
 	return angle
 }
 
-//样例
-//判定值： 60 ------>随机数： 99
-//false
-//判定值： 60 ------>随机数： 25
-//true
-//判定值： 60 ------>随机数： 88
-//false
-//判定值： 60 ------>随机数： 92
-//false
-//判定值： 60 ------>随机数： 9
-//true
-//获取机率触发的可能性。参数：机率值0-100，返回：机率达成返true、未达成返false。
+// 样例
+// 判定值： 60 ------>随机数： 99
+// false
+// 判定值： 60 ------>随机数： 25
+// true
+// 判定值： 60 ------>随机数： 88
+// false
+// 判定值： 60 ------>随机数： 92
+// false
+// 判定值： 60 ------>随机数： 9
+// true
+// 获取机率触发的可能性。参数：机率值0-100，返回：机率达成返true、未达成返false
 func GetOdds(n int) bool {
 	//如果机率值小于等于0时，则百分之百返回false。
 	if n <= 0 {
@@ -233,9 +238,9 @@ func GetOdds(n int) bool {
 	return false
 }
 
-//获取物体对象碰到另一物体对象后的随机向量(参考传奇占位，A英雄碰到B英雄后的反弹向量，也就是某个方向每步要移动的值)。返回：随机角度、弧度、x方向每步移动值、y方向每步移动值。
-//参数说明：s为self简写字母(自己)、t为target简写字母(目标)
-//判断说明：以左上0,0为起始点
+// 获取物体对象碰到另一物体对象后的随机向量(参考传奇占位，A英雄碰到B英雄后的反弹向量，也就是某个方向每步要移动的值)。返回：随机角度、弧度、x方向每步移动值、y方向每步移动值
+// 参数说明：s为self简写字母(自己)、t为target简写字母(目标)
+// 判断说明：以左上0,0为起始点
 func GetObjectRandomVector(sX, sY, tX, tY float64) (int, float64, float64, float64) {
 	//获取物体对象碰到另一物体对象后的反弹角度与弧度
 	angle := GetObjectRandomAngle(sX, sY, tX, tY)
@@ -247,9 +252,9 @@ func GetObjectRandomVector(sX, sY, tX, tY float64) (int, float64, float64, float
 	return angle, radian, stepX, stepY
 }
 
-//获取物体对象碰到边界后的随机向量(也就是某个方向每步要移动的值)。返回：随机角度、弧度、x方向每步移动值、y方向每步移动值、
-//参数说明：边界标识->上1、左2、下3、右4
-//判断说明：以左上0,0为起始点
+// 获取物体对象碰到边界后的随机向量(也就是某个方向每步要移动的值)。返回：随机角度、弧度、x方向每步移动值、y方向每步移动值
+// 参数说明：边界标识->上1、左2、下3、右4
+// 判断说明：以左上0,0为起始点
 func GetBorderRandomVector(border_flag uint32) (int, float64, float64, float64) {
 	//由于本函数只在内部调用，所以参数肯定合法，以下情况就不做处理了：
 	//只有成功获取到角度时才返回数据，不然会导致外部调用方计算出错。
@@ -265,7 +270,7 @@ func GetBorderRandomVector(border_flag uint32) (int, float64, float64, float64) 
 	return angle, radian, stepX, stepY
 }
 
-//获取物体对象碰到障碍物后的回弹向量(也就是某个方向每步要移动的值)。返回：回弹角度、弧度、x方向每步移动值、y方向每步移动值、
+// 获取物体对象碰到障碍物后的回弹向量(也就是某个方向每步要移动的值)。返回：回弹角度、弧度、x方向每步移动值、y方向每步移动值
 func GetBorderReboundVector(angle int) (int, float64, float64, float64) {
 	//获取回弹角度。不用考虑碰到的目标是圆形物体还是墙壁，都是直接回弹。
 	newAngle := GetReboundAngle(angle)
@@ -277,8 +282,8 @@ func GetBorderReboundVector(angle int) (int, float64, float64, float64) {
 	return newAngle, radian, stepX, stepY
 }
 
-//获取物体对象碰到边界后的反射向量(也就是某个方向每步要移动的值)。返回： 反射角度、弧度、x方向每步移动值、y方向每步移动值、
-//参数说明：边界标识->上1、左2、下3、右4、正弦值(y向量)、余弦值(x向量)
+// 获取物体对象碰到边界后的反射向量(也就是某个方向每步要移动的值)。返回： 反射角度、弧度、x方向每步移动值、y方向每步移动值
+// 参数说明：边界标识->上1、左2、下3、右4、正弦值(y向量)、余弦值(x向量)
 func GetBorderReflectVector(border_flag uint32, stepY, stepX float64) (float64, float64, float64, float64) {
 	//获取物体对象碰到边界后的反射角度
 	angle, radian := GetReflectAngle(border_flag, stepY, stepX)
@@ -288,9 +293,9 @@ func GetBorderReflectVector(border_flag uint32, stepY, stepX float64) (float64, 
 	return angle, radian, stepX, stepY
 }
 
-//获取物体对象碰到另一物体对象后的随机角度(参考传奇占位，A英雄碰到B英雄后的反弹)。返回：角度值
-//参数说明：s为self简写字母(自己)、t为target简写字母(目标)
-//判断说明：坐标以左上0,0为起始点、角度以右起顺时针0到360
+// 获取物体对象碰到另一物体对象后的随机角度(参考传奇占位，A英雄碰到B英雄后的反弹)。返回：角度值
+// 参数说明：s为self简写字母(自己)、t为target简写字母(目标)
+// 判断说明：坐标以左上0,0为起始点、角度以右起顺时针0到360
 func GetObjectRandomAngle(sX, sY, tX, tY float64) int {
 	//临时变量
 	var randX = 0 //接收随机数
@@ -337,8 +342,8 @@ func GetObjectRandomAngle(sX, sY, tX, tY float64) int {
 	return randX
 }
 
-//获取物体碰到边框后的随机角度。参数：碰到的边界标识。返回：角度值
-//判断说明：坐标以左上0,0为起始点、角度以右起顺时针0到360
+// 获取物体碰到边框后的随机角度。参数：碰到的边界标识。返回：角度值
+// 判断说明：坐标以左上0,0为起始点、角度以右起顺时针0到360
 func GetBorderRandomAngle(border_flag uint32) int {
 	//过滤，不然会导致外部调用本函数的地方做出错误计算
 	if border_flag < border_Up || border_flag > border_Right {
@@ -366,7 +371,7 @@ func GetBorderRandomAngle(border_flag uint32) int {
 	return randX
 }
 
-//获取回弹角度。不用考虑碰到的目标是圆形物体还是墙壁，都是直接回弹。
+// 获取回弹角度。不用考虑碰到的目标是圆形物体还是墙壁，都是直接回弹
 func GetReboundAngle(angle int) int {
 	//无论出发角度是多少度，都加180，然后取模即可
 	angle += 180 //直来直去增加180度
@@ -377,7 +382,7 @@ func GetReboundAngle(angle int) int {
 	return newAngle
 }
 
-//获取物体对象碰到边界后的反射角度
+// 获取物体对象碰到边界后的反射角度
 func GetReflectAngle(border_flag uint32, stepY, stepX float64) (float64, float64) {
 	if border_flag == border_Up { //如果碰到上边界
 
@@ -402,16 +407,16 @@ func GetReflectAngle(border_flag uint32, stepY, stepX float64) (float64, float64
 	return angle, radian
 }
 
-//获取圆的两侧切线坐标--->点p到圆的右侧切线坐标、点p到圆的左侧切线坐标、点p与圆的切线->与点p与圆心直线的夹角度数、是否获取到切线坐标与角度值
-//说明：点p如果在圆内时是得不到切线坐标的，所以会返：0,0,0,0,0,false
-//说明：点p如果在圆外时是可以得到切线坐标的，所以会返：坐标1、坐标2、角度值、true
-//	:param px: 圆外点P横坐标
-//	:param py: 圆外点P纵坐标
-//	:param cx: 圆心横坐标
-//	:param cy: 圆心纵坐标
-//	:param r:  圆半径
-//	:return:   过点P的俩条切线坐标
-//作者：josepa https: //www.bilibili.com/read/cv13951079 出处：bilibili
+// 获取圆的两侧切线坐标--->点p到圆的右侧切线坐标、点p到圆的左侧切线坐标、点p与圆的切线->与点p与圆心直线的夹角度数、是否获取到切线坐标与角度值
+// 说明：点p如果在圆内时是得不到切线坐标的，所以会返：0,0,0,0,0,false
+// 说明：点p如果在圆外时是可以得到切线坐标的，所以会返：坐标1、坐标2、角度值、true
+// :param px: 圆外点P横坐标
+// :param py: 圆外点P纵坐标
+// :param cx: 圆心横坐标
+// :param cy: 圆心纵坐标
+// :param r:  圆半径
+// :return:   过点P的俩条切线坐标
+// 作者：josepa https: //www.bilibili.com/read/cv13951079 出处：bilibili
 func GetCircleTangentCoor(px, py, cx, cy, r float64) (float64, float64, float64, float64, float64, bool) {
 	//求点p到圆心的距离
 	distance := math.Sqrt((px-cx)*(px-cx) + (py-cy)*(py-cy))
@@ -465,11 +470,11 @@ func GetCircleTangentCoor(px, py, cx, cy, r float64) (float64, float64, float64,
 	return q1x, q1y, q2x, q2y, a_angle, true
 }
 
-//检测目标角度是否在朝向角度与偏移角度区间内。返回：左侧偏移后的角度、右侧偏移后的角度、是否在左侧到右侧角度内：true是、false否
-//参数：朝向角度、左右浮动(偏移)角度、目标角度
-//样例：朝向135度，偏移区间30度、目标120度--->左侧角度105(135-30)度、右侧角度165(135+30)度--->在区间角度内
-//样例：朝向356度，偏移区间30度、目标12度--->左侧角度326(356-30)度、右侧角度26((356+30)%360)度--->在区间角度内
-//样例：朝向12度，偏移区间30度、目标356度--->左侧角度342((12-30)+360)度、右侧角度42(12+30)度--->在区间角度内
+// 检测目标角度是否在朝向角度与偏移角度区间内。返回：左侧偏移后的角度、右侧偏移后的角度、是否在左侧到右侧角度内：true是、false否
+// 参数：朝向角度、左右浮动(偏移)角度、目标角度
+// 样例：朝向135度，偏移区间30度、目标120度--->左侧角度105(135-30)度、右侧角度165(135+30)度--->在区间角度内
+// 样例：朝向356度，偏移区间30度、目标12度--->左侧角度326(356-30)度、右侧角度26((356+30)%360)度--->在区间角度内
+// 样例：朝向12度，偏移区间30度、目标356度--->左侧角度342((12-30)+360)度、右侧角度42(12+30)度--->在区间角度内
 func CheckTargetAtOffsetAngle(dirAngle int, offsetAngle int, targetAngle int) (int, int, bool) {
 	//校验偏移角度
 	//如果偏移角度小于0时，设置为0
@@ -530,8 +535,8 @@ func CheckTargetAtOffsetAngle(dirAngle int, offsetAngle int, targetAngle int) (i
 	return leftLineAngle, rightLineAngle, false
 }
 
-//获取两个数之间的最大值
-func GetTwoNubmerMax(a, b int) int {
+// 获取两个数之间的最大值
+func GetMax2[T cmp.Ordered](a, b T) T {
 	//比较大小
 	if a > b { //如果a大于b，则返回a
 		return a
@@ -540,10 +545,10 @@ func GetTwoNubmerMax(a, b int) int {
 	return b
 }
 
-//获取三个数之间的最大值
-func GetThreeNubmerMax(a, b, c int) int {
+// 获取三个数之间的最大值
+func GetMax3[T cmp.Ordered](a, b, c T) T {
 	//临时变量：最大值
-	var maxValue = 0
+	var maxValue T
 
 	//比较大小
 	if a > b { //如果a大于b，则将a值赋到临时变量上

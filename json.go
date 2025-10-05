@@ -6,8 +6,8 @@ import (
 	"reflect"
 )
 
-//封装struct转map、struct转struct、map转struct、map转map。
-//复杂数据结构间的转换函数
+// 封装struct转map、struct转struct、map转struct、map转map。
+// 复杂数据结构间的转换函数
 func JsonToObject(input interface{}, output interface{}) error {
 	//首先要判断两个参数的类型，只有指针才可以进行以下操作，否则直接返回错误
 	//ptr1 := reflect.TypeOf(input).//普通方式获取类型，判断时需要使用.Kind()
@@ -18,7 +18,7 @@ func JsonToObject(input interface{}, output interface{}) error {
 	}
 
 	//将input(struct或map)指针编码为json数据
-	jsonByte,err := json.Marshal(input)
+	jsonByte, err := json.Marshal(input)
 	if err != nil {
 		return err
 	}

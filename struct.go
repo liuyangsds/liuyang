@@ -5,7 +5,7 @@ import (
 	"reflect"
 )
 
-//将结构体的字段名称和字段值以字符串相连接，供sql语句使用，返回字段、值、bool
+// 将结构体的字段名称和字段值以字符串相连接，供sql语句使用，返回字段、值、bool
 func StructFieldAndValueToString(i interface{}) (string, string, bool) {
 	//获取struct的field
 	fobj := reflect.TypeOf(i)
@@ -18,7 +18,7 @@ func StructFieldAndValueToString(i interface{}) (string, string, bool) {
 	//声明变量，接收struct的field字符串
 	var fieldStr string
 	for n := 0; n < fobj.NumField(); n++ {
-		if n < fobj.NumField() - 1 {
+		if n < fobj.NumField()-1 {
 			fieldStr += "`" + fobj.Field(n).Name + "`,"
 		} else {
 			fieldStr += "`" + fobj.Field(n).Name + "`"
@@ -30,12 +30,11 @@ func StructFieldAndValueToString(i interface{}) (string, string, bool) {
 	//声明变量，接收struct的value字符串
 	var valueStr string
 	for m := 0; m < vobj.NumField(); m++ {
-		if m < vobj.NumField() - 1 {
-			valueStr += "'" + fmt.Sprintf("%v",vobj.Field(m)) + "',"
+		if m < vobj.NumField()-1 {
+			valueStr += "'" + fmt.Sprintf("%v", vobj.Field(m)) + "',"
 		} else {
-			valueStr += "'" + fmt.Sprintf("%v",vobj.Field(m)) + "'"
+			valueStr += "'" + fmt.Sprintf("%v", vobj.Field(m)) + "'"
 		}
 	}
 	return fieldStr, valueStr, true
 }
-
