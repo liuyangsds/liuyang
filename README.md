@@ -18,7 +18,7 @@
 
 ### go version < 1.20 使用1.6.3
 
-### go version >= 1.20 使用 2.0+
+### go version >= 1.20 使用 1.7.0+
 
 下载：
 go get -u github.com/liuyangsds/liuyang
@@ -37,73 +37,140 @@ require (
 
 ### array.go
 
-数组检查重复元素			func ArrayCheckRepeat([]T) bool
-数组移除重复元素			func ArrayRemoveRepeat([]T) []T
-数组查找元素				func ArraySearch([]T, elem) int
-判断某元素是否在数组中			func InArray([]T) bool
-数组排序					func ArraySort([]T, sort)
-删除一个数组元素			func ArrayDelIndex([]T, index) []T
-删除一个或多个数组元素			func ArrayDelIndexLength([]T, index, length) []T
-收集要删除的索引值			func ArrayCollectDelIndex([]T, saveIndex) []T
-批量删除切片索引			func ArrayRemove([]T, delIndex) []T
-复制一个数组切片			func ArrayCopy([]T) []T
-复制一个切片范围			func ArrayCopyRange([]T, start, length) []T
-获取一个由int类型切片元素转成以指定符号连接的字符串		func ArrayImplode([]int, sep) string
-将所有类型的数组分割成以指定符号连接的字符串			func ArrayToString(T, sep) string
-数组中相同元素数量统计			func ArraySameElementCount([]T) map
+数组检查重复元素
+func ArrayCheckRepeat([]T) bool
+
+数组移除重复元素
+func ArrayRemoveRepeat([]T) []T
+
+数组查找元素
+func ArraySearch([]T, elem) int
+
+判断某元素是否在数组中
+func InArray([]T) bool
+
+数组排序
+func ArraySort([]T, sort)
+
+删除一个数组元素
+func ArrayDelIndex([]T, index) []T
+
+删除一个或多个数组元素
+func ArrayDelIndexLength([]T, index, length) []T
+
+收集要删除的索引值
+func ArrayCollectDelIndex([]T, saveIndex) []T
+
+批量删除切片索引
+func ArrayRemove([]T, delIndex) []T
+
+复制一个数组切片
+func ArrayCopy([]T) []T
+
+复制一个切片范围
+func ArrayCopyRange([]T, start, length) []T
+
+获取一个由int类型切片元素转成以指定符号连接的字符串
+func ArrayImplode([]int, sep) string
+
+将所有类型的数组分割成以指定符号连接的字符串
+func ArrayToString(T, sep) string
+
+数组中相同元素数量统计
+func ArraySameElementCount([]T) map
 
 
 
 ### base.go
 
-进制转换，10转2		func Base10To2(n) string
-进制转换，10转8		func Base10To8(n) string
-进制转换，10转16		func Base10To16(n) string
-进制转换，2816转10--->可根据0b、0o、0x前缀自动判断想要的进制计算 func Base2816To10(s) int64
-进制转换，2转10		func Base2To10(s) int64
-进制转换，8转10		func Base8To10(s) int64
-进制转换，16转10		func Base16To10(s) int64
-将10进制转2进制后得到字符串(传统计算方式) func Base10To2Custom(n) string
-将10进制转8进制后得到字符串(传统计算方式) func Base10To8Custom(n) string
-将10进制数值转成16进制字符串(传统计算方式) func Base10To16Custom(n) string
-将2进制字符串转成10进制数值(传统计算方式) func Base2To10Custom(s) int64
-将8进制字符串转成10进制数值(传统计算方式) func Base8To10Custom(s) int64
-将16进制字符串转成10进制数值(传统计算方式) func Base16To10Custom(s) int64
-将10进制数值转成62进制字符串(传统计算方式) func Base10To62Custom(n) string
-将62进制字符串转成10进制数值(传统计算方式) func Base62To10Custom(s) int64
+进制转换，10转2
+func Base10To2(n) string
+
+进制转换，10转8
+func Base10To8(n) string
+
+进制转换，10转16
+func Base10To16(n) string
+
+进制转换，2816转10--->可根据0b、0o、0x前缀自动判断想要的进制计算
+func Base2816To10(s) int64
+
+进制转换，2转10
+func Base2To10(s) int64
+
+进制转换，8转10
+func Base8To10(s) int64
+
+进制转换，16转10
+func Base16To10(s) int64
+
+将10进制转2进制后得到字符串(传统计算方式)
+func Base10To2Custom(n) string
+
+将10进制转8进制后得到字符串(传统计算方式)
+func Base10To8Custom(n) string
+
+将10进制数值转成16进制字符串(传统计算方式)
+func Base10To16Custom(n) string
+
+将2进制字符串转成10进制数值(传统计算方式)
+func Base2To10Custom(s) int64
+
+将8进制字符串转成10进制数值(传统计算方式)
+func Base8To10Custom(s) int64
+
+将16进制字符串转成10进制数值(传统计算方式)
+func Base16To10Custom(s) int64
+
+将10进制数值转成62进制字符串(传统计算方式)
+func Base10To62Custom(n) string
+
+将62进制字符串转成10进制数值(传统计算方式)
+func Base62To10Custom(s) int64
 
 
 
 ### base64.go
 
-将字符串进行base64编码 func Base64Encode(s) string
-将base64字符串进行解码 func Base64Decode(s) string
+将字符串进行base64编码
+func Base64Encode(s) string
+
+将base64字符串进行解码
+func Base64Decode(s) string
 
 
 
 ### fixed_point.go
 
-将普通数值转为定点数 func FixedPointEncode(f,digit) int
-将定点数还原为普通数值 func FixedPointDecode(n, digit) string
+将普通数值转为定点数
+func FixedPointEncode(f,digit) int
+
+将定点数还原为普通数值
+func FixedPointDecode(n, digit) string
 
 
 
 ### urlcode.go
 
-将字符串进行urlencode编码 func UrlEncode(s) string
-将urlencode字符串进行解码 func UrlDecode(s) string
+将字符串进行urlencode编码
+func UrlEncode(s) string
+
+将urlencode字符串进行解码
+func UrlDecode(s) string
 
 
 
 ### md5.go
 
-将字符串进行md5加密 func Md5(s) string
+将字符串进行md5加密
+func Md5(s) string
 
 
 
 ### sha1.go
 
-将字符串进行sha1加密 func Sha1(s) string
+将字符串进行sha1加密
+func Sha1(s) string
 
 
 
@@ -119,37 +186,87 @@ func GetPointMinMaxLngLat(lat, lng, radius) (float64, float64, float64, float64)
 
 ### regexp.go
 
-检查用户名 func CheckUsername(s) bool
-检查密码 func CheckPassword(s) bool
-检查手机号 func CheckMobile(s) bool
-检查邮箱 func CheckEmail(s) bool
-只能输入汉字、字母、数字、下划线(1至16个) func CheckTitle(s) bool
-检查身份证码码 func CheckIDCard(s) bool
-检查座机号码 func CheckTelephone(s) bool
-检查网址是否合法 func CheckUrl(s) bool
-检查金额 func CheckMoney(s) bool
-检查(正负)金额 func CheckSMoney(s) bool
-检查小数 func CheckDecimal(s) bool
-检查(正负)小数 func CheckSDecimal(s) bool
-检查小数(6位) func CheckDecimal6(s) bool
-检查(正负)小数(6位) func CheckSDecimal6(s) bool
-检查纯数字 func CheckNumber(s) bool
-检查(正负)纯数字 func CheckSNumber(s) bool
-检查用户id func CheckUid(s) bool
-检查版本号 func CheckVersion(s) bool
-检查坐标 func CheckPosition(s) bool
-检查字符串是否为单个或以英文逗号连接的多个字符串 func CheckStrStr(s) bool
-检查字符串是否为多个整型数字字符串 func CheckNumberNumber(s) bool
-检查字符串是否为json字符串 func CheckJson(s) bool
-检查json字符串是否已加上转义符 func CheckJsonEscape(s) bool
+检查用户名
+func CheckUsername(s) bool
+
+检查密码
+func CheckPassword(s) bool
+
+检查手机号
+func CheckMobile(s) bool
+
+检查邮箱
+func CheckEmail(s) bool
+
+只能输入汉字、字母、数字、下划线(1至16个)
+func CheckTitle(s) bool
+
+检查身份证码码
+func CheckIDCard(s) bool
+
+检查座机号码
+func CheckTelephone(s) bool
+
+检查网址是否合法
+func CheckUrl(s) bool
+
+检查金额
+func CheckMoney(s) bool
+
+检查(正负)金额
+func CheckSMoney(s) bool
+
+检查小数
+func CheckDecimal(s) bool
+
+检查(正负)小数
+func CheckSDecimal(s) bool
+
+检查小数(6位)
+func CheckDecimal6(s) bool
+
+检查(正负)小数(6位)
+func CheckSDecimal6(s) bool
+
+检查纯数字
+func CheckNumber(s) bool
+
+检查(正负)纯数字
+func CheckSNumber(s) bool
+
+检查用户id
+func CheckUid(s) bool
+
+检查版本号
+func CheckVersion(s) bool
+
+检查坐标
+func CheckPosition(s) bool
+
+检查字符串是否为单个或以英文逗号连接的多个字符串
+func CheckStrStr(s) bool
+
+检查字符串是否为多个整型数字字符串
+func CheckNumberNumber(s) bool
+
+检查字符串是否为json字符串
+func CheckJson(s) bool
+
+检查json字符串是否已加上转义符
+func CheckJsonEscape(s) bool
 
 
 
 ### http.go
 
-http请求,get方式 func HttpRequestGet(url) (string, error)
-http请求,post方式 func HttpRequestPost(url, map) (string, error)
-http请求,post方式->json数据传参 func HttpRequestPostJson(url, []byte) (string, error)
+http请求,get方式
+func HttpRequestGet(url) (string, error)
+
+http请求,post方式
+func HttpRequestPost(url, map) (string, error)
+
+http请求,post方式->json数据传参
+func HttpRequestPostJson(url, []byte) (string, error)
 
 
 
