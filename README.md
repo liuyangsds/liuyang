@@ -24,11 +24,11 @@
 go get -u github.com/liuyangsds/liuyang
 
 或指定版本：
-go get -u github.com/liuyangsds/liuyang@v2.0.1
+go get -u github.com/liuyangsds/liuyang@v1.6.3
 
 使用：
 require (
-    github.com/liuyangsds/liuyang v2.0.1
+    github.com/liuyangsds/liuyang v1.6.3
 )
 
 
